@@ -25,7 +25,6 @@
 		A5DF79F029B0608300799BEA /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79EF29B0608300799BEA /* HomeViewModel.swift */; };
 		A5DF79F229B0608E00799BEA /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79F129B0608E00799BEA /* SearchViewController.swift */; };
 		A5DF79F429B0609600799BEA /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79F329B0609600799BEA /* SearchViewModel.swift */; };
-		A5DF79F629B060A900799BEA /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79F529B060A900799BEA /* MainTabBarController.swift */; };
 		A5DF79F829B0610D00799BEA /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79F729B0610D00799BEA /* ViewModelType.swift */; };
 /* End PBXBuildFile section */
 
@@ -51,7 +50,6 @@
 		A5DF79EF29B0608300799BEA /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		A5DF79F129B0608E00799BEA /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		A5DF79F329B0609600799BEA /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
-		A5DF79F529B060A900799BEA /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		A5DF79F729B0610D00799BEA /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		E40D583E4044753832CA6740 /* Pods_NiceMuisc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NiceMuisc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -211,7 +209,6 @@
 			children = (
 				A5DF79E829B0601700799BEA /* Home */,
 				A5DF79E929B0601F00799BEA /* Search */,
-				A5DF79F529B060A900799BEA /* MainTabBarController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -372,7 +369,6 @@
 				A5DF79BB29B0275A00799BEA /* SceneDelegate.swift in Sources */,
 				A5DF79EE29B0607800799BEA /* HomeViewController.swift in Sources */,
 				A5DF79DC29B05CC000799BEA /* SearchStepper.swift in Sources */,
-				A5DF79F629B060A900799BEA /* MainTabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

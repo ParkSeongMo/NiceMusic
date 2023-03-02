@@ -11,15 +11,19 @@ import RxFlow
 final class MainFlow: Flow {
     
     
+    private var tabBarTitle: [String] {
+        ["Home", "Search"]
+    }
+    
     private var tabBarImageN: [UIImage] {
         return [#imageLiteral(resourceName: "cm_btn_gnb_home_n"),  #imageLiteral(resourceName: "cm_btn_gnb_search_n")]
     }
     
-    var tabBarImageP: [UIImage] {
+    private var tabBarImageP: [UIImage] {
         return [#imageLiteral(resourceName: "cm_btn_gnb_home_p"),  #imageLiteral(resourceName: "cm_btn_gnb_search_p")]
     }
 
-    var tabBarImageF: [UIImage] {
+    private var tabBarImageF: [UIImage] {
         return [#imageLiteral(resourceName: "cm_btn_gnb_home_f"),  #imageLiteral(resourceName: "cm_btn_gnb_search_f")]
     }
     
@@ -57,11 +61,9 @@ final class MainFlow: Flow {
             [unowned self] (root1: UINavigationController, root2: UINavigationController) in
             
             rootViewController.tabBar.backgroundColor = .white
-            let homeItem: UITabBarItem = .init(title: "Home", image: self.tabBarImageN[0], selectedImage: self.tabBarImageF[0])
-            let middleItem: UITabBarItem = .init(title: "Search", image: self.tabBarImageN[1], selectedImage: self.tabBarImageF[1])
             
-            root1.tabBarItem = homeItem
-            root2.tabBarItem = middleItem
+            root1.tabBarItem = makeTabBarItem(index: 0)
+            root2.tabBarItem = makeTabBarItem(index: 1)
                                     
             self.rootViewController.setViewControllers([root1, root2], animated: false)
         }
@@ -70,5 +72,12 @@ final class MainFlow: Flow {
                 .contribute(withNextPresentable: homeFlow, withNextStepper: homeStepper),
                 .contribute(withNextPresentable: searchFlow, withNextStepper: searchStepper)
         ])
+    }
+    
+    private func makeTabBarItem(index: Int) -> UITabBarItem {
+        return .init(
+            title: tabBarTitle[index],
+            image: tabBarImageN[index],
+            selectedImage: tabBarImageF[index])
     }
 }
