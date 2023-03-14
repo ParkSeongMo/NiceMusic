@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ArtistListModel: Codable {
+struct ArtistTopModel: Codable {
     let artists:ArtistList?
 }
 

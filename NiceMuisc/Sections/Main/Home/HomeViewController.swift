@@ -12,10 +12,13 @@ import SnapKit
 import Moya
 
 class HomeViewController: UIViewController {
+    
+    typealias ActionType = HomeActionType    
             
     let disposeBag = DisposeBag()
     
     private let viewModel:HomeViewModel
+    let action = PublishRelay<ActionType>()
     
     private lazy var homeView = HomeView()
     
@@ -39,6 +42,17 @@ class HomeViewController: UIViewController {
         
         print("HomeViewController viewDidLoad()")
         setupLayout()
+        bindViewModel()
+    }
+    
+    private func bindViewModel() {
+        
+        let output = viewModel.transform(
+            req: HomeViewModel.Input(actionTrigger: action.asObservable()))
+        
+        homeView
+            .setupDI(generic: action)
+            .setupDI(observable: output.response)
     }
     
     private func setupLayout() {
@@ -72,15 +86,17 @@ class HomeViewController: UIViewController {
 //                ServiceApi.Track.detail(artist: "Imagine Dragons", track: "Believer").subscribe { event in
 //                ServiceApi.Track.search(track: "Believe").subscribe { event in
 //                ServiceApi.Track.search(track: "Believe").subscribe { event in
-                ServiceApi.Track.topLocal().subscribe { event in
-                    switch event {
-                    case .success(let json):
-                        let name = self.paringName(data: json)
-                        print("HomeViewController - success \(String(describing: name))")
-                    case .failure(_):
-                        print("HomeViewController - error")
-                    }
-                }.disposed(by: self.disposeBag)
+//                ServiceApi.Track.topLocal().subscribe { event in
+//                    switch event {
+//                    case .success(let json):
+//                        let name = self.paringName(data: json)
+//                        print("HomeViewController - success \(String(describing: name))")
+//                    case .failure(_):
+//                        print("HomeViewController - error")
+//                    }
+//                }.disposed(by: self.disposeBag)
+                
+                self.action.accept(.execute)
             }
             .disposed(by: disposeBag)
     }
@@ -91,9 +107,9 @@ class HomeViewController: UIViewController {
             return someData.artist?.name
         case let someData as ArtistSearchModel:
             return someData.results?.artistmatches?.artist?[0].name
-        case let someData as ArtistListModel:
+        case let someData as ArtistTopModel:
             return someData.artists?.artist?[0].name
-        case let someData as ArtistLocalTopListModel:
+        case let someData as ArtistLocalTopModel:
             return someData.topartists?.artist?[0].name
         case let someData as AlbumDetailModel:
             return someData.album?.name
@@ -103,7 +119,7 @@ class HomeViewController: UIViewController {
             return someData.track?.name
         case let someData as TrackSearchModel:
             return someData.results?.trackmatches?.track?[0].name
-        case let someData as TrackTopListModel:
+        case let someData as TrackTopModel:
             return someData.tracks?.track?[0].name
             
         default:

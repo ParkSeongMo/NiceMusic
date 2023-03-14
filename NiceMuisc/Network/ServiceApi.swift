@@ -24,11 +24,11 @@ extension ServiceApi.Artist {
         return ServiceApiClient.request(.artistSearch(artist: artist))
     }
     
-    static func top() -> Single<ArtistListModel> {
+    static func top() -> Single<ArtistTopModel> {
         return ServiceApiClient.request(.topArtistList)
     }
         
-    static func topLocal() -> Single<ArtistLocalTopListModel> {
+    static func topLocal() -> Single<ArtistLocalTopModel> {
         return ServiceApiClient.request(.topArtistListInLocal(country: "Korea, Republic of"))
     }
 }
@@ -43,11 +43,11 @@ extension ServiceApi.Track {
         return ServiceApiClient.request(.trackSearch(track: track))
     }
     
-    static func top() -> Single<TrackTopListModel> {
+    static func top() -> Single<TrackTopModel> {
         return ServiceApiClient.request(.topTrackList)
     }
     
-    static func topLocal() -> Single<TrackTopListModel> {
+    static func topLocal() -> Single<TrackLocalTopModel> {
         return ServiceApiClient.request(.topTrackListInLocal(country: "Korea, Republic of"))
     }
 }
