@@ -14,4 +14,5 @@ pod 'Then'
 pod 'Moya/RxSwift'
 pod 'Kingfisher'
 pod 'SnapKit', '~> 5.0.0'
+pod 'SwiftyJSON'
 end
