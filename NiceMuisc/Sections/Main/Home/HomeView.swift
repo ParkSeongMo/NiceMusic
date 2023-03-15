@@ -39,6 +39,9 @@ final class HomeView: UIView, SubViewDI {
             applySubviewTags()
         }
     }
+    
+    
+    private let refreshControl = UIRefreshControl()
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {
         $0.allowsSelection = false
@@ -55,7 +58,8 @@ final class HomeView: UIView, SubViewDI {
         
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupLayout() 
+        setupLayout()
+        initRefresh()
     }
     
     required init?(coder: NSCoder) {
@@ -68,9 +72,28 @@ final class HomeView: UIView, SubViewDI {
         tableView.delegate = self
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }    
+        }
     }
     
+    private func initRefresh() {
+        
+        refreshControl.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
+        
+        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
+        refreshControl.attributedTitle = NSAttributedString(string: "당겨서 새로고침", attributes: attributes)
+        refreshControl.tintColor = .white
+        
+        tableView.refreshControl = refreshControl
+    }
+    
+    @objc func refreshTable(refresh: UIRefreshControl) {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//            self.tableView.reloadData()
+            self.inputRelay.accept(HomeActionType.refresh)
+            refresh.endRefreshing()
+        }
+    }
     
     @discardableResult
     func setupDI<T>(generic: PublishRelay<T>) -> Self {
@@ -79,7 +102,10 @@ final class HomeView: UIView, SubViewDI {
             inputRelay.compactMap { $0 as? HomeActionType }
                 .bind(to: generic)
                 .disposed(by: disposeBag)
+            
+            generic.accept(.none)
         }
+        
         
         return self
     }
@@ -99,13 +125,11 @@ final class HomeView: UIView, SubViewDI {
 //                cell.prepare(name: self.getTitleText(index: element.index), items: element.items)
 //                print("setupDI bind index:\(element.index), count:\(element.items.count)")
 //            }
-            .bind(to: tableView.rx.items) { tableView, _, element in
-                if let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell {
-                    
-//                    if !element.items.isEmpty {
-//                        print("HomeView title \(element.items[0].title)")
-//                    }
+            .bind(to: tableView.rx.items) { [weak self] tableView, _, element in
+                guard let `self` = self else { return UITableViewCell() }
+                if let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell {                    
                     cell.prepare(name: self.getTitleText(index: element.index), items: element.items)
+                    cell.bindAction(reley: self.inputRelay)
                     return cell
                 }
                 return UITableViewCell()

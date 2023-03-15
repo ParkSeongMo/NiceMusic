@@ -59,17 +59,14 @@ class HomeViewModel: ViewModelType, Stepper {
     lazy var buttonAction = Action<HomeActionType, Void> { [weak self] in
         guard let `self` = self else { return .empty() }
         
+        Log.d("buttonAction:\($0)")
         switch $0 {
         case .none:
             return .empty()
         case .execute:
-            self.homeData.removeAll()
-            self.requestTopTrackDataAction.execute()
-            self.requestTopLocalTrackDataAction.execute()
-            self.requestTopArtistDataAction.execute()
-            self.requestTopLocalArtistDataAction.execute()
+            self.requestMainApi()
         case .refresh:
-            return .empty()
+            self.requestMainApi()
         case .tapList(let index):
             Log.d("tap list index:\(index)")
             // TODO Go to List
@@ -99,6 +96,15 @@ class HomeViewModel: ViewModelType, Stepper {
         subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
                 
         return Output(response: homeDataRelay.asObservable())
+    }
+    
+    private func requestMainApi() {
+        
+        self.homeData.removeAll()
+        self.requestTopTrackDataAction.execute()
+        self.requestTopLocalTrackDataAction.execute()
+        self.requestTopArtistDataAction.execute()
+        self.requestTopLocalArtistDataAction.execute()
     }
     
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {

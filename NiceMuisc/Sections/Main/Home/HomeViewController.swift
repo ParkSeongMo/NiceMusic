@@ -40,28 +40,9 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("HomeViewController viewDidLoad()")
         setupLayout()
         bindViewModel()
-        
-                
-        
-//        items.append(CommonCardModel(title: "title_1", subTitle: "subTitle_1", imageUrls: nil))
-//        items.append(CommonCardModel(title: "title_2", subTitle: "subTitle_2", imageUrls: nil))
-//        items.append(CommonCardModel(title: "title_3", subTitle: "subTitle_3", imageUrls: nil))
-//        items.append(CommonCardModel(title: "title_4", subTitle: "subTitle_4", imageUrls: nil))
-//        items.append(CommonCardModel(title: "title_5", subTitle: "subTitle_5", imageUrls: nil))
-//        items.append(CommonCardModel(title: "title_6", subTitle: "subTitle_6", imageUrls: nil))
-//
-//        self.collectionView.dataSource = self
-//        self.view.addSubview(collectionView)
-//        collectionView.snp.makeConstraints { make in
-//            make.height.equalTo(100)
-//            make.top.equalToSuperview().offset(200)
-//            make.left.equalToSuperview().offset(5)
-//            make.right.equalToSuperview().offset(5)
-//        }
-        
+        self.action.accept(.execute)
     }
     
     private func bindViewModel() {
@@ -84,40 +65,40 @@ class HomeViewController: UIViewController {
         
         
         
-        self.view.addSubview(artistDetailApiButton)
-        artistDetailApiButton.snp.makeConstraints { make in
-            make.height.equalTo(50)
-            make.leading.equalToSuperview().offset(50)
-            make.trailing.equalToSuperview().offset(-50)
-            make.top.equalToSuperview().offset(100)
-        }
-        
-
-        artistDetailApiButton.rx.tap
-            .bind {
-//                ServiceApi.Artist.top().subscribe { event in
-//                ServiceApi.Artist.detail(artist: "BTS").subscribe { event in
-//                ServiceApi.Artist.search(artist: "BTS").subscribe { event in
-//                ServiceApi.Artist.top().subscribe { event in
-//                ServiceApi.Artist.topLocal().subscribe { event in
-//                ServiceApi.Album.detail(artist: "BTS", album: "Dynamite").subscribe { event in
-//                ServiceApi.Album.search(album: "Dynamite").subscribe { event in
-//                ServiceApi.Track.detail(artist: "Imagine Dragons", track: "Believer").subscribe { event in
-//                ServiceApi.Track.search(track: "Believe").subscribe { event in
-//                ServiceApi.Track.search(track: "Believe").subscribe { event in
-//                ServiceApi.Track.topLocal().subscribe { event in
-//                    switch event {
-//                    case .success(let json):
-//                        let name = self.paringName(data: json)
-//                        print("HomeViewController - success \(String(describing: name))")
-//                    case .failure(_):
-//                        print("HomeViewController - error")
-//                    }
-//                }.disposed(by: self.disposeBag)
-                
-                self.action.accept(.execute)
-            }
-            .disposed(by: disposeBag)
+//        self.view.addSubview(artistDetailApiButton)
+//        artistDetailApiButton.snp.makeConstraints { make in
+//            make.height.equalTo(50)
+//            make.leading.equalToSuperview().offset(50)
+//            make.trailing.equalToSuperview().offset(-50)
+//            make.top.equalToSuperview().offset(100)
+//        }
+//
+//
+//        artistDetailApiButton.rx.tap
+//            .bind {
+////                ServiceApi.Artist.top().subscribe { event in
+////                ServiceApi.Artist.detail(artist: "BTS").subscribe { event in
+////                ServiceApi.Artist.search(artist: "BTS").subscribe { event in
+////                ServiceApi.Artist.top().subscribe { event in
+////                ServiceApi.Artist.topLocal().subscribe { event in
+////                ServiceApi.Album.detail(artist: "BTS", album: "Dynamite").subscribe { event in
+////                ServiceApi.Album.search(album: "Dynamite").subscribe { event in
+////                ServiceApi.Track.detail(artist: "Imagine Dragons", track: "Believer").subscribe { event in
+////                ServiceApi.Track.search(track: "Believe").subscribe { event in
+////                ServiceApi.Track.search(track: "Believe").subscribe { event in
+////                ServiceApi.Track.topLocal().subscribe { event in
+////                    switch event {
+////                    case .success(let json):
+////                        let name = self.paringName(data: json)
+////                        print("HomeViewController - success \(String(describing: name))")
+////                    case .failure(_):
+////                        print("HomeViewController - error")
+////                    }
+////                }.disposed(by: self.disposeBag)
+//
+//                self.action.accept(.execute)
+//            }
+//            .disposed(by: disposeBag)
     }
     
     private func paringName<T>(data: T) -> String? {

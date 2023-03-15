@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 import SnapKit
 import Then
+import RxRelay
+import RxSwift
 
 final class HomeTableViewCell: UITableViewCell {
     
@@ -17,6 +19,9 @@ final class HomeTableViewCell: UITableViewCell {
     private let cellWidth = 150
         
     private var items: [CommonCardModel] = []
+        
+    private let action = PublishRelay<HomeActionType>()
+    private let disposeBag = DisposeBag()
     
     lazy var titleLabel = UILabel().then {
         $0.font = .boldSystemFont(ofSize: 18)
@@ -24,11 +29,10 @@ final class HomeTableViewCell: UITableViewCell {
         $0.textColor = .white
     }
     
-    private lazy var moreLabel = UILabel().then {
-        $0.text = "전체보기 >"
-        $0.font = .systemFont(ofSize: 15)
-        $0.numberOfLines = 1
-        $0.textColor = .gray
+    private lazy var moreLabel = UIButton().then {
+        $0.titleLabel?.font = .systemFont(ofSize: 15)
+        $0.setTitleColor(.gray, for: .normal)
+        $0.setTitle("전체보기 >", for: .normal)
     }
     
     private lazy var collectionViewFlowLayout = UICollectionViewFlowLayout().then {
@@ -51,6 +55,7 @@ final class HomeTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupLayout()
+        bindrx()
     }
     
     required init?(coder: NSCoder) {
@@ -84,6 +89,17 @@ final class HomeTableViewCell: UITableViewCell {
         }
     }
     
+    private func bindrx() {
+        moreLabel.rx.tap
+            .bind { [weak self] in
+                guard let `self` = self else { return }
+                self.action.accept(.tapList(HomeIndex.topLocalTrack))
+                print("click button")
+            }
+            .disposed(by: disposeBag)
+        
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         self.prepare(name: nil, items: [])
@@ -106,7 +122,14 @@ final class HomeTableViewCell: UITableViewCell {
         }
     }
     
-    
+    func bindAction(reley: PublishRelay<Any>) {
+        
+        if let reley = reley as? PublishRelay<HomeActionType> {
+            action.compactMap { $0 as? HomeActionType }
+                .bind(to: reley)
+                .disposed(by: disposeBag)
+        }
+    }
     
 }
 
