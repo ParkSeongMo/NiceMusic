@@ -27,7 +27,7 @@ class HomeViewController: UIViewController {
         $0.setTitleColor(.black, for: .normal)
         $0.backgroundColor = .gray
     }
-    
+        
     init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -43,6 +43,25 @@ class HomeViewController: UIViewController {
         print("HomeViewController viewDidLoad()")
         setupLayout()
         bindViewModel()
+        
+                
+        
+//        items.append(CommonCardModel(title: "title_1", subTitle: "subTitle_1", imageUrls: nil))
+//        items.append(CommonCardModel(title: "title_2", subTitle: "subTitle_2", imageUrls: nil))
+//        items.append(CommonCardModel(title: "title_3", subTitle: "subTitle_3", imageUrls: nil))
+//        items.append(CommonCardModel(title: "title_4", subTitle: "subTitle_4", imageUrls: nil))
+//        items.append(CommonCardModel(title: "title_5", subTitle: "subTitle_5", imageUrls: nil))
+//        items.append(CommonCardModel(title: "title_6", subTitle: "subTitle_6", imageUrls: nil))
+//
+//        self.collectionView.dataSource = self
+//        self.view.addSubview(collectionView)
+//        collectionView.snp.makeConstraints { make in
+//            make.height.equalTo(100)
+//            make.top.equalToSuperview().offset(200)
+//            make.left.equalToSuperview().offset(5)
+//            make.right.equalToSuperview().offset(5)
+//        }
+        
     }
     
     private func bindViewModel() {
@@ -127,4 +146,3 @@ class HomeViewController: UIViewController {
         }
     }
 }
-

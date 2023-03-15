@@ -16,6 +16,8 @@ enum HomeActionType {
     case none     // None Or Error
     case execute  // 홈조회API Execute
     case refresh  // 홈화면 갱신
+    case tapList(HomeIndex)     // 전체 보기
+    case tapDetail(HomeIndex)   // 상세 보기
 }
 
 class HomeViewModel: ViewModelType, Stepper {
@@ -29,8 +31,10 @@ class HomeViewModel: ViewModelType, Stepper {
     typealias ViewModel = HomeViewModel
     private let disposeBag = DisposeBag()
     
+    private var homeData: [HomeCardModel] = []
+    
     // MARK: - Output properties
-    private let homeDataRelay = BehaviorRelay<(HomeIndex, [Any])>(value: (HomeIndex.none, [TrackDetail.makeNilModel()]))
+    private let homeDataRelay = BehaviorRelay<[HomeCardModel]>(value: [HomeCardModel()])
     
     lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
@@ -59,12 +63,19 @@ class HomeViewModel: ViewModelType, Stepper {
         case .none:
             return .empty()
         case .execute:
+            self.homeData.removeAll()
             self.requestTopTrackDataAction.execute()
             self.requestTopLocalTrackDataAction.execute()
             self.requestTopArtistDataAction.execute()
             self.requestTopLocalArtistDataAction.execute()
         case .refresh:
             return .empty()
+        case .tapList(let index):
+            Log.d("tap list index:\(index)")
+            // TODO Go to List
+        case .tapDetail(let index):
+            Log.d("tap list index:\(index)")
+            // TODO Go to Detail
         }
         
         return .empty()
@@ -75,7 +86,7 @@ class HomeViewModel: ViewModelType, Stepper {
     }
     
     struct Output {
-        let response: Observable<(HomeIndex, [Any])>
+        let response: Observable<[HomeCardModel]>
     }
     
     func transform(req: Input) -> Output {
@@ -95,18 +106,23 @@ class HomeViewModel: ViewModelType, Stepper {
         action.elements
             .subscribe(onNext: { [weak self] element in
                 guard let `self` = self else { return }
-                
+                                
                 switch element {
                 case let data as ArtistTopModel:
-                    self.homeDataRelay.accept((HomeIndex.topArtist, self.makeLimitedHomeData(array: data.artists?.artist)))
+                    self.homeData.append(HomeCardModel(index: HomeIndex.topArtist, items: self.makeLimitedHomeData(array: data.artists?.artist)))
                 case let data as TrackTopModel:
-                    self.homeDataRelay.accept((HomeIndex.topTrack, self.makeLimitedHomeData(array: data.tracks?.track)))
+                    self.homeData.append(HomeCardModel(index: HomeIndex.topTrack, items: self.makeLimitedHomeData(array: data.tracks?.track)))
                 case let data as ArtistLocalTopModel:
-                    self.homeDataRelay.accept((HomeIndex.topLocalArtist, self.makeLimitedHomeData(array: data.topartists?.artist)))
+                    self.homeData.append(HomeCardModel(index: HomeIndex.topLocalArtist, items: self.makeLimitedHomeData(array: data.topartists?.artist)))
                 case let data as TrackLocalTopModel:
-                    self.homeDataRelay.accept((HomeIndex.topLocalTrack, self.makeLimitedHomeData(array: data.tracks?.track)))
+                    self.homeData.append(HomeCardModel(index: HomeIndex.topLocalTrack, items: self.makeLimitedHomeData(array: data.tracks?.track)))
                 default:
                     return
+                }
+    
+                if self.homeData.count >= 4 {
+                    self.homeData.sort { return $0.index.rawValue < $1.index.rawValue }
+                    self.homeDataRelay.accept(self.homeData)
                 }
             }, onError: { code in
                 Log.d("RequestHomeData Error: \(code)")
@@ -114,14 +130,14 @@ class HomeViewModel: ViewModelType, Stepper {
             }).disposed(by: disposeBag)
     }
        
-    private func makeLimitedHomeData<T>(array: [T]?) -> [T] {
+    private func makeLimitedHomeData<T>(array: [T]?) -> [CommonCardModel] {
         
-        var responseData:[T] = []
+        var responseData:[CommonCardModel] = []
         
         guard let array = array else { return responseData }
         
         for item in array {
-            responseData.append(item)
+            responseData.append(CommonCardModel(data: item))
             if responseData.count >= maxHomeItemCount {
                 break
             }

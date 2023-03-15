@@ -23,6 +23,10 @@
 		A57ADC8229BF3F2300C9FDDF /* TrackTopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8129BF3F2300C9FDDF /* TrackTopModel.swift */; };
 		A57ADC8429C008FD00C9FDDF /* SubViewDI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8329C008FD00C9FDDF /* SubViewDI.swift */; };
 		A57ADC8629C0284D00C9FDDF /* TrackLocalTopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8529C0284D00C9FDDF /* TrackLocalTopModel.swift */; };
+		A57ADC8829C0573300C9FDDF /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8729C0573300C9FDDF /* HomeTableViewCell.swift */; };
+		A57ADC8C29C05D6900C9FDDF /* CommonCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8B29C05D6900C9FDDF /* CommonCardModel.swift */; };
+		A57ADC8E29C065BE00C9FDDF /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8D29C065BE00C9FDDF /* HomeCollectionViewCell.swift */; };
+		A57ADC9029C14DCC00C9FDDF /* HomeCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8F29C14DCC00C9FDDF /* HomeCardModel.swift */; };
 		A5DF79B929B0275A00799BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79B829B0275A00799BEA /* AppDelegate.swift */; };
 		A5DF79BB29B0275A00799BEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */; };
 		A5DF79C229B0275A00799BEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5DF79C129B0275A00799BEA /* Assets.xcassets */; };
@@ -62,6 +66,10 @@
 		A57ADC8129BF3F2300C9FDDF /* TrackTopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackTopModel.swift; sourceTree = "<group>"; };
 		A57ADC8329C008FD00C9FDDF /* SubViewDI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubViewDI.swift; sourceTree = "<group>"; };
 		A57ADC8529C0284D00C9FDDF /* TrackLocalTopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackLocalTopModel.swift; sourceTree = "<group>"; };
+		A57ADC8729C0573300C9FDDF /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
+		A57ADC8B29C05D6900C9FDDF /* CommonCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCardModel.swift; sourceTree = "<group>"; };
+		A57ADC8D29C065BE00C9FDDF /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
+		A57ADC8F29C14DCC00C9FDDF /* HomeCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCardModel.swift; sourceTree = "<group>"; };
 		A5DF79B529B0275A00799BEA /* NiceMuisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiceMuisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5DF79B829B0275A00799BEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -108,11 +116,13 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
-		A57ADC6729BEE01E00C9FDDF /* New Group */ = {
+		A57ADC6729BEE01E00C9FDDF /* Cell */ = {
 			isa = PBXGroup;
 			children = (
+				A57ADC8729C0573300C9FDDF /* HomeTableViewCell.swift */,
+				A57ADC8D29C065BE00C9FDDF /* HomeCollectionViewCell.swift */,
 			);
-			path = "New Group";
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		A57ADC6C29BEE72D00C9FDDF /* Utils */ = {
@@ -144,7 +154,6 @@
 		A5DF79B729B0275A00799BEA /* NiceMuisc */ = {
 			isa = PBXGroup;
 			children = (
-				A57ADC6729BEE01E00C9FDDF /* New Group */,
 				A5DF79F929B0618D00799BEA /* Common */,
 				A57ADC6229BEB69400C9FDDF /* Network */,
 				A5DF79CD29B043DD00799BEA /* Models */,
@@ -173,6 +182,8 @@
 		A5DF79CD29B043DD00799BEA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A57ADC8B29C05D6900C9FDDF /* CommonCardModel.swift */,
+				A57ADC8F29C14DCC00C9FDDF /* HomeCardModel.swift */,
 				A57ADC6829BEE3E100C9FDDF /* ArtistDetailModel.swift */,
 				A57ADC7129BF22AC00C9FDDF /* ArtistSearhModel.swift */,
 				A57ADC7329BF278400C9FDDF /* ArtistTopModel.swift */,
@@ -246,6 +257,7 @@
 		A5DF79E829B0601700799BEA /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				A57ADC6729BEE01E00C9FDDF /* Cell */,
 				A5DF79ED29B0607800799BEA /* HomeViewController.swift */,
 				A5DF79EF29B0608300799BEA /* HomeViewModel.swift */,
 				A5DF7A2729B0821C00799BEA /* HomeView.swift */,
@@ -425,12 +437,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A57ADC8E29C065BE00C9FDDF /* HomeCollectionViewCell.swift in Sources */,
 				A57ADC6B29BEE5EF00C9FDDF /* ServiceApiClient.swift in Sources */,
 				A5DF79F229B0608E00799BEA /* SearchViewController.swift in Sources */,
 				A57ADC6E29BEE73900C9FDDF /* Log.swift in Sources */,
 				A57ADC8029BF3C1F00C9FDDF /* TrackSearchModel.swift in Sources */,
 				A5DF79D829B05CA600799BEA /* MainStepper.swift in Sources */,
 				A57ADC7229BF22AC00C9FDDF /* ArtistSearhModel.swift in Sources */,
+				A57ADC8C29C05D6900C9FDDF /* CommonCardModel.swift in Sources */,
 				A5DF79F429B0609600799BEA /* SearchViewModel.swift in Sources */,
 				A57ADC6629BEB84200C9FDDF /* ServiceApiProvider.swift in Sources */,
 				A57ADC8429C008FD00C9FDDF /* SubViewDI.swift in Sources */,
@@ -449,9 +463,11 @@
 				A57ADC7A29BF2C3900C9FDDF /* TrackDetailModel.swift in Sources */,
 				A5DF79D229B05BA600799BEA /* MainSteps.swift in Sources */,
 				A57ADC8629C0284D00C9FDDF /* TrackLocalTopModel.swift in Sources */,
+				A57ADC9029C14DCC00C9FDDF /* HomeCardModel.swift in Sources */,
 				A5DF79DA29B05CB500799BEA /* HomeStepper.swift in Sources */,
 				A5DF79F029B0608300799BEA /* HomeViewModel.swift in Sources */,
 				A57ADC8229BF3F2300C9FDDF /* TrackTopModel.swift in Sources */,
+				A57ADC8829C0573300C9FDDF /* HomeTableViewCell.swift in Sources */,
 				A5DF79E729B05D8C00799BEA /* SearchFlow.swift in Sources */,
 				A5DF79BB29B0275A00799BEA /* SceneDelegate.swift in Sources */,
 				A5DF79EE29B0607800799BEA /* HomeViewController.swift in Sources */,

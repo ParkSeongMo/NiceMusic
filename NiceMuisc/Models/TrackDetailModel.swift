@@ -18,20 +18,8 @@ struct TrackDetail: Codable {
     let playcount: String?
     let toptags: Tags?
     let wiki: Desciption?
-    
-    static func makeNilModel(name: String? = nil,
-                             artist: ArtistDetail? = nil,
-                             duration: String? = nil,
-                             playcount: String? = nil,
-                             toptags: Tags? = nil,
-                             wiki: Desciption? = nil) -> Self {
-        return TrackDetail(name: name,
-                           artist: artist,
-                           duration: duration,
-                           playcount: playcount,
-                           toptags: toptags,
-                           wiki: wiki)
-    }
+    let image:[Image]?
+    let album:AlbumDetail?    
 }
 
 
