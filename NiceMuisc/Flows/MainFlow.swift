@@ -40,10 +40,12 @@ final class MainFlow: Flow {
     func navigate(to step: Step) -> FlowContributors {
         guard let step = step as? MainSteps else { return .none }
         
+        print("navigate \(step)")
         switch step {
         case .mainTabBarIsRequired:
             return coordinateToMainTabBar()
-            
+        case .listIsRequired(let index):
+            return coordinateToList(index: index)
         default:
             return .none
         }
@@ -79,5 +81,15 @@ final class MainFlow: Flow {
             title: tabBarTitle[index],
             image: tabBarImageN[index],
             selectedImage: tabBarImageF[index])
+    }
+    
+    private func coordinateToList(index: HomeIndex) -> FlowContributors {
+        
+//        print("count : \(self.rootViewController.viewControllers?.count)")
+        
+        let vm = ListViewModel()
+        let vc = ListViewController(viewModel: vm, index: index)
+//        self.rootViewController.viewControllers?[0].pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
 }

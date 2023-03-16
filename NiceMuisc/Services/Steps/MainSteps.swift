@@ -12,6 +12,6 @@ enum MainSteps: Step {
     case mainTabBarIsRequired
     case homeIsRequired
     case searchIsRequired
-    case listIsRequired
-    case detailIsRequired
+    case listIsRequired(index: HomeIndex)
+    case detailIsRequired(index: HomeIndex, title: String?, subTitle: String?)
 }

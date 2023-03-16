@@ -13,6 +13,12 @@ final class CommonCardModel {
     let subTitle:String?
     var image:[Image]?
     
+    init() {
+        self.title = ""
+        self.subTitle = ""
+        self.image = []
+    }
+    
     init(title: String?, subTitle: String?, image: [Image]?) {
         self.title = title
         self.subTitle = subTitle

@@ -22,6 +22,8 @@ final class HomeFlow: Flow {
         switch step {
         case .homeIsRequired:
             return coordinateToHome()
+        case .listIsRequired(let index):
+            return coordinateToList(index: index)
         default:
             return .none
         }
@@ -31,6 +33,14 @@ final class HomeFlow: Flow {
         let vm = HomeViewModel()
         let vc = HomeViewController(viewModel: vm)
         self.rootViewController.pushViewController(vc, animated: false)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func coordinateToList(index: HomeIndex) -> FlowContributors {
+        let vm = ListViewModel()
+        let vc = ListViewController(viewModel: vm, index: index)
+        vc.hidesBottomBarWhenPushed = true
+        self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
 }

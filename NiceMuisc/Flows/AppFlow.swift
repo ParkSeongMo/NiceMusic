@@ -34,7 +34,7 @@ final class AppFlow: Flow {
     private func coordinateToMain() -> FlowContributors {
         
         let mainFlow = MainFlow()
-        let stepper = MainStepper()
+        let stepper = MainStepper.shared
         
         Flows.use(mainFlow, when: .created) {
             [unowned self] root in

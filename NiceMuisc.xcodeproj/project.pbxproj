@@ -27,6 +27,11 @@
 		A57ADC8C29C05D6900C9FDDF /* CommonCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8B29C05D6900C9FDDF /* CommonCardModel.swift */; };
 		A57ADC8E29C065BE00C9FDDF /* HomeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8D29C065BE00C9FDDF /* HomeCollectionViewCell.swift */; };
 		A57ADC9029C14DCC00C9FDDF /* HomeCardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC8F29C14DCC00C9FDDF /* HomeCardModel.swift */; };
+		A57ADC9429C2B0F600C9FDDF /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC9329C2B0F600C9FDDF /* ListViewController.swift */; };
+		A57ADC9629C2B14400C9FDDF /* ListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC9529C2B14400C9FDDF /* ListViewModel.swift */; };
+		A57ADC9829C2B15300C9FDDF /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC9729C2B15300C9FDDF /* ListView.swift */; };
+		A57ADC9B29C2D63700C9FDDF /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC9A29C2D63700C9FDDF /* ListTableViewCell.swift */; };
+		A57ADCA029C30D7700C9FDDF /* UIScrollView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC9F29C30D7700C9FDDF /* UIScrollView+.swift */; };
 		A5DF79B929B0275A00799BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79B829B0275A00799BEA /* AppDelegate.swift */; };
 		A5DF79BB29B0275A00799BEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */; };
 		A5DF79C229B0275A00799BEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5DF79C129B0275A00799BEA /* Assets.xcassets */; };
@@ -70,6 +75,11 @@
 		A57ADC8B29C05D6900C9FDDF /* CommonCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCardModel.swift; sourceTree = "<group>"; };
 		A57ADC8D29C065BE00C9FDDF /* HomeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewCell.swift; sourceTree = "<group>"; };
 		A57ADC8F29C14DCC00C9FDDF /* HomeCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCardModel.swift; sourceTree = "<group>"; };
+		A57ADC9329C2B0F600C9FDDF /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		A57ADC9529C2B14400C9FDDF /* ListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewModel.swift; sourceTree = "<group>"; };
+		A57ADC9729C2B15300C9FDDF /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		A57ADC9A29C2D63700C9FDDF /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
+		A57ADC9F29C30D7700C9FDDF /* UIScrollView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+.swift"; sourceTree = "<group>"; };
 		A5DF79B529B0275A00799BEA /* NiceMuisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiceMuisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5DF79B829B0275A00799BEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -128,9 +138,26 @@
 		A57ADC6C29BEE72D00C9FDDF /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				A57ADC9E29C30D5500C9FDDF /* Extension */,
 				A57ADC6D29BEE73900C9FDDF /* Log.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		A57ADC9929C2D62900C9FDDF /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				A57ADC9A29C2D63700C9FDDF /* ListTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		A57ADC9E29C30D5500C9FDDF /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				A57ADC9F29C30D7700C9FDDF /* UIScrollView+.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		A5DF79AC29B0275A00799BEA = {
@@ -277,6 +304,10 @@
 		A5DF79EA29B0602300799BEA /* List */ = {
 			isa = PBXGroup;
 			children = (
+				A57ADC9929C2D62900C9FDDF /* Cell */,
+				A57ADC9329C2B0F600C9FDDF /* ListViewController.swift */,
+				A57ADC9529C2B14400C9FDDF /* ListViewModel.swift */,
+				A57ADC9729C2B15300C9FDDF /* ListView.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -437,6 +468,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A57ADC9429C2B0F600C9FDDF /* ListViewController.swift in Sources */,
 				A57ADC8E29C065BE00C9FDDF /* HomeCollectionViewCell.swift in Sources */,
 				A57ADC6B29BEE5EF00C9FDDF /* ServiceApiClient.swift in Sources */,
 				A5DF79F229B0608E00799BEA /* SearchViewController.swift in Sources */,
@@ -445,11 +477,14 @@
 				A5DF79D829B05CA600799BEA /* MainStepper.swift in Sources */,
 				A57ADC7229BF22AC00C9FDDF /* ArtistSearhModel.swift in Sources */,
 				A57ADC8C29C05D6900C9FDDF /* CommonCardModel.swift in Sources */,
+				A57ADC9B29C2D63700C9FDDF /* ListTableViewCell.swift in Sources */,
 				A5DF79F429B0609600799BEA /* SearchViewModel.swift in Sources */,
 				A57ADC6629BEB84200C9FDDF /* ServiceApiProvider.swift in Sources */,
 				A57ADC8429C008FD00C9FDDF /* SubViewDI.swift in Sources */,
 				A5DF79E129B05D7500799BEA /* AppFlow.swift in Sources */,
 				A5DF79E329B05D7B00799BEA /* MainFlow.swift in Sources */,
+				A57ADC9829C2B15300C9FDDF /* ListView.swift in Sources */,
+				A57ADC9629C2B14400C9FDDF /* ListViewModel.swift in Sources */,
 				A57ADC7E29BF301F00C9FDDF /* AlbumSearchModel.swift in Sources */,
 				A5DF7A2829B0821C00799BEA /* HomeView.swift in Sources */,
 				A5DF79B929B0275A00799BEA /* AppDelegate.swift in Sources */,
@@ -471,6 +506,7 @@
 				A5DF79E729B05D8C00799BEA /* SearchFlow.swift in Sources */,
 				A5DF79BB29B0275A00799BEA /* SceneDelegate.swift in Sources */,
 				A5DF79EE29B0607800799BEA /* HomeViewController.swift in Sources */,
+				A57ADCA029C30D7700C9FDDF /* UIScrollView+.swift in Sources */,
 				A5DF79DC29B05CC000799BEA /* SearchStepper.swift in Sources */,
 				A57ADC7429BF278400C9FDDF /* ArtistTopModel.swift in Sources */,
 			);

@@ -43,6 +43,11 @@ class HomeViewController: UIViewController {
         setupLayout()
         bindViewModel()
         self.action.accept(.execute)
+        
+        
+        let vc = ListViewController(viewModel: ListViewModel(), index: .topTrack)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     private func bindViewModel() {
@@ -56,8 +61,6 @@ class HomeViewController: UIViewController {
     }
     
     private func setupLayout() {
-        self.view.backgroundColor = .brown
-        
         self.view.addSubview(homeView)
         homeView.snp.makeConstraints {
             $0.directionalEdges.equalToSuperview()            

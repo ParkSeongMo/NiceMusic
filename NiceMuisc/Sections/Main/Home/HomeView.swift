@@ -12,13 +12,29 @@ import SnapKit
 import Then
 import UIKit
 
-
 enum HomeIndex: Int {
     case none = -1
     case topArtist = 0
     case topTrack = 1
     case topLocalArtist = 2
     case topLocalTrack = 3
+}
+
+extension HomeIndex {
+    var title: String {
+        switch self {
+        case .topArtist:
+            return "Top 뮤지션"
+        case .topTrack:
+            return "Top 음반"
+        case .topLocalArtist:
+            return "Top 국내 뮤지션"
+        case .topLocalTrack:
+            return "Top 국내 음반"
+        default:
+            return "None"
+        }
+    }
 }
 
 final class HomeView: UIView, SubViewDI {
@@ -39,8 +55,7 @@ final class HomeView: UIView, SubViewDI {
             applySubviewTags()
         }
     }
-    
-    
+        
     private let refreshControl = UIRefreshControl()
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {
@@ -76,11 +91,12 @@ final class HomeView: UIView, SubViewDI {
     }
     
     private func initRefresh() {
-        
-        refreshControl.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
-        
-        let attributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
+                
+        let attributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.white,
+            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
         refreshControl.attributedTitle = NSAttributedString(string: "당겨서 새로고침", attributes: attributes)
+        refreshControl.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
         refreshControl.tintColor = .white
         
         tableView.refreshControl = refreshControl
@@ -101,10 +117,7 @@ final class HomeView: UIView, SubViewDI {
             inputRelay.compactMap { $0 as? HomeActionType }
                 .bind(to: generic)
                 .disposed(by: disposeBag)
-            
-            generic.accept(.none)
         }
-        
         
         return self
     }

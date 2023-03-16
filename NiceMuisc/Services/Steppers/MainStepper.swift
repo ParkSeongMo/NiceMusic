@@ -10,6 +10,8 @@ import RxRelay
 
 final class MainStepper: Stepper {
     
+    static let shared = MainStepper()
+    
     var steps = PublishRelay<Step>()
     
     var initialStep: Step {

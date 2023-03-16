@@ -23,8 +23,9 @@ final class HomeTableViewCell: UITableViewCell {
         
     private var action = PublishRelay<Any>()
     private let disposeBag = DisposeBag()
-    
-    lazy var titleLabel = UILabel().then {
+            
+    private lazy var titleLabel = UILabel().then {
+        $0.text = "title"
         $0.font = .boldSystemFont(ofSize: 18)
         $0.numberOfLines = 1
         $0.textColor = .white
@@ -62,8 +63,7 @@ final class HomeTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+        
     private func setupLayout() {
         
         backgroundColor = .black
@@ -88,7 +88,6 @@ final class HomeTableViewCell: UITableViewCell {
             make.right.equalToSuperview().offset(5)
             make.bottom.equalToSuperview().offset(5)
         }
-        
     }
     
     private func bindrx() {
@@ -96,7 +95,6 @@ final class HomeTableViewCell: UITableViewCell {
             .bind { [weak self] in
                 guard let `self` = self else { return }
                 self.action.accept(HomeActionType.tapList(self.index))
-                print("click button")
             }
             .disposed(by: disposeBag)
         
@@ -119,7 +117,7 @@ final class HomeTableViewCell: UITableViewCell {
     func prepare(index: HomeIndex, items: [CommonCardModel]?) {
         
         self.index = index
-        self.titleLabel.text = self.getTitleText(index: index)
+        self.titleLabel.text = index.title
         if let items = items {
             self.items = items
         } else {
@@ -133,25 +131,7 @@ final class HomeTableViewCell: UITableViewCell {
     
     func bindAction(reley: PublishRelay<Any>) {
         self.action = reley
-    }
-    
-    
-    private func getTitleText(index: HomeIndex) -> String {
-        
-        switch index {
-        case .topArtist:
-            return "Top 뮤지션"
-        case .topTrack:
-            return "Top 음반"
-        case .topLocalArtist:
-            return "Top 국내 뮤지션"
-        case .topLocalTrack:
-            return "Top 국내 음반"
-        default:
-            return "None"
-        }
-    }
-    
+    }    
 }
 
 extension HomeTableViewCell: UICollectionViewDataSource {
