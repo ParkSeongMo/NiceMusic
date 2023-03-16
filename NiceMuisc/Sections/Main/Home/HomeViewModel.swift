@@ -17,7 +17,7 @@ enum HomeActionType {
     case execute  // 홈조회API Execute
     case refresh  // 홈화면 갱신
     case tapList(HomeIndex)     // 전체 보기
-    case tapDetail(HomeIndex)   // 상세 보기
+    case tapDetail(HomeIndex, String?, String?)   // 상세 보기
 }
 
 class HomeViewModel: ViewModelType, Stepper {
@@ -70,8 +70,8 @@ class HomeViewModel: ViewModelType, Stepper {
         case .tapList(let index):
             Log.d("tap list index:\(index)")
             // TODO Go to List
-        case .tapDetail(let index):
-            Log.d("tap list index:\(index)")
+        case .tapDetail(let index, let artist, let name):
+            Log.d("tap list index:\(index), artist:\(artist), name:\(name)")
             // TODO Go to Detail
         }
         

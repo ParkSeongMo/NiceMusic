@@ -19,8 +19,9 @@ final class HomeTableViewCell: UITableViewCell {
     private let cellWidth = 150
         
     private var items: [CommonCardModel] = []
+    private var index: HomeIndex = .none
         
-    private let action = PublishRelay<HomeActionType>()
+    private var action = PublishRelay<Any>()
     private let disposeBag = DisposeBag()
     
     lazy var titleLabel = UILabel().then {
@@ -87,30 +88,38 @@ final class HomeTableViewCell: UITableViewCell {
             make.right.equalToSuperview().offset(5)
             make.bottom.equalToSuperview().offset(5)
         }
+        
     }
     
     private func bindrx() {
         moreLabel.rx.tap
             .bind { [weak self] in
                 guard let `self` = self else { return }
-                self.action.accept(.tapList(HomeIndex.topLocalTrack))
+                self.action.accept(HomeActionType.tapList(self.index))
                 print("click button")
             }
             .disposed(by: disposeBag)
         
+        collectionView.rx.itemSelected
+            .subscribe(onNext: { [weak self] indexPath in
+                guard let `self` = self else { return }
+                self.action.accept(HomeActionType.tapDetail(
+                    self.index,
+                    self.items[indexPath.item].title,
+                    self.items[indexPath.item].subTitle))
+            })
+            .disposed(by: disposeBag)
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.prepare(name: nil, items: [])
+        self.prepare(index: .none, items: [])
     }
     
-    func prepare(name: String?, items: [CommonCardModel]?) {
+    func prepare(index: HomeIndex, items: [CommonCardModel]?) {
         
-//        print("HomeTableViewCell prepare \(name)")
-        
-//        guard let name = name else { return }
-        self.titleLabel.text = name
+        self.index = index
+        self.titleLabel.text = self.getTitleText(index: index)
         if let items = items {
             self.items = items
         } else {
@@ -123,11 +132,23 @@ final class HomeTableViewCell: UITableViewCell {
     }
     
     func bindAction(reley: PublishRelay<Any>) {
+        self.action = reley
+    }
+    
+    
+    private func getTitleText(index: HomeIndex) -> String {
         
-        if let reley = reley as? PublishRelay<HomeActionType> {
-            action.compactMap { $0 as? HomeActionType }
-                .bind(to: reley)
-                .disposed(by: disposeBag)
+        switch index {
+        case .topArtist:
+            return "Top 뮤지션"
+        case .topTrack:
+            return "Top 음반"
+        case .topLocalArtist:
+            return "Top 국내 뮤지션"
+        case .topLocalTrack:
+            return "Top 국내 음반"
+        default:
+            return "None"
         }
     }
     
@@ -135,13 +156,10 @@ final class HomeTableViewCell: UITableViewCell {
 
 extension HomeTableViewCell: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        print("HomeTableViewCell count \(items.count)")
         return items.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-//        print("HomeTableViewCell title \(items[indexPath.row].title)")
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.id, for: indexPath) as! HomeCollectionViewCell
         cell.prepare(
             title: items[indexPath.row].title,

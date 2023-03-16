@@ -89,7 +89,6 @@ final class HomeView: UIView, SubViewDI {
     @objc func refreshTable(refresh: UIRefreshControl) {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//            self.tableView.reloadData()
             self.inputRelay.accept(HomeActionType.refresh)
             refresh.endRefreshing()
         }
@@ -128,7 +127,7 @@ final class HomeView: UIView, SubViewDI {
             .bind(to: tableView.rx.items) { [weak self] tableView, _, element in
                 guard let `self` = self else { return UITableViewCell() }
                 if let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell {                    
-                    cell.prepare(name: self.getTitleText(index: element.index), items: element.items)
+                    cell.prepare(index: element.index, items: element.items)
                     cell.bindAction(reley: self.inputRelay)
                     return cell
                 }
@@ -138,23 +137,6 @@ final class HomeView: UIView, SubViewDI {
               
         return self
     }
-    
-    private func getTitleText(index: HomeIndex) -> String {
-        
-        switch index {
-        case .topArtist:
-            return "Top 뮤지션"
-        case .topTrack:
-            return "Top 음반"
-        case .topLocalArtist:
-            return "Top 국내 뮤지션"
-        case .topLocalTrack:
-            return "Top 국내 음반"
-        default:
-            return "None"
-        }
-    }
-    
 }
 
 extension HomeView: UITableViewDelegate {
