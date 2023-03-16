@@ -43,9 +43,8 @@ class HomeViewController: UIViewController {
         setupLayout()
         bindViewModel()
         self.action.accept(.execute)
-        
-        
-        let vc = ListViewController(viewModel: ListViewModel(), index: .topTrack)
+                
+        let vc = ListViewController(viewModel: ListViewModel(index: .topTrack), index: .topTrack)
         vc.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(vc, animated: true)
     }

@@ -20,7 +20,7 @@ class ListViewController: UIViewController {
     private let index:HomeIndex
     private let action = PublishRelay<ActionType>()
     
-    private lazy var listView = ListView()
+    private lazy var subView = ListView()
     
     init(viewModel: ListViewModel, index: HomeIndex) {
         self.viewModel = viewModel
@@ -36,7 +36,8 @@ class ListViewController: UIViewController {
         
         setupLayout()
         bindViewModel()
-        action.accept(.execute(index))
+        action.accept(.execute)
+        subView.index = self.index
     }
     
     private func setupLayout() {
@@ -46,8 +47,8 @@ class ListViewController: UIViewController {
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
-        self.view.addSubview(listView)
-        listView.snp.makeConstraints {
+        self.view.addSubview(subView)
+        subView.snp.makeConstraints {
             $0.directionalEdges.equalToSuperview()
         }
     }
@@ -57,7 +58,7 @@ class ListViewController: UIViewController {
         let output = viewModel.transform(
             req: ListViewModel.Input(actionTrigger: action.asObservable()))
         
-        listView
+        subView
             .setupDI(generic: action)
             .setupDI(observable: output.response)
     }

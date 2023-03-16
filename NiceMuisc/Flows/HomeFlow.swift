@@ -36,8 +36,8 @@ final class HomeFlow: Flow {
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     
-    private func coordinateToList(index: HomeIndex) -> FlowContributors {
-        let vm = ListViewModel()
+    private func coordinateToList(index: HomeIndex) -> FlowContributors {        
+        let vm = ListViewModel(index: index)
         let vc = ListViewController(viewModel: vm, index: index)
         vc.hidesBottomBarWhenPushed = true
         self.rootViewController.pushViewController(vc, animated: true)

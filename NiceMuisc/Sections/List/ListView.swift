@@ -21,6 +21,7 @@ class ListView: UIView, SubViewDI {
     private let refreshControl = UIRefreshControl()
     private let action = PublishRelay<ListActionType>()
     private var fetchingMore = false
+    var index = HomeIndex.none
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {
         $0.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -59,7 +60,7 @@ class ListView: UIView, SubViewDI {
     private func bindrx() {
                 
         tableView.rx.modelSelected(CommonCardModel.self)
-            .map { item in ListActionType.tapDetail(.topTrack, item.title, item.subTitle) }
+            .map { item in ListActionType.tapDetail(item.title, item.subTitle) }
             .bind(to: inputRelay)
             .disposed(by: disposeBag)
         
@@ -68,6 +69,7 @@ class ListView: UIView, SubViewDI {
                 guard let `self` = self else { return }
                 if self.tableView.isNearBottomEdge() && !self.fetchingMore {
                     self.fetchingMore = true
+                    self.inputRelay.accept(ListActionType.refresh)
                     print("contentOffset isNearBottomEdge")
                 }
             }).disposed(by: disposeBag)

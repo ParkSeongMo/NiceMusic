@@ -14,9 +14,10 @@ import RxSwift
 enum ListActionType {
     // MARK: - Setting Part
     case none                   // None Or Error
-    case execute(HomeIndex)     // 조회API Execute
-    case refresh(HomeIndex)     // 화면 갱신
-    case tapDetail(HomeIndex, String?, String?)   // 상세 보기
+    case execute     // 조회API Execute
+    case refresh     // 화면 갱신
+    case more                   // 더가져오기
+    case tapDetail(String?, String?)   // 상세 보기
 }
 
 final class ListViewModel: ViewModelType, Stepper {
@@ -56,19 +57,27 @@ final class ListViewModel: ViewModelType, Stepper {
         switch $0 {
         case .none:
             return .empty()
-        case .execute(let index):
-            self.requestListApi(index: index)
-        case .refresh(let index):
-            self.requestListApi(index: index)
+        case .execute:
+            self.requestListApi()
+        case .refresh:
+            self.requestListApi()
             return .empty()
-        case .tapDetail(let index, let artist, let name):
-            Log.d("tap list index:\(index), artist:\(String(describing: artist)), name:\(String(describing: name))")
+        case .more:
+            return .empty()
+        case .tapDetail(let artist, let name):
+            Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")
         }
         
         return .empty()
     }
     
-    private func requestListApi(index: HomeIndex) {
+    private var index = HomeIndex.none
+    
+    init(index: HomeIndex) {
+        self.index = index
+    }
+    
+    private func requestListApi() {
         
         switch index {
         case .topArtist:
