@@ -32,22 +32,22 @@ final class ListViewModel: ViewModelType, Stepper {
     
     private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Track.top().asObservable()
+        return ServiceApi.Track.top(limit: 20).asObservable()
     }
     
     private lazy var requestTopLocalTrackDataAction = Action<Void, TrackLocalTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Track.topLocal().asObservable()
+        return ServiceApi.Track.topLocal(limit: 20).asObservable()
     }
     
     private lazy var requestTopArtistDataAction = Action<Void, ArtistTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Artist.top().asObservable()
+        return ServiceApi.Artist.top(limit: 20).asObservable()
     }
     
     private lazy var requestTopLocalArtistDataAction = Action<Void, ArtistLocalTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Artist.topLocal().asObservable()
+        return ServiceApi.Artist.topLocal(limit: 20).asObservable()
     }
         
     lazy var buttonAction = Action<ListActionType, Void> { [weak self] in

@@ -9,16 +9,16 @@ import Moya
 import SwiftyJSON
 
 enum ServiceApiProvider {
-    case topArtistList                          // Top 아티스트 조회
-    case topTrackList                           // Top 음반 조회
-    case topArtistListInLocal(country: String)  // 국내 Top 아티스트 조회
-    case topTrackListInLocal(country: String)   // 국내 Top 음반 조회
-    case artistSearch(artist: String)           // 아티스트 검색
-    case trackSearch(track: String)             // 음반 검색
-    case albumSearch(album: String)             // 엘범 검색
-    case artistDetail(artist: String)           // 아티스트 상세 조회
-    case trackDetail(artist: String, track: String) // 음반 상세 조회
-    case albumDetail(artist: String, album: String) // 엘범 상세 조회
+    case topArtistList(page: Int, limit: Int)                           // Top 아티스트 조회
+    case topTrackList(page: Int, limit: Int)                            // Top 음반 조회
+    case topArtistListInLocal(page: Int, limit: Int, country: String)   // 국내 Top 아티스트 조회
+    case topTrackListInLocal(page: Int, limit: Int, country: String)    // 국내 Top 음반 조회
+    case artistSearch(artist: String)                       // 아티스트 검색
+    case trackSearch(track: String)                         // 음반 검색
+    case albumSearch(album: String)                         // 엘범 검색
+    case artistDetail(artist: String)                       // 아티스트 상세 조회
+    case trackDetail(artist: String, track: String)         // 음반 상세 조회
+    case albumDetail(artist: String, album: String)         // 엘범 상세 조회
 }
 
 extension ServiceApiProvider: TargetType {
@@ -111,8 +111,7 @@ extension ServiceApiProvider: TargetType {
                     param.updateValue(v, forKey: key)
                 }
             }
-        }
-               
+        }               
             
         param.updateValue("d0e923f7bc2ea76c43e1fe2234e5ccb3", forKey: "api_key")
         param.updateValue("json", forKey: "format")

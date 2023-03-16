@@ -22,8 +22,6 @@ enum HomeActionType {
 
 class HomeViewModel: ViewModelType, Stepper {
     
-    private let maxHomeItemCount = 10
-    
     // MARK: - Stepper
     var steps = RxRelay.PublishRelay<RxFlow.Step>()
     
@@ -143,13 +141,10 @@ class HomeViewModel: ViewModelType, Stepper {
         
         guard let array = array else { return responseData }
         
-        for item in array {
+        array.forEach { item in
             responseData.append(CommonCardModel(data: item))
-            if responseData.count >= maxHomeItemCount {
-                break
-            }
         }
-                
+                        
         return responseData
     }    
 }

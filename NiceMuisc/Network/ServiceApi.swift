@@ -24,12 +24,12 @@ extension ServiceApi.Artist {
         return ServiceApiClient.request(.artistSearch(artist: artist))
     }
     
-    static func top() -> Single<ArtistTopModel> {
-        return ServiceApiClient.request(.topArtistList)
+    static func top(page: Int=1, limit: Int=10) -> Single<ArtistTopModel> {
+        return ServiceApiClient.request(.topArtistList(page: page, limit: limit))
     }
         
-    static func topLocal() -> Single<ArtistLocalTopModel> {
-        return ServiceApiClient.request(.topArtistListInLocal(country: "Korea, Republic of"))
+    static func topLocal(page: Int=1, limit: Int=10) -> Single<ArtistLocalTopModel> {
+        return ServiceApiClient.request(.topArtistListInLocal(page: page, limit: limit, country: "Korea, Republic of"))
     }
 }
 
@@ -43,12 +43,12 @@ extension ServiceApi.Track {
         return ServiceApiClient.request(.trackSearch(track: track))
     }
     
-    static func top() -> Single<TrackTopModel> {
-        return ServiceApiClient.request(.topTrackList)
+    static func top(page: Int=1, limit: Int=10) -> Single<TrackTopModel> {
+        return ServiceApiClient.request(.topTrackList(page: page, limit: limit))
     }
     
-    static func topLocal() -> Single<TrackLocalTopModel> {
-        return ServiceApiClient.request(.topTrackListInLocal(country: "Korea, Republic of"))
+    static func topLocal(page: Int=1, limit: Int=10) -> Single<TrackLocalTopModel> {
+        return ServiceApiClient.request(.topTrackListInLocal(page: page, limit: limit, country: "Korea, Republic of"))
     }
 }
 
