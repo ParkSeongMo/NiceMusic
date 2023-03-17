@@ -57,7 +57,7 @@ final class HomeViewController: BaseViewController {
             .setupDI(generic: action)
             .setupDI(observable: output.response)
         
-        setupLoadChager(observable: output.loadChagner)
+        setupLoadChager(observable: output.loadChanger)
     }
     
     private func setupLayout() {

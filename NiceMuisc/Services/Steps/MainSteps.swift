@@ -13,5 +13,5 @@ enum MainSteps: Step {
     case homeIsRequired
     case searchIsRequired
     case listIsRequired(index: HomeIndex)
-    case detailIsRequired(index: HomeIndex, title: String?, subTitle: String?)
+    case detailIsRequired(type: DetailType, artist: String?, name: String?)
 }

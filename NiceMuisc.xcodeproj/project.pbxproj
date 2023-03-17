@@ -37,6 +37,8 @@
 		A57ADCA629C4349F00C9FDDF /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA529C4349F00C9FDDF /* DetailViewController.swift */; };
 		A57ADCA829C434AB00C9FDDF /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA729C434AB00C9FDDF /* DetailViewModel.swift */; };
 		A57ADCAA29C434B500C9FDDF /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA929C434B500C9FDDF /* DetailView.swift */; };
+		A57ADCAC29C4415300C9FDDF /* DetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCAB29C4415300C9FDDF /* DetailModel.swift */; };
+		A57ADCAF29C463AC00C9FDDF /* DetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */; };
 		A5DF79B929B0275A00799BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79B829B0275A00799BEA /* AppDelegate.swift */; };
 		A5DF79BB29B0275A00799BEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */; };
 		A5DF79C229B0275A00799BEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5DF79C129B0275A00799BEA /* Assets.xcassets */; };
@@ -90,6 +92,8 @@
 		A57ADCA529C4349F00C9FDDF /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		A57ADCA729C434AB00C9FDDF /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		A57ADCA929C434B500C9FDDF /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		A57ADCAB29C4415300C9FDDF /* DetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailModel.swift; sourceTree = "<group>"; };
+		A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageView.swift; sourceTree = "<group>"; };
 		A5DF79B529B0275A00799BEA /* NiceMuisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiceMuisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5DF79B829B0275A00799BEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -170,6 +174,14 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
+		A57ADCAD29C4638600C9FDDF /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
 		A5DF79AC29B0275A00799BEA = {
 			isa = PBXGroup;
 			children = (
@@ -231,6 +243,7 @@
 				A57ADC7F29BF3C1F00C9FDDF /* TrackSearchModel.swift */,
 				A57ADC8129BF3F2300C9FDDF /* TrackTopModel.swift */,
 				A57ADC8529C0284D00C9FDDF /* TrackLocalTopModel.swift */,
+				A57ADCAB29C4415300C9FDDF /* DetailModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -327,6 +340,7 @@
 		A5DF79EB29B0602600799BEA /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				A57ADCAD29C4638600C9FDDF /* Subviews */,
 				A57ADCA529C4349F00C9FDDF /* DetailViewController.swift */,
 				A57ADCA729C434AB00C9FDDF /* DetailViewModel.swift */,
 				A57ADCA929C434B500C9FDDF /* DetailView.swift */,
@@ -500,12 +514,14 @@
 				A57ADC8429C008FD00C9FDDF /* SubViewDI.swift in Sources */,
 				A5DF79E129B05D7500799BEA /* AppFlow.swift in Sources */,
 				A5DF79E329B05D7B00799BEA /* MainFlow.swift in Sources */,
+				A57ADCAF29C463AC00C9FDDF /* DetailImageView.swift in Sources */,
 				A57ADCAA29C434B500C9FDDF /* DetailView.swift in Sources */,
 				A57ADC9829C2B15300C9FDDF /* ListView.swift in Sources */,
 				A57ADCA429C42DEC00C9FDDF /* LoadChangeAction.swift in Sources */,
 				A57ADC9629C2B14400C9FDDF /* ListViewModel.swift in Sources */,
 				A57ADC7E29BF301F00C9FDDF /* AlbumSearchModel.swift in Sources */,
 				A5DF7A2829B0821C00799BEA /* HomeView.swift in Sources */,
+				A57ADCAC29C4415300C9FDDF /* DetailModel.swift in Sources */,
 				A5DF79B929B0275A00799BEA /* AppDelegate.swift in Sources */,
 				A5DF79D429B05C1300799BEA /* AppStepper.swift in Sources */,
 				A57ADC7C29BF2D7200C9FDDF /* AlbumDetailModel.swift in Sources */,

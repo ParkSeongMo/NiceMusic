@@ -16,7 +16,7 @@ enum HomeActionType {
     case execute  // 홈조회API Execute
     case refresh  // 홈화면 갱신
     case tapList(HomeIndex)     // 전체 보기
-    case tapDetail(HomeIndex, String?, String?)   // 상세 보기
+    case tapDetail(DetailType, String?, String?)   // 상세 보기
 }
 
 class HomeViewModel: ViewModelType, Stepper {
@@ -54,11 +54,11 @@ class HomeViewModel: ViewModelType, Stepper {
         return ServiceApi.Artist.topLocal().asObservable()
     }
     
-    lazy var buttonAction = Action<HomeActionType, Void> { [weak self] in
+    lazy var buttonAction = Action<HomeActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         
-        Log.d("buttonAction:\($0)")
-        switch $0 {
+        Log.d("buttonAction:\(action)")
+        switch action {
         case .none:
             return .empty()
         case .execute:
@@ -67,9 +67,10 @@ class HomeViewModel: ViewModelType, Stepper {
             self.requestMainApi()
         case .tapList(let index):
             self.steps.accept(MainSteps.listIsRequired(index: index))
-        case .tapDetail(let index, let artist, let name):
-            Log.d("tap list index:\(index), artist:\(String(describing: artist)), name:\(String(describing: name))")
-            // TODO Go to Detail
+        case .tapDetail(let type, let artist, let name):
+            self.steps.accept(MainSteps.detailIsRequired(type: type, artist: artist, name: name))
+//            self.steps.accept(MainSteps.detailIsRequired(type: type, artist: artist, name: name))
+            Log.d("tap list index:\(type), artist:\(String(describing: artist)), name:\(String(describing: name))")
         }
         
         return .empty()
@@ -81,7 +82,7 @@ class HomeViewModel: ViewModelType, Stepper {
     
     struct Output {
         let response: Observable<[HomeCardModel]>
-        let loadChagner: Observable<LoadChangeAction>
+        let loadChanger: Observable<LoadChangeAction>
     }
     
     func transform(req: Input) -> Output {
@@ -93,7 +94,7 @@ class HomeViewModel: ViewModelType, Stepper {
         subscribeServerRequestionAction(action: requestTopArtistDataAction)
         subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
                 
-        return Output(response: homeDataRelay.asObservable(), loadChagner: changerRelay.asObservable())
+        return Output(response: homeDataRelay.asObservable(), loadChanger: changerRelay.asObservable())
     }
     
     private func requestMainApi() {

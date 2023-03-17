@@ -25,6 +25,10 @@ struct Image: Codable {
 
 struct Tags: Codable {
     let tag:[Tag]?
+    
+    init() {
+        self.tag = []
+    }
 }
 
 struct Tag: Codable {
@@ -35,4 +39,9 @@ struct Tag: Codable {
 struct Desciption: Codable {
     let summary:String?
     let content:String?
+    
+    init() {
+        self.summary = ""
+        self.content = ""
+    }
 }

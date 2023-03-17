@@ -26,7 +26,7 @@ final class ListViewModel: ViewModelType, Stepper {
     var steps = RxRelay.PublishRelay<RxFlow.Step>()
             
     // MARK: - Output properties
-    private let listDataRelay = BehaviorRelay<[CommonCardModel]>(value: [CommonCardModel()])
+    private let resDataRelay = BehaviorRelay<[CommonCardModel]>(value: [CommonCardModel()])
     private let changerRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     
     private let disposeBag = DisposeBag()
@@ -56,9 +56,9 @@ final class ListViewModel: ViewModelType, Stepper {
         return ServiceApi.Artist.topLocal(page: self.page, limit: self.limit).asObservable()
     }
         
-    lazy var buttonAction = Action<ListActionType, Void> { [weak self] in
+    lazy var buttonAction = Action<ListActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
-        switch $0 {
+        switch action {
         case .none:
             return .empty()
         case .execute:
@@ -106,7 +106,7 @@ final class ListViewModel: ViewModelType, Stepper {
     
     struct Output {
         let response: Observable<[CommonCardModel]>
-        let loadChagner: Observable<LoadChangeAction>
+        let loadChanger: Observable<LoadChangeAction>
     }
     
     func transform(req: Input) -> Output {
@@ -118,7 +118,7 @@ final class ListViewModel: ViewModelType, Stepper {
         subscribeServerRequestionAction(action: requestTopArtistDataAction)
         subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
         
-        return Output(response: listDataRelay.asObservable(), loadChagner: changerRelay.asObservable())
+        return Output(response: resDataRelay.asObservable(), loadChanger: changerRelay.asObservable())
     }
     
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
@@ -138,7 +138,7 @@ final class ListViewModel: ViewModelType, Stepper {
                 default:
                     return
                 }
-                self.listDataRelay.accept(self.responseData)
+                self.resDataRelay.accept(self.responseData)
                 self.changerRelay.accept(.loaderStop)
             }, onError: { code in
                 Log.d("RequestHomeData Error: \(code)")

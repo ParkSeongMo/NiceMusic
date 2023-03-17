@@ -24,6 +24,8 @@ final class HomeFlow: Flow {
             return coordinateToHome()
         case .listIsRequired(let index):
             return coordinateToList(index: index)
+        case .detailIsRequired(let type, let artist, let name):
+            return coordinateToDetail(type: type, artist: artist, name: name)
         default:
             return .none
         }
@@ -39,6 +41,14 @@ final class HomeFlow: Flow {
     private func coordinateToList(index: HomeIndex) -> FlowContributors {        
         let vm = ListViewModel(index: index)
         let vc = ListViewController(viewModel: vm, index: index)
+        vc.hidesBottomBarWhenPushed = true
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
+    }
+    
+    private func coordinateToDetail(type: DetailType, artist: String?, name: String?) -> FlowContributors {
+        let vm = DetailViewModel(detailType: type, artist: artist, name: name)
+        let vc = DetailViewController(viewModel: vm, detailType: type)
         vc.hidesBottomBarWhenPushed = true
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))

@@ -17,6 +17,10 @@ struct AlbumDetail: Codable {
     let image:[Image]?
     let tags:Tags?
     let wiki:Desciption?
-    //음원 목록
+    let tracks:AlbumTrack?
+}
+
+struct AlbumTrack: Codable {
+    let track:[Track]?
 }
 

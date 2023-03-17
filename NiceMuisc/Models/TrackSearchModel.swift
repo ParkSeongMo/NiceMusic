@@ -22,5 +22,6 @@ struct TrackMatche: Codable {
 struct Track: Codable {
     let name:String?
     let artist:String?
+    let duration:String?
     let image:[Image]?
 }
