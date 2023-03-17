@@ -27,6 +27,7 @@ final class ListViewModel: ViewModelType, Stepper {
             
     // MARK: - Output properties
     private let listDataRelay = BehaviorRelay<[CommonCardModel]>(value: [CommonCardModel()])
+    private let changerRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     
     private let disposeBag = DisposeBag()
     private let defaultPageNum = 1
@@ -84,6 +85,7 @@ final class ListViewModel: ViewModelType, Stepper {
     }
     
     private func requestListApi() {
+        self.changerRelay.accept(.loaderStart)
         switch index {
         case .topArtist:
             self.requestTopArtistDataAction.execute()
@@ -104,6 +106,7 @@ final class ListViewModel: ViewModelType, Stepper {
     
     struct Output {
         let response: Observable<[CommonCardModel]>
+        let loadChagner: Observable<LoadChangeAction>
     }
     
     func transform(req: Input) -> Output {
@@ -115,7 +118,7 @@ final class ListViewModel: ViewModelType, Stepper {
         subscribeServerRequestionAction(action: requestTopArtistDataAction)
         subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
         
-        return Output(response: listDataRelay.asObservable())
+        return Output(response: listDataRelay.asObservable(), loadChagner: changerRelay.asObservable())
     }
     
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
@@ -136,9 +139,11 @@ final class ListViewModel: ViewModelType, Stepper {
                     return
                 }
                 self.listDataRelay.accept(self.responseData)
+                self.changerRelay.accept(.loaderStop)
             }, onError: { code in
                 Log.d("RequestHomeData Error: \(code)")
                 // TODO 에러 처리 필요
+                self.changerRelay.accept(.loaderStop)
             }).disposed(by: disposeBag)
     }
     

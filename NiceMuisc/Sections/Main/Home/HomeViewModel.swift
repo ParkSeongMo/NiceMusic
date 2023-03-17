@@ -10,7 +10,6 @@ import RxFlow
 import RxRelay
 import RxSwift
 
-
 enum HomeActionType {
     // MARK: - Setting Part
     case none     // None Or Error
@@ -33,6 +32,7 @@ class HomeViewModel: ViewModelType, Stepper {
     
     // MARK: - Output properties
     private let homeDataRelay = BehaviorRelay<[HomeCardModel]>(value: [HomeCardModel()])
+    private let changerRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     
     lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
@@ -81,6 +81,7 @@ class HomeViewModel: ViewModelType, Stepper {
     
     struct Output {
         let response: Observable<[HomeCardModel]>
+        let loadChagner: Observable<LoadChangeAction>
     }
     
     func transform(req: Input) -> Output {
@@ -92,10 +93,11 @@ class HomeViewModel: ViewModelType, Stepper {
         subscribeServerRequestionAction(action: requestTopArtistDataAction)
         subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
                 
-        return Output(response: homeDataRelay.asObservable())
+        return Output(response: homeDataRelay.asObservable(), loadChagner: changerRelay.asObservable())
     }
     
     private func requestMainApi() {
+        self.changerRelay.accept(.loaderStart)
         
         self.homeData.removeAll()
         self.requestTopTrackDataAction.execute()
@@ -126,9 +128,11 @@ class HomeViewModel: ViewModelType, Stepper {
                 if self.homeData.count >= 4 {
                     self.homeData.sort { return $0.index.rawValue < $1.index.rawValue }
                     self.homeDataRelay.accept(self.homeData)
+                    self.changerRelay.accept(.loaderStop)
                 }
             }, onError: { code in
                 Log.d("RequestHomeData Error: \(code)")
+                self.changerRelay.accept(.loaderStop)
                 // TODO 에러 처리 필요
             }).disposed(by: disposeBag)
     }

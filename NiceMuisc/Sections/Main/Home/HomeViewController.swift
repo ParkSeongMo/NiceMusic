@@ -7,18 +7,17 @@
 
 import RxCocoa
 import RxSwift
-import UIKit
 import SnapKit
 import Moya
+import Then
 
-class HomeViewController: UIViewController {
+final class HomeViewController: BaseViewController {
     
-    typealias ActionType = HomeActionType    
-            
-    let disposeBag = DisposeBag()
+    typealias ActionType = HomeActionType
     
-    private let viewModel:HomeViewModel
-    let action = PublishRelay<ActionType>()
+    private let action = PublishRelay<ActionType>()
+                
+    private let viewModel: HomeViewModel
     
     private lazy var homeView = HomeView()
     
@@ -44,11 +43,11 @@ class HomeViewController: UIViewController {
         bindViewModel()
         action.accept(.execute)
                 
-        let vc = ListViewController(viewModel: ListViewModel(index: .topTrack), index: .topTrack)
-        vc.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = ListViewController(viewModel: ListViewModel(index: .topTrack), index: .topTrack)
+//        vc.hidesBottomBarWhenPushed = true
+//        navigationController?.pushViewController(vc, animated: true)
     }
-    
+        
     private func bindViewModel() {
         
         let output = viewModel.transform(
@@ -57,6 +56,8 @@ class HomeViewController: UIViewController {
         homeView
             .setupDI(generic: action)
             .setupDI(observable: output.response)
+        
+        setupLoadChager(observable: output.loadChagner)
     }
     
     private func setupLayout() {

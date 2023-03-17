@@ -32,6 +32,11 @@
 		A57ADC9829C2B15300C9FDDF /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC9729C2B15300C9FDDF /* ListView.swift */; };
 		A57ADC9B29C2D63700C9FDDF /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC9A29C2D63700C9FDDF /* ListTableViewCell.swift */; };
 		A57ADCA029C30D7700C9FDDF /* UIScrollView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC9F29C30D7700C9FDDF /* UIScrollView+.swift */; };
+		A57ADCA229C4071E00C9FDDF /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA129C4071E00C9FDDF /* BaseViewController.swift */; };
+		A57ADCA429C42DEC00C9FDDF /* LoadChangeAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA329C42DEC00C9FDDF /* LoadChangeAction.swift */; };
+		A57ADCA629C4349F00C9FDDF /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA529C4349F00C9FDDF /* DetailViewController.swift */; };
+		A57ADCA829C434AB00C9FDDF /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA729C434AB00C9FDDF /* DetailViewModel.swift */; };
+		A57ADCAA29C434B500C9FDDF /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA929C434B500C9FDDF /* DetailView.swift */; };
 		A5DF79B929B0275A00799BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79B829B0275A00799BEA /* AppDelegate.swift */; };
 		A5DF79BB29B0275A00799BEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */; };
 		A5DF79C229B0275A00799BEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5DF79C129B0275A00799BEA /* Assets.xcassets */; };
@@ -80,6 +85,11 @@
 		A57ADC9729C2B15300C9FDDF /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		A57ADC9A29C2D63700C9FDDF /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
 		A57ADC9F29C30D7700C9FDDF /* UIScrollView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+.swift"; sourceTree = "<group>"; };
+		A57ADCA129C4071E00C9FDDF /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		A57ADCA329C42DEC00C9FDDF /* LoadChangeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadChangeAction.swift; sourceTree = "<group>"; };
+		A57ADCA529C4349F00C9FDDF /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		A57ADCA729C434AB00C9FDDF /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		A57ADCA929C434B500C9FDDF /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		A5DF79B529B0275A00799BEA /* NiceMuisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiceMuisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5DF79B829B0275A00799BEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -240,6 +250,8 @@
 				A5DF79EA29B0602300799BEA /* List */,
 				A5DF79F729B0610D00799BEA /* ViewModelType.swift */,
 				A57ADC8329C008FD00C9FDDF /* SubViewDI.swift */,
+				A57ADCA129C4071E00C9FDDF /* BaseViewController.swift */,
+				A57ADCA329C42DEC00C9FDDF /* LoadChangeAction.swift */,
 			);
 			path = Sections;
 			sourceTree = "<group>";
@@ -315,6 +327,9 @@
 		A5DF79EB29B0602600799BEA /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				A57ADCA529C4349F00C9FDDF /* DetailViewController.swift */,
+				A57ADCA729C434AB00C9FDDF /* DetailViewModel.swift */,
+				A57ADCA929C434B500C9FDDF /* DetailView.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -479,11 +494,15 @@
 				A57ADC8C29C05D6900C9FDDF /* CommonCardModel.swift in Sources */,
 				A57ADC9B29C2D63700C9FDDF /* ListTableViewCell.swift in Sources */,
 				A5DF79F429B0609600799BEA /* SearchViewModel.swift in Sources */,
+				A57ADCA629C4349F00C9FDDF /* DetailViewController.swift in Sources */,
 				A57ADC6629BEB84200C9FDDF /* ServiceApiProvider.swift in Sources */,
+				A57ADCA829C434AB00C9FDDF /* DetailViewModel.swift in Sources */,
 				A57ADC8429C008FD00C9FDDF /* SubViewDI.swift in Sources */,
 				A5DF79E129B05D7500799BEA /* AppFlow.swift in Sources */,
 				A5DF79E329B05D7B00799BEA /* MainFlow.swift in Sources */,
+				A57ADCAA29C434B500C9FDDF /* DetailView.swift in Sources */,
 				A57ADC9829C2B15300C9FDDF /* ListView.swift in Sources */,
+				A57ADCA429C42DEC00C9FDDF /* LoadChangeAction.swift in Sources */,
 				A57ADC9629C2B14400C9FDDF /* ListViewModel.swift in Sources */,
 				A57ADC7E29BF301F00C9FDDF /* AlbumSearchModel.swift in Sources */,
 				A5DF7A2829B0821C00799BEA /* HomeView.swift in Sources */,
@@ -495,6 +514,7 @@
 				A5DF79F829B0610D00799BEA /* ViewModelType.swift in Sources */,
 				A5DF79E529B05D8500799BEA /* HomeFlow.swift in Sources */,
 				A57ADC6929BEE3E100C9FDDF /* ArtistDetailModel.swift in Sources */,
+				A57ADCA229C4071E00C9FDDF /* BaseViewController.swift in Sources */,
 				A57ADC7A29BF2C3900C9FDDF /* TrackDetailModel.swift in Sources */,
 				A5DF79D229B05BA600799BEA /* MainSteps.swift in Sources */,
 				A57ADC8629C0284D00C9FDDF /* TrackLocalTopModel.swift in Sources */,
