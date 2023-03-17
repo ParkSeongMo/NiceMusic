@@ -29,40 +29,48 @@ final class ListViewModel: ViewModelType, Stepper {
     private let listDataRelay = BehaviorRelay<[CommonCardModel]>(value: [CommonCardModel()])
     
     private let disposeBag = DisposeBag()
+    private let defaultPageNum = 1
+    private var page = 1
+    private let limit = 20
+    private var responseData:[CommonCardModel] = []
+    private var index = HomeIndex.none
     
     private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Track.top(limit: 20).asObservable()
+        return ServiceApi.Track.top(page: self.page, limit: self.limit).asObservable()
     }
     
     private lazy var requestTopLocalTrackDataAction = Action<Void, TrackLocalTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Track.topLocal(limit: 20).asObservable()
+        return ServiceApi.Track.topLocal(page: self.page, limit: self.limit).asObservable()
     }
     
     private lazy var requestTopArtistDataAction = Action<Void, ArtistTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Artist.top(limit: 20).asObservable()
+        return ServiceApi.Artist.top(page: self.page, limit: self.limit).asObservable()
     }
     
     private lazy var requestTopLocalArtistDataAction = Action<Void, ArtistLocalTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Artist.topLocal(limit: 20).asObservable()
+        return ServiceApi.Artist.topLocal(page: self.page, limit: self.limit).asObservable()
     }
         
     lazy var buttonAction = Action<ListActionType, Void> { [weak self] in
         guard let `self` = self else { return .empty() }
-        
-        Log.d("buttonAction:\($0)")
         switch $0 {
         case .none:
             return .empty()
         case .execute:
+            self.page = self.defaultPageNum
+            self.responseData.removeAll()
             self.requestListApi()
         case .refresh:
+            self.page = self.defaultPageNum
+            self.responseData.removeAll()
             self.requestListApi()
-            return .empty()
         case .more:
+            self.page = self.page + 1
+            self.requestListApi()
             return .empty()
         case .tapDetail(let artist, let name):
             Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")
@@ -70,15 +78,12 @@ final class ListViewModel: ViewModelType, Stepper {
         
         return .empty()
     }
-    
-    private var index = HomeIndex.none
-    
+        
     init(index: HomeIndex) {
         self.index = index
     }
     
     private func requestListApi() {
-        
         switch index {
         case .topArtist:
             self.requestTopArtistDataAction.execute()
@@ -118,19 +123,19 @@ final class ListViewModel: ViewModelType, Stepper {
         action.elements
             .subscribe(onNext: { [weak self] element in
                 guard let `self` = self else { return }
-                                                                
                 switch element {
                 case let data as ArtistTopModel:
-                    self.listDataRelay.accept(self.makeLimitedHomeData(array: data.artists?.artist))
+                    self.responseData.append(contentsOf: self.makeLimitedHomeData(array: data.artists?.artist))
                 case let data as TrackTopModel:
-                    self.listDataRelay.accept(self.makeLimitedHomeData(array: data.tracks?.track))
+                    self.responseData.append(contentsOf: self.makeLimitedHomeData(array: data.tracks?.track))
                 case let data as ArtistLocalTopModel:
-                    self.listDataRelay.accept(self.makeLimitedHomeData(array: data.topartists?.artist))
+                    self.responseData.append(contentsOf: self.makeLimitedHomeData(array: data.topartists?.artist))
                 case let data as TrackLocalTopModel:
-                    self.listDataRelay.accept(self.makeLimitedHomeData(array: data.tracks?.track))
+                    self.responseData.append(contentsOf: self.makeLimitedHomeData(array: data.tracks?.track))
                 default:
                     return
                 }
+                self.listDataRelay.accept(self.responseData)
             }, onError: { code in
                 Log.d("RequestHomeData Error: \(code)")
                 // TODO 에러 처리 필요

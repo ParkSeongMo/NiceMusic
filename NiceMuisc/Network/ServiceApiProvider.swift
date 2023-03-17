@@ -116,8 +116,7 @@ extension ServiceApiProvider: TargetType {
         param.updateValue("d0e923f7bc2ea76c43e1fe2234e5ccb3", forKey: "api_key")
         param.updateValue("json", forKey: "format")
         param.updateValue(apiMethod, forKey: "method")
-        
-        print("objectMapper param = \(param)")
+//        Log.d("objectMapper param = \(param)")
         return param
     }
 }

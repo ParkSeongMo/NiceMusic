@@ -66,9 +66,7 @@ class HomeViewModel: ViewModelType, Stepper {
         case .refresh:
             self.requestMainApi()
         case .tapList(let index):
-            Log.d("tap list index:\(index)")
             self.steps.accept(MainSteps.listIsRequired(index: index))
-            // TODO Go to List
         case .tapDetail(let index, let artist, let name):
             Log.d("tap list index:\(index), artist:\(String(describing: artist)), name:\(String(describing: name))")
             // TODO Go to Detail

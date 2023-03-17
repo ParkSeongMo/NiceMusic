@@ -32,11 +32,9 @@ struct ServiceApiClient {
       
         Log.d("network requests \(api.path)")
         let request = Single<T>.create { observer in
-            
             let observable = ServiceApiClient.apiProvider.rx.request(api).subscribe { event in
                 switch event {
                 case .success(let response):
-                    
                     do {
                         Log.d("network requests - success")
                         let data = try JSONDecoder().decode(T.self, from: response.data)

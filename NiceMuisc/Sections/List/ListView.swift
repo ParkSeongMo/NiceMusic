@@ -68,9 +68,9 @@ class ListView: UIView, SubViewDI {
             .subscribe({  [weak self] _ in
                 guard let `self` = self else { return }
                 if self.tableView.isNearBottomEdge() && !self.fetchingMore {
+//                    print("contentOffset isNearBottomEdge \(self.fetchingMore)")
                     self.fetchingMore = true
-                    self.inputRelay.accept(ListActionType.refresh)
-                    print("contentOffset isNearBottomEdge")
+                    self.inputRelay.accept(ListActionType.more)
                 }
             }).disposed(by: disposeBag)
     }
