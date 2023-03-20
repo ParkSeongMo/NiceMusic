@@ -19,7 +19,6 @@ class ListView: UIView, SubViewDI {
     private let refreshControl = UIRefreshControl()
     private let action = PublishRelay<ListActionType>()
     private var fetchingMore = false
-    var index = HomeIndex.none
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {
         $0.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -27,6 +26,7 @@ class ListView: UIView, SubViewDI {
         $0.separatorStyle = .singleLine
         $0.separatorColor = .gray
         
+        $0.rowHeight = 70
         $0.backgroundColor = .black
         $0.bounces = true
         $0.showsVerticalScrollIndicator = true
@@ -49,7 +49,6 @@ class ListView: UIView, SubViewDI {
         
         addSubview(tableView)
         
-        tableView.delegate = self //check
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -131,10 +130,3 @@ class ListView: UIView, SubViewDI {
         return self
     }
 }
-
-extension ListView: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(70)
-  }
-}
-

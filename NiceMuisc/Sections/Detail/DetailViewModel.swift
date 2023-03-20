@@ -68,9 +68,9 @@ final class DetailViewModel: ViewModelType, Stepper {
     }      
         
     private let disposeBag = DisposeBag()
-    private let detailType: DetailType
     private let artist: String
     private let name: String
+    let detailType: DetailType
     
     init(detailType: DetailType, artist: String?, name: String?) {
         self.detailType = detailType

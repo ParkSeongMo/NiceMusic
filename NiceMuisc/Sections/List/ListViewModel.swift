@@ -34,7 +34,7 @@ final class ListViewModel: ViewModelType, Stepper {
     private var page = 1
     private let limit = 20
     private var responseData:[CommonCardModel] = []
-    private var index = HomeIndex.none
+    var index = HomeIndex.none
     
     private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }

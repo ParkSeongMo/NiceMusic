@@ -74,9 +74,7 @@ final class DetailView: UIView, SubViewDI {
     
     @discardableResult
     func setupDI<T>(observable: Observable<T>) -> Self {
-                    
-                
+                                    
         return self
-    }
-        
+    }        
 }

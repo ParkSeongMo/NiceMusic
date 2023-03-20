@@ -40,7 +40,7 @@ final class HomeFlow: Flow {
     
     private func coordinateToList(index: HomeIndex) -> FlowContributors {        
         let vm = ListViewModel(index: index)
-        let vc = ListViewController(viewModel: vm, index: index)
+        let vc = ListViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
@@ -48,7 +48,7 @@ final class HomeFlow: Flow {
     
     private func coordinateToDetail(type: DetailType, artist: String?, name: String?) -> FlowContributors {
         let vm = DetailViewModel(detailType: type, artist: artist, name: name)
-        let vc = DetailViewController(viewModel: vm, detailType: type)
+        let vc = DetailViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))

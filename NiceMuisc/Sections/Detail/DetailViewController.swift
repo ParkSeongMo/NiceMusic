@@ -18,12 +18,10 @@ final class DetailViewController: BaseViewController {
     
     private let viewModel: DetailViewModel
     
-    private let detailType: DetailType
     private lazy var subView = DetailView()
     
-    init(viewModel: DetailViewModel, detailType: DetailType) {
+    init(viewModel: DetailViewModel) {
         self.viewModel = viewModel
-        self.detailType = detailType
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,7 +32,7 @@ final class DetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        subView.detailType = detailType
+        subView.detailType = self.viewModel.detailType
         
         setupLayout()
         bindViewModel()

@@ -17,14 +17,11 @@ final class ListViewController: BaseViewController {
     private let action = PublishRelay<ActionType>()
     
     private let viewModel: ListViewModel
-    
-    private let index: HomeIndex
-    
+        
     private lazy var subView = ListView()
     
-    init(viewModel: ListViewModel, index: HomeIndex) {
+    init(viewModel: ListViewModel) {
         self.viewModel = viewModel
-        self.index = index
         super.init(nibName: nil, bundle: nil)        
     }
     
@@ -38,12 +35,11 @@ final class ListViewController: BaseViewController {
         setupLayout()
         bindViewModel()
         action.accept(.execute)
-        subView.index = self.index
     }
     
     private func setupLayout() {
         
-        self.title = index.title + " 목록"
+        self.title = self.viewModel.index.title + " 목록"
         self.navigationController?.navigationBar.backgroundColor = .black
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]

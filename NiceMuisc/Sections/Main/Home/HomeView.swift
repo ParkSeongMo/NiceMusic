@@ -74,7 +74,6 @@ final class HomeView: UIView, SubViewDI {
     private func setupLayout() {
         
         addSubview(tableView)
-//        tableView.delegate = self
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -141,9 +140,3 @@ final class HomeView: UIView, SubViewDI {
         return self
     }
 }
-
-//extension HomeView: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return CGFloat(tableViewHeight)
-//  }    
-//}
