@@ -42,7 +42,7 @@ final class HomeView: UIView, SubViewDI {
         
     typealias Model = HomeViewModel
     
-    private let tableViewHeight = 270
+    private let tableViewHeight = 270.0
     private let disposeBag = DisposeBag()
     
     var inputRelay = PublishRelay<Any>()
@@ -51,7 +51,7 @@ final class HomeView: UIView, SubViewDI {
     private let refreshControl = UIRefreshControl()
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {
-        $0.rowHeight = 270
+        $0.rowHeight = tableViewHeight
         $0.allowsSelection = false
         $0.backgroundColor = .black
         $0.separatorStyle = .none
@@ -114,7 +114,7 @@ final class HomeView: UIView, SubViewDI {
     @discardableResult
     func setupDI<T>(observable: Observable<T>) -> Self {
         
-        if let observable = observable as? Observable<[HomeCardModel]> {       
+        if let observable = observable as? Observable<[HomeCardModel]> {
             observable
 //                .compactMap { $0 as? [HomeCardModel] }
     //                .do(onNext: { [weak self] element in

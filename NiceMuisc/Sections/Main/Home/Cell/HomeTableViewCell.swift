@@ -17,6 +17,8 @@ final class HomeTableViewCell: UITableViewCell {
     static let id = "HomeTableViewCell"
     private let cellHeight = 200
     private let cellWidth = 150
+    private let titleFontSize = 18.0
+    private let moreFontSize = 15.0
         
     private var items: [CommonCardModel] = []
     private var index: HomeIndex = .none
@@ -25,16 +27,24 @@ final class HomeTableViewCell: UITableViewCell {
     private let disposeBag = DisposeBag()
             
     private lazy var titleLabel = UILabel().then {
-        $0.text = "title"
-        $0.font = .boldSystemFont(ofSize: 18)
+        $0.text = ""
+        $0.font = .boldSystemFont(ofSize: titleFontSize)
         $0.numberOfLines = 1
         $0.textColor = .white
     }
     
     private lazy var moreLabel = UIButton().then {
-        $0.titleLabel?.font = .systemFont(ofSize: 15)
+        $0.titleLabel?.font = .systemFont(ofSize: moreFontSize)
         $0.setTitleColor(.gray, for: .normal)
-        $0.setTitle("전체보기 >", for: .normal)
+        $0.setTitle("전체보기", for: .normal)
+    }
+              
+    private lazy var moreImageView = UIImageView().then {
+        $0.image = UIImage(
+            systemName: "chevron.right",
+            withConfiguration:
+                UIImage.SymbolConfiguration(font: .systemFont(ofSize: moreFontSize)))
+        $0.tintColor = .white
     }
     
     private lazy var collectionViewFlowLayout = UICollectionViewFlowLayout().then {
@@ -69,23 +79,28 @@ final class HomeTableViewCell: UITableViewCell {
                         
         backgroundColor = .black
         
-        self.contentView.addSubviews(titleLabel, moreLabel, collectionView)
+        self.contentView.addSubviews(titleLabel, moreLabel, collectionView, moreImageView)
        
-        titleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(10)
-            make.top.equalToSuperview().offset(30)
+        titleLabel.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(10)
+            $0.top.equalToSuperview().offset(30)
         }
-                
-        moreLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(titleLabel.snp.centerY)
-            make.right.equalToSuperview().offset(-10)
+        
+        moreImageView.snp.makeConstraints {
+            $0.centerY.equalTo(titleLabel.snp.centerY)
+            $0.right.equalToSuperview().offset(-10)
         }
+        
+        moreLabel.snp.makeConstraints {
+            $0.centerY.equalTo(titleLabel.snp.centerY)
+            $0.right.equalTo(moreImageView.snp.left).offset(-5)
+        }       
                 
-        collectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.left.equalToSuperview().offset(5)
-            make.right.equalToSuperview().offset(5)
-            make.bottom.equalToSuperview().offset(5)
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
+            $0.left.equalToSuperview().offset(5)
+            $0.right.equalToSuperview().offset(5)
+            $0.bottom.equalToSuperview().offset(5)
         }
     }
     
@@ -119,12 +134,7 @@ final class HomeTableViewCell: UITableViewCell {
         self.titleLabel.text = index.title
         
         self.items = items ?? [CommonCardModel]()
-//        if let items = items {
-//            self.items = items
-//        } else {
-//            self.items = [CommonCardModel]()
-//        }
-        collectionView.reloadData()
+//        collectionView.reloadData()
         collectionView.performBatchUpdates {
             collectionView.scrollsToTop = true
         }
@@ -159,16 +169,5 @@ extension HomeTableViewCell: UICollectionViewDataSource {
             rank: String(describing: indexPath.row+1),
             imageUrl: items[indexPath.row].image?[3].text)
         return cell
-    }
-}
-
-extension HomeTableViewCell: UICollectionViewDelegate {
-
-}
-
-
-extension HomeTableViewCell: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 150, height: 200)
     }
 }
