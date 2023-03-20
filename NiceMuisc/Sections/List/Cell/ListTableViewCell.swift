@@ -45,22 +45,22 @@ final class ListTableViewCell: UITableViewCell {
         
         self.contentView.addSubviews(imageview, titleLabel, subTitleLabel)
                 
-        imageview.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(10)
-            make.top.equalToSuperview()
-            make.height.width.equalTo(70)
+        imageview.snp.makeConstraints {
+           $0.left.equalToSuperview().offset(10)
+           $0.top.equalToSuperview()
+           $0.height.width.equalTo(70)
         }
         
-        titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(imageview.snp.right).offset(5)
-            make.top.equalToSuperview().offset(5)
-            make.right.equalToSuperview().offset(5)
+        titleLabel.snp.makeConstraints {
+           $0.left.equalTo(imageview.snp.right).offset(5)
+           $0.top.equalToSuperview().offset(5)
+           $0.right.equalToSuperview().offset(5)
         }
         
-        subTitleLabel.snp.makeConstraints { make in
-            make.left.equalTo(titleLabel.snp.left)
-            make.top.equalTo(titleLabel.snp.bottom).offset(5)
-            make.right.equalToSuperview().offset(5)
+        subTitleLabel.snp.makeConstraints {
+           $0.left.equalTo(titleLabel.snp.left)
+           $0.top.equalTo(titleLabel.snp.bottom).offset(5)
+           $0.right.equalToSuperview().offset(5)
         }
     }
         

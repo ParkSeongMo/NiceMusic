@@ -31,9 +31,9 @@ final class DetailImageView: UIView {
         
         addSubview(imageView)
         
-        imageView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(300)
+        imageView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(300)
         }
         
         imageView.kf.setImage(with: URL(string: "https://lastfm.freetls.fastly.net/i/u/300x300/bfb84f4aa2ac69a5ffa98c0406b8bf10.png"), options: [.transition(ImageTransition.fade(0.3))])

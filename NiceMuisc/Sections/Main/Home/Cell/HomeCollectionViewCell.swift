@@ -47,29 +47,29 @@ final class HomeCollectionViewCell: UICollectionViewCell {
     private func setupLayout() {
                 
         self.contentView.addSubviews(imageView, titleLabel, subTitleLabel, rankLabel)               
-        imageView.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.top.equalToSuperview()
-            make.right.equalToSuperview()
-            make.height.equalTo(150)
-            make.width.equalToSuperview()
+        imageView.snp.makeConstraints {
+            $0.left.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.right.equalToSuperview()
+            $0.height.equalTo(150)
+            $0.width.equalToSuperview()
         }
         
-        titleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(5)
-            make.top.equalTo(imageView.snp.bottom).offset(5)
-            make.right.equalToSuperview().offset(-25)
+        titleLabel.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(5)
+            $0.top.equalTo(imageView.snp.bottom).offset(5)
+            $0.right.equalToSuperview().offset(-25)
         }
         
-        subTitleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(5)
-            make.top.equalTo(titleLabel.snp.bottom).offset(5)
-            make.right.equalToSuperview().offset(-25)
+        subTitleLabel.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(5)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(5)
+            $0.right.equalToSuperview().offset(-25)
         }
         
-        rankLabel.snp.makeConstraints { make in
-            make.right.equalToSuperview().offset(-5)
-            make.bottom.equalTo(subTitleLabel.snp.bottom)
+        rankLabel.snp.makeConstraints {
+            $0.right.equalToSuperview().offset(-5)
+            $0.bottom.equalTo(subTitleLabel.snp.bottom)
         }
     }
     

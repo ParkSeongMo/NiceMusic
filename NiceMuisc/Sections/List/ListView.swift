@@ -49,8 +49,8 @@ class ListView: UIView, SubViewDI {
         
         addSubview(tableView)
         
-        tableView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        tableView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
         

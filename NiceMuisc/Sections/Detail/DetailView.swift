@@ -52,12 +52,12 @@ final class DetailView: UIView, SubViewDI {
     private func setupLayout() {
                 
         addSubview(scrollView)
-        scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        scrollView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
         scrollView.addSubview(stackView)
-        stackView.snp.makeConstraints { make in
-            make.edges.width.equalToSuperview()
+        stackView.snp.makeConstraints {
+            $0.edges.width.equalToSuperview()
         }
         
         subViews.forEach {
