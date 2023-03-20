@@ -18,9 +18,7 @@ protocol SubViewDI: AnyObject {
     var outputRelay: PublishRelay<Any> { get }
     
     // MARK: - Properties
-    var subViews: [UIView] { get set }
-    
-    func applySubviewTags()
+    var subViews: [UIView] { get set }    
 }
 
 extension SubViewDI {
@@ -35,13 +33,6 @@ extension SubViewDI {
             return []
         }
         set {
-        }
-    }
-}
-extension SubViewDI {
-    func applySubViewTags() {
-        subViews.enumerated().forEach { index, view in
-            view.tag = index + 1
         }
     }
 }

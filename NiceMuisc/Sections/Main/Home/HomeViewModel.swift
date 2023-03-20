@@ -15,8 +15,8 @@ enum HomeActionType {
     case none     // None Or Error
     case execute  // 홈조회API Execute
     case refresh  // 홈화면 갱신
-    case tapList(HomeIndex)     // 전체 보기
-    case tapDetail(DetailType, String?, String?)   // 상세 보기
+    case tapAllforList(HomeIndex)     // 전체 보기
+    case tapItemForDetail(DetailType, String?, String?)   // 상세 보기
 }
 
 class HomeViewModel: ViewModelType, Stepper {
@@ -61,16 +61,12 @@ class HomeViewModel: ViewModelType, Stepper {
         switch action {
         case .none:
             return .empty()
-        case .execute:
+        case .execute, .refresh:
             self.requestMainApi()
-        case .refresh:
-            self.requestMainApi()
-        case .tapList(let index):
+        case .tapAllforList(let index):
             self.steps.accept(MainSteps.listIsRequired(index: index))
-        case .tapDetail(let type, let artist, let name):
+        case .tapItemForDetail(let type, let artist, let name):
             self.steps.accept(MainSteps.detailIsRequired(type: type, artist: artist, name: name))
-//            self.steps.accept(MainSteps.detailIsRequired(type: type, artist: artist, name: name))
-            Log.d("tap list index:\(type), artist:\(String(describing: artist)), name:\(String(describing: name))")
         }
         
         return .empty()

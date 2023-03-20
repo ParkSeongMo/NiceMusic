@@ -206,9 +206,7 @@
 				A5DF79F929B0618D00799BEA /* Common */,
 				A57ADC6229BEB69400C9FDDF /* Network */,
 				A5DF79CD29B043DD00799BEA /* Models */,
-				A5DF79D029B0441100799BEA /* Views */,
 				A5DF79CF29B043EF00799BEA /* Sections */,
-				A5DF79CE29B043EA00799BEA /* Types */,
 				A5DF79DF29B05D5900799BEA /* Flows */,
 				A5DF79CC29B043D800799BEA /* Services */,
 				A57ADC6C29BEE72D00C9FDDF /* Utils */,
@@ -248,13 +246,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		A5DF79CE29B043EA00799BEA /* Types */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Types;
-			sourceTree = "<group>";
-		};
 		A5DF79CF29B043EF00799BEA /* Sections */ = {
 			isa = PBXGroup;
 			children = (
@@ -267,13 +258,6 @@
 				A57ADCA329C42DEC00C9FDDF /* LoadChangeAction.swift */,
 			);
 			path = Sections;
-			sourceTree = "<group>";
-		};
-		A5DF79D029B0441100799BEA /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		A5DF79D529B05C1C00799BEA /* Steps */ = {

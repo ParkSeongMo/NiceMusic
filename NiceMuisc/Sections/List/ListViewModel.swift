@@ -13,11 +13,11 @@ import RxSwift
 
 enum ListActionType {
     // MARK: - Setting Part
-    case none                   // None Or Error
+    case none        // None Or Error
     case execute     // 조회API Execute
     case refresh     // 화면 갱신
-    case more                   // 더가져오기
-    case tapDetail(String?, String?)   // 상세 보기
+    case more        // 더가져오기
+    case tapItemForDetail(String?, String?)   // 상세 보기
 }
 
 final class ListViewModel: ViewModelType, Stepper {
@@ -61,19 +61,14 @@ final class ListViewModel: ViewModelType, Stepper {
         switch action {
         case .none:
             return .empty()
-        case .execute:
-            self.page = self.defaultPageNum
-            self.responseData.removeAll()
-            self.requestListApi()
-        case .refresh:
+        case .execute, .refresh:
             self.page = self.defaultPageNum
             self.responseData.removeAll()
             self.requestListApi()
         case .more:
-            self.page = self.page + 1
+            self.page += 1
             self.requestListApi()
-            return .empty()
-        case .tapDetail(let artist, let name):
+        case .tapItemForDetail(let artist, let name):
             Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")
         }
         
@@ -112,7 +107,7 @@ final class ListViewModel: ViewModelType, Stepper {
     func transform(req: Input) -> Output {
         
         req.actionTrigger.bind(to: buttonAction.inputs).disposed(by: disposeBag)
-        
+               
         subscribeServerRequestionAction(action: requestTopTrackDataAction)
         subscribeServerRequestionAction(action: requestTopLocalTrackDataAction)
         subscribeServerRequestionAction(action: requestTopArtistDataAction)
@@ -122,7 +117,7 @@ final class ListViewModel: ViewModelType, Stepper {
     }
     
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
-        
+                
         action.elements
             .subscribe(onNext: { [weak self] element in
                 guard let `self` = self else { return }

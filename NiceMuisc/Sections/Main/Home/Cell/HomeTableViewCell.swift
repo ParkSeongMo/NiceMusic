@@ -45,6 +45,7 @@ final class HomeTableViewCell: UITableViewCell {
     }
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout).then {
+        $0.dataSource = self // check
         $0.isScrollEnabled = true
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = true
@@ -69,6 +70,7 @@ final class HomeTableViewCell: UITableViewCell {
         backgroundColor = .black
         
         self.contentView.addSubview(titleLabel)
+       
         titleLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(10)
             make.top.equalToSuperview().offset(30)
@@ -80,7 +82,6 @@ final class HomeTableViewCell: UITableViewCell {
             make.right.equalToSuperview().offset(-10)
         }
                 
-        self.collectionView.dataSource = self
         self.contentView.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
@@ -94,14 +95,14 @@ final class HomeTableViewCell: UITableViewCell {
         moreLabel.rx.tap
             .bind { [weak self] in
                 guard let `self` = self else { return }
-                self.action.accept(HomeActionType.tapList(self.index))
+                self.action.accept(HomeActionType.tapAllforList(self.index))
             }
             .disposed(by: disposeBag)
         
         collectionView.rx.itemSelected
             .subscribe(onNext: { [weak self] indexPath in
                 guard let `self` = self else { return }
-                self.action.accept(HomeActionType.tapDetail(
+                self.action.accept(HomeActionType.tapItemForDetail(
                     self.parsingHomeIndexToDetailType(index: self.index),
                     self.items[indexPath.item].title,
                     self.items[indexPath.item].subTitle))
@@ -118,11 +119,13 @@ final class HomeTableViewCell: UITableViewCell {
         
         self.index = index
         self.titleLabel.text = index.title
-        if let items = items {
-            self.items = items
-        } else {
-            self.items = [CommonCardModel]()
-        }
+        
+        self.items = items ?? [CommonCardModel]()
+//        if let items = items {
+//            self.items = items
+//        } else {
+//            self.items = [CommonCardModel]()
+//        }
         collectionView.reloadData()
         collectionView.performBatchUpdates {
             collectionView.scrollsToTop = true
@@ -135,13 +138,9 @@ final class HomeTableViewCell: UITableViewCell {
     
     private func parsingHomeIndexToDetailType(index: HomeIndex) -> DetailType {
         switch index {
-        case .topArtist:
+        case .topArtist, .topLocalArtist:
             return .artist
-        case .topLocalArtist:
-            return .artist
-        case .topTrack:
-            return .track
-        case .topLocalTrack:
+        case .topTrack, .topLocalTrack:
             return .track
         default:
             return .none

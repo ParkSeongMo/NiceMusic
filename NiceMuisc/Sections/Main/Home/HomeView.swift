@@ -12,12 +12,13 @@ import SnapKit
 import Then
 import UIKit
 
+// 홈화면에 표출되는 항목 순서
 enum HomeIndex: Int {
     case none = -1
-    case topArtist = 0
-    case topTrack = 1
-    case topLocalArtist = 2
-    case topLocalTrack = 3
+    case topArtist = 0      // Top 뮤지션
+    case topTrack = 1       // Top 음원
+    case topLocalArtist = 2 // Top 국내 뮤지션
+    case topLocalTrack = 3  // Top 국내 음원
 }
 
 extension HomeIndex {
@@ -26,18 +27,18 @@ extension HomeIndex {
         case .topArtist:
             return "Top 뮤지션"
         case .topTrack:
-            return "Top 음반"
+            return "Top 음원"
         case .topLocalArtist:
             return "Top 국내 뮤지션"
         case .topLocalTrack:
-            return "Top 국내 음반"
+            return "Top 국내 음원"
         default:
             return "None"
         }
     }
 }
 
-final class HomeView: UIView, SubViewDI {
+final class HomeView: UIView, SubViewDI {    
         
     typealias Model = HomeViewModel
     
@@ -46,19 +47,11 @@ final class HomeView: UIView, SubViewDI {
     
     var inputRelay = PublishRelay<Any>()
     var outputRelay = PublishRelay<Any>()
-    
-    var subViews: [DescendantView] = [] {
-        willSet {
-            newValue.forEach {
-                $0.delegate = self
-            }
-            applySubviewTags()
-        }
-    }
-        
+            
     private let refreshControl = UIRefreshControl()
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {
+        $0.rowHeight = 270
         $0.allowsSelection = false
         $0.backgroundColor = .black
         $0.separatorStyle = .none
@@ -66,9 +59,6 @@ final class HomeView: UIView, SubViewDI {
         $0.showsVerticalScrollIndicator = true
         $0.contentInset = .zero
         $0.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.id)
-    }
-        
-    func applySubviewTags() {
     }
         
     override init(frame: CGRect) {
@@ -84,7 +74,7 @@ final class HomeView: UIView, SubViewDI {
     private func setupLayout() {
         
         addSubview(tableView)
-        tableView.delegate = self
+//        tableView.delegate = self
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -152,8 +142,8 @@ final class HomeView: UIView, SubViewDI {
     }
 }
 
-extension HomeView: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return CGFloat(tableViewHeight)
-  }    
-}
+//extension HomeView: UITableViewDelegate {
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return CGFloat(tableViewHeight)
+//  }    
+//}

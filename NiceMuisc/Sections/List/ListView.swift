@@ -15,9 +15,7 @@ class ListView: UIView, SubViewDI {
     
     var inputRelay = PublishRelay<Any>()
     var outputRelay = PublishRelay<Any>()
-    
-    func applySubviewTags() {}
-    
+        
     private let refreshControl = UIRefreshControl()
     private let action = PublishRelay<ListActionType>()
     private var fetchingMore = false
@@ -51,7 +49,7 @@ class ListView: UIView, SubViewDI {
         
         addSubview(tableView)
         
-        tableView.delegate = self
+        tableView.delegate = self //check
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -60,7 +58,7 @@ class ListView: UIView, SubViewDI {
     private func bindrx() {
                 
         tableView.rx.modelSelected(CommonCardModel.self)
-            .map { item in ListActionType.tapDetail(item.title, item.subTitle) }
+            .map { item in ListActionType.tapItemForDetail(item.title, item.subTitle) }
             .bind(to: inputRelay)
             .disposed(by: disposeBag)
         
@@ -109,7 +107,8 @@ class ListView: UIView, SubViewDI {
     
     @discardableResult
     func setupDI<T>(observable: Observable<T>) -> Self {
-                    
+                  
+        // check 타입 캐스팅
         observable
             .compactMap { $0 as? [CommonCardModel] }
             .do(onNext: { [weak self] element in

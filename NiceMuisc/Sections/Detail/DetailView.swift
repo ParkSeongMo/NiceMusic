@@ -20,17 +20,15 @@ final class DetailView: UIView, SubViewDI {
     
     var detailType: DetailType = .artist
     
+    var subViews: [UIView] = []
     
     private lazy var scrollView = UIScrollView().then {
         $0.isScrollEnabled = true
         $0.alwaysBounceVertical = true
         $0.showsVerticalScrollIndicator = true
         $0.showsHorizontalScrollIndicator = false
-        $0.contentInsetAdjustmentBehavior = .never
     }
-    
-    private lazy var scrollContainerView = UIView()
-       
+           
     private lazy var stackView = UIStackView().then {
         $0.backgroundColor = .red
         $0.distribution = .equalSpacing
@@ -38,13 +36,12 @@ final class DetailView: UIView, SubViewDI {
         $0.axis = .vertical
     }
     
-    
-    func applySubviewTags() {
-    }
-        
+    private lazy var detailImageView = DetailImageView()
+           
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        setupSubviews()
         setupLayout()
     }
     
@@ -56,20 +53,23 @@ final class DetailView: UIView, SubViewDI {
                 
         addSubview(scrollView)
         scrollView.snp.makeConstraints { make in
-            make.leading.top.right.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
-        scrollView.addSubview(scrollContainerView)
-        scrollContainerView.snp.makeConstraints { make in
-            make.leading.top.right.bottom.equalToSuperview()
-        }
-        scrollContainerView.addSubview(stackView)
+        scrollView.addSubview(stackView)
         stackView.snp.makeConstraints { make in
-            make.leading.top.right.bottom.equalToSuperview()
+            make.edges.width.equalToSuperview()
         }
         
-        stackView.addArrangedSubview(imageView)
-        
-        
+        subViews.forEach {
+            stackView.addArrangedSubview($0)
+        }       
+    }
+    
+    
+    private func setupSubviews() {
+        subViews = [
+            detailImageView
+        ]
     }
     
     @discardableResult
