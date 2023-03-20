@@ -34,27 +34,27 @@ class HomeViewModel: ViewModelType, Stepper {
     private let homeDataRelay = BehaviorRelay<[HomeCardModel]>(value: [HomeCardModel()])
     private let changerRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     
-    lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
+    private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
         return ServiceApi.Track.top().asObservable()
     }
     
-    lazy var requestTopLocalTrackDataAction = Action<Void, TrackLocalTopModel> { [weak self] in
+    private lazy var requestTopLocalTrackDataAction = Action<Void, TrackLocalTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
         return ServiceApi.Track.topLocal().asObservable()
     }
     
-    lazy var requestTopArtistDataAction = Action<Void, ArtistTopModel> { [weak self] in
+    private lazy var requestTopArtistDataAction = Action<Void, ArtistTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
         return ServiceApi.Artist.top().asObservable()
     }
     
-    lazy var requestTopLocalArtistDataAction = Action<Void, ArtistLocalTopModel> { [weak self] in
+    private lazy var requestTopLocalArtistDataAction = Action<Void, ArtistLocalTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
         return ServiceApi.Artist.topLocal().asObservable()
     }
     
-    lazy var buttonAction = Action<HomeActionType, Void> { [weak self] action in
+    private lazy var buttonAction = Action<HomeActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         
         Log.d("buttonAction:\(action)")
@@ -82,7 +82,7 @@ class HomeViewModel: ViewModelType, Stepper {
     }
     
     func transform(req: Input) -> Output {
-        
+                
         req.actionTrigger.bind(to: buttonAction.inputs).disposed(by: disposeBag)
                 
         subscribeServerRequestionAction(action: requestTopTrackDataAction)
@@ -102,6 +102,8 @@ class HomeViewModel: ViewModelType, Stepper {
         self.requestTopArtistDataAction.execute()
         self.requestTopLocalArtistDataAction.execute()
     }
+    
+    var inputRelay = PublishRelay<Any>()
     
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
         

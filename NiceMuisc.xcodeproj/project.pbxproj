@@ -39,6 +39,7 @@
 		A57ADCAA29C434B500C9FDDF /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA929C434B500C9FDDF /* DetailView.swift */; };
 		A57ADCAC29C4415300C9FDDF /* DetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCAB29C4415300C9FDDF /* DetailModel.swift */; };
 		A57ADCAF29C463AC00C9FDDF /* DetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */; };
+		A5DD6F7329C86063008D2B80 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DD6F7229C86063008D2B80 /* UIView+.swift */; };
 		A5DF79B929B0275A00799BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79B829B0275A00799BEA /* AppDelegate.swift */; };
 		A5DF79BB29B0275A00799BEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */; };
 		A5DF79C229B0275A00799BEA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5DF79C129B0275A00799BEA /* Assets.xcassets */; };
@@ -94,6 +95,7 @@
 		A57ADCA929C434B500C9FDDF /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		A57ADCAB29C4415300C9FDDF /* DetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailModel.swift; sourceTree = "<group>"; };
 		A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageView.swift; sourceTree = "<group>"; };
+		A5DD6F7229C86063008D2B80 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		A5DF79B529B0275A00799BEA /* NiceMuisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiceMuisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5DF79B829B0275A00799BEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				A57ADC9F29C30D7700C9FDDF /* UIScrollView+.swift */,
+				A5DD6F7229C86063008D2B80 /* UIView+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -518,6 +521,7 @@
 				A57ADC7A29BF2C3900C9FDDF /* TrackDetailModel.swift in Sources */,
 				A5DF79D229B05BA600799BEA /* MainSteps.swift in Sources */,
 				A57ADC8629C0284D00C9FDDF /* TrackLocalTopModel.swift in Sources */,
+				A5DD6F7329C86063008D2B80 /* UIView+.swift in Sources */,
 				A57ADC9029C14DCC00C9FDDF /* HomeCardModel.swift in Sources */,
 				A5DF79DA29B05CB500799BEA /* HomeStepper.swift in Sources */,
 				A5DF79F029B0608300799BEA /* HomeViewModel.swift in Sources */,

@@ -43,9 +43,7 @@ final class ListTableViewCell: UITableViewCell {
                 
         self.backgroundColor = .black
         
-        self.contentView.addSubview(imageview)
-        self.contentView.addSubview(titleLabel)
-        self.contentView.addSubview(subTitleLabel)
+        self.contentView.addSubviews(imageview, titleLabel, subTitleLabel)
                 
         imageview.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(10)

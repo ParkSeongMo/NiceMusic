@@ -35,7 +35,7 @@ final class ListViewModel: ViewModelType, Stepper {
     private let limit = 20
     private var responseData:[CommonCardModel] = []
     var index = HomeIndex.none
-    
+        
     private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
         return ServiceApi.Track.top(page: self.page, limit: self.limit).asObservable()
@@ -56,7 +56,7 @@ final class ListViewModel: ViewModelType, Stepper {
         return ServiceApi.Artist.topLocal(page: self.page, limit: self.limit).asObservable()
     }
         
-    lazy var buttonAction = Action<ListActionType, Void> { [weak self] action in
+    private lazy var buttonAction = Action<ListActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         switch action {
         case .none:
@@ -74,7 +74,7 @@ final class ListViewModel: ViewModelType, Stepper {
         
         return .empty()
     }
-        
+
     init(index: HomeIndex) {
         self.index = index
     }
@@ -107,7 +107,7 @@ final class ListViewModel: ViewModelType, Stepper {
     func transform(req: Input) -> Output {
         
         req.actionTrigger.bind(to: buttonAction.inputs).disposed(by: disposeBag)
-               
+        
         subscribeServerRequestionAction(action: requestTopTrackDataAction)
         subscribeServerRequestionAction(action: requestTopLocalTrackDataAction)
         subscribeServerRequestionAction(action: requestTopArtistDataAction)
@@ -117,7 +117,7 @@ final class ListViewModel: ViewModelType, Stepper {
     }
     
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
-                
+        
         action.elements
             .subscribe(onNext: { [weak self] element in
                 guard let `self` = self else { return }

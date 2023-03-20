@@ -68,21 +68,19 @@ final class HomeTableViewCell: UITableViewCell {
     private func setupLayout() {
         
         backgroundColor = .black
-        
-        self.contentView.addSubview(titleLabel)
+                
+        self.contentView.addSubviews(titleLabel, moreLabel, collectionView)
        
         titleLabel.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(10)
             make.top.equalToSuperview().offset(30)
         }
                 
-        self.contentView.addSubview(moreLabel)
         moreLabel.snp.makeConstraints { make in
             make.centerY.equalTo(titleLabel.snp.centerY)
             make.right.equalToSuperview().offset(-10)
         }
                 
-        self.contentView.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
             make.left.equalToSuperview().offset(5)

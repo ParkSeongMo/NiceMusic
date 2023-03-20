@@ -46,12 +46,7 @@ final class HomeCollectionViewCell: UICollectionViewCell {
     
     private func setupLayout() {
                 
-        self.contentView.addSubview(imageView)
-        self.contentView.addSubview(titleLabel)
-        self.contentView.addSubview(subTitleLabel)
-        self.contentView.addSubview(rankLabel)
-        
-        
+        self.contentView.addSubviews(imageView, titleLabel, subTitleLabel, rankLabel)               
         imageView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.top.equalToSuperview()
