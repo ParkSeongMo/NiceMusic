@@ -106,27 +106,27 @@ class ListView: UIView, SubViewDI {
     
     @discardableResult
     func setupDI<T>(observable: Observable<T>) -> Self {
-                  
-        // check 타입 캐스팅
-        observable
-            .compactMap { $0 as? [CommonCardModel] }
-            .do(onNext: { [weak self] element in
-                guard let `self` = self else { return }
-                self.fetchingMore = false
-            })
-            .bind(to: tableView.rx.items) { tableView, _, element in
-                if let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as? ListTableViewCell {
-                    cell.prepare(
-                        title: element.title,
-                        subTitle: element.subTitle,
-                        imageUrl: element.image?.isEmpty == true ? "" : element.image?[2].text)
-                    cell.selectionStyle = .none
-                    return cell
-                }
-                return UITableViewCell()
-            }
-            .disposed(by: disposeBag)
-              
+                          
+        if let observable = observable as? Observable<[CommonCardModel]> {
+            observable
+                .do(onNext: { [weak self] element in
+                    guard let `self` = self else { return }
+                    self.fetchingMore = false
+                })
+                    .bind(to: tableView.rx.items) { tableView, _, element in
+                        if let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as? ListTableViewCell {
+                            cell.prepare(
+                                title: element.title,
+                                subTitle: element.subTitle,
+                                imageUrl: element.image?.isEmpty == true ? "" : element.image?[2].text)
+                            cell.selectionStyle = .none
+                            return cell
+                        }
+                        return UITableViewCell()
+                    }
+                    .disposed(by: disposeBag)
+        }
+        
         return self
     }
 }

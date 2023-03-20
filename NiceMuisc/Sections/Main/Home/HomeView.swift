@@ -113,29 +113,31 @@ final class HomeView: UIView, SubViewDI {
     
     @discardableResult
     func setupDI<T>(observable: Observable<T>) -> Self {
-                    
-        observable
-            .compactMap { $0 as? [HomeCardModel] }
-//                .do(onNext: { [weak self] element in
-//                    guard let `self` = self else { return }
-////                    let name = self.paringName(data: element)
-//                    print("response name: ")
-//                })
-//            .bind(to: tableView.rx.items(cellIdentifier: HomeTableViewCell.id, cellType: HomeTableViewCell.self)) {
-//                (index: Int, element:HomeCardModel, cell:HomeTableViewCell) in
-//                cell.prepare(name: self.getTitleText(index: element.index), items: element.items)
-//                print("setupDI bind index:\(element.index), count:\(element.items.count)")
-//            }
-            .bind(to: tableView.rx.items) { [weak self] tableView, _, element in
-                guard let `self` = self else { return UITableViewCell() }
-                if let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell {                    
-                    cell.prepare(index: element.index, items: element.items)
-                    cell.bindAction(reley: self.inputRelay)
-                    return cell
+        
+        if let observable = observable as? Observable<[HomeCardModel]> {       
+            observable
+//                .compactMap { $0 as? [HomeCardModel] }
+    //                .do(onNext: { [weak self] element in
+    //                    guard let `self` = self else { return }
+    ////                    let name = self.paringName(data: element)
+    //                    print("response name: ")
+    //                })
+    //            .bind(to: tableView.rx.items(cellIdentifier: HomeTableViewCell.id, cellType: HomeTableViewCell.self)) {
+    //                (index: Int, element:HomeCardModel, cell:HomeTableViewCell) in
+    //                cell.prepare(name: self.getTitleText(index: element.index), items: element.items)
+    //                print("setupDI bind index:\(element.index), count:\(element.items.count)")
+    //            }
+                .bind(to: tableView.rx.items) { [weak self] tableView, _, element in
+                    guard let `self` = self else { return UITableViewCell() }
+                    if let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.id) as? HomeTableViewCell {
+                        cell.prepare(index: element.index, items: element.items)
+                        cell.bindAction(reley: self.inputRelay)
+                        return cell
+                    }
+                    return UITableViewCell()
                 }
-                return UITableViewCell()
-            }
-            .disposed(by: disposeBag)
+                .disposed(by: disposeBag)
+        }
               
         return self
     }

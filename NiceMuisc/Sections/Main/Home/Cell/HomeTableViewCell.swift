@@ -45,7 +45,7 @@ final class HomeTableViewCell: UITableViewCell {
     }
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout).then {
-        $0.dataSource = self // check
+        $0.dataSource = self
         $0.isScrollEnabled = true
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = true
@@ -66,9 +66,9 @@ final class HomeTableViewCell: UITableViewCell {
     }
         
     private func setupLayout() {
-        
+                        
         backgroundColor = .black
-                
+        
         self.contentView.addSubviews(titleLabel, moreLabel, collectionView)
        
         titleLabel.snp.makeConstraints { make in
