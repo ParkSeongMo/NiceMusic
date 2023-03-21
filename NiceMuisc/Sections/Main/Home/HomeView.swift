@@ -60,7 +60,6 @@ final class HomeView: BaseSubView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        initRefresh()
     }
     
     required init?(coder: NSCoder) {
@@ -73,23 +72,13 @@ final class HomeView: BaseSubView {
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-    }
-    
-    private func initRefresh() {
-                
-        let attributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
-        refreshControl.attributedTitle = NSAttributedString(string: "당겨서 새로고침", attributes: attributes)
-        refreshControl.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
-        refreshControl.tintColor = .white
         
-        tableView.refreshControl = refreshControl
+        tableView.refreshControl = getRefreshControl(#selector(refreshTable(refresh:)))
     }
     
     @objc func refreshTable(refresh: UIRefreshControl) {
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.inputRelay.accept(HomeActionType.refresh)
             refresh.endRefreshing()
         }

@@ -11,9 +11,7 @@ import UIKit
 
 class ListView: BaseSubView {
                 
-    private let refreshControl = UIRefreshControl()
     private let action = PublishRelay<ListActionType>()
-    private var fetchingMore = false
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {
         $0.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -32,7 +30,6 @@ class ListView: BaseSubView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
-        initRefresh()
         bindrx()
     }
     
@@ -47,6 +44,7 @@ class ListView: BaseSubView {
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        tableView.refreshControl = getRefreshControl(#selector(refreshTable(refresh:)))
     }
         
     private func bindrx() {
@@ -59,29 +57,15 @@ class ListView: BaseSubView {
         tableView.rx.contentOffset
             .subscribe({  [weak self] _ in
                 guard let `self` = self else { return }
-                if self.tableView.isNearBottomEdge() && !self.fetchingMore {
-//                    print("contentOffset isNearBottomEdge \(self.fetchingMore)")
-                    self.fetchingMore = true
+                if self.tableView.isNearBottomEdge() {
                     self.inputRelay.accept(ListActionType.more)
                 }
             }).disposed(by: disposeBag)
     }
-    
-    private func initRefresh() {
-                
-        let attributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
-        refreshControl.attributedTitle = NSAttributedString(string: "당겨서 새로고침", attributes: attributes)
-        refreshControl.addTarget(self, action: #selector(refreshTable(refresh:)), for: .valueChanged)
-        refreshControl.tintColor = .white
         
-        tableView.refreshControl = refreshControl
-    }
-    
     @objc func refreshTable(refresh: UIRefreshControl) {
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now()) {
             self.inputRelay.accept(ListActionType.refresh)
             refresh.endRefreshing()
         }
@@ -104,22 +88,18 @@ class ListView: BaseSubView {
                           
         if let observable = observable as? Observable<[CommonCardModel]> {
             observable
-                .do(onNext: { [weak self] element in
-                    guard let `self` = self else { return }
-                    self.fetchingMore = false
-                })
-                    .bind(to: tableView.rx.items) { tableView, _, element in
-                        if let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as? ListTableViewCell {
-                            cell.prepare(
-                                title: element.title,
-                                subTitle: element.subTitle,
-                                imageUrl: element.image?.isEmpty == true ? "" : element.image?[2].text)
-                            cell.selectionStyle = .none
-                            return cell
-                        }
-                        return UITableViewCell()
+                .bind(to: tableView.rx.items) { tableView, _, element in
+                    if let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as? ListTableViewCell {
+                        cell.prepare(
+                            title: element.title,
+                            subTitle: element.subTitle,
+                            imageUrl: element.image?.isEmpty == true ? "" : element.image?[2].text)
+                        cell.selectionStyle = .none
+                        return cell
                     }
-                    .disposed(by: disposeBag)
+                    return UITableViewCell()
+                }
+                .disposed(by: disposeBag)
         }
         
         return self

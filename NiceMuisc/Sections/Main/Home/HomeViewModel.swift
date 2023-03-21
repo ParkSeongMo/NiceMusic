@@ -84,12 +84,9 @@ class HomeViewModel: ViewModelType, Stepper {
     func transform(req: Input) -> Output {
                 
         req.actionTrigger.bind(to: buttonAction.inputs).disposed(by: disposeBag)
-                
-        subscribeServerRequestionAction(action: requestTopTrackDataAction)
-        subscribeServerRequestionAction(action: requestTopLocalTrackDataAction)
-        subscribeServerRequestionAction(action: requestTopArtistDataAction)
-        subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
-                
+                                
+        subscribeServerRequestionAction()
+        
         return Output(response: homeDataRelay.asObservable(), loadChanger: changerRelay.asObservable())
     }
     
@@ -103,49 +100,40 @@ class HomeViewModel: ViewModelType, Stepper {
         self.requestTopLocalArtistDataAction.execute()
     }
     
-    var inputRelay = PublishRelay<Any>()
-    
-    private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
-        
-        action.elements
-            .subscribe(onNext: { [weak self] element in
+    private func subscribeServerRequestionAction() {
+                       
+        let observable = Observable.zip(
+            requestTopArtistDataAction.elements,
+            requestTopTrackDataAction.elements,
+            requestTopLocalArtistDataAction.elements,
+            requestTopLocalTrackDataAction.elements)
+            .subscribe {  [weak self] (topArtist, topTrack, topLocalArtist, topLocalTrack) in
                 guard let `self` = self else { return }
-                                
-                switch element {
-                case let data as ArtistTopModel:
-                    self.homeData.append(HomeCardModel(index: HomeIndex.topArtist, items: self.makeLimitedHomeData(array: data.artists?.artist)))
-                case let data as TrackTopModel:
-                    self.homeData.append(HomeCardModel(index: HomeIndex.topTrack, items: self.makeLimitedHomeData(array: data.tracks?.track)))
-                case let data as ArtistLocalTopModel:
-                    self.homeData.append(HomeCardModel(index: HomeIndex.topLocalArtist, items: self.makeLimitedHomeData(array: data.topartists?.artist)))
-                case let data as TrackLocalTopModel:
-                    self.homeData.append(HomeCardModel(index: HomeIndex.topLocalTrack, items: self.makeLimitedHomeData(array: data.tracks?.track)))
-                default:
-                    return
-                }
-    
-                if self.homeData.count >= 4 {
-                    self.homeData.sort { return $0.index.rawValue < $1.index.rawValue }
-                    self.homeDataRelay.accept(self.homeData)
-                    self.changerRelay.accept(.loaderStop)
-                }
-            }, onError: { code in
-                Log.d("RequestHomeData Error: \(code)")
+                self.appendHomeData(index: HomeIndex.topArtist, array: topArtist.artists?.artist)
+                self.appendHomeData(index: HomeIndex.topTrack, array: topTrack.tracks?.track)
+                self.appendHomeData(index: HomeIndex.topLocalArtist, array: topLocalArtist.topartists?.artist)
+                self.appendHomeData(index: HomeIndex.topLocalTrack, array: topLocalTrack.tracks?.track)
+                self.homeData.sort { return $0.index.rawValue < $1.index.rawValue }
+                self.homeDataRelay.accept(self.homeData)
                 self.changerRelay.accept(.loaderStop)
-                // TODO 에러 처리 필요
-            }).disposed(by: disposeBag)
+            }
+            
+        observable.disposed(by: disposeBag)
     }
-       
-    private func makeLimitedHomeData<T>(array: [T]?) -> [CommonCardModel] {
+    
+    private func appendHomeData<T>(index: HomeIndex, array: [T]?) {
         
-        var responseData:[CommonCardModel] = []
+        var cardModels:[CommonCardModel] = []
         
-        guard let array = array else { return responseData }
-        
-        array.forEach { item in
-            responseData.append(CommonCardModel(data: item))
+        guard let array = array else {
+            self.homeData.append(HomeCardModel(index: index, items: []))
+            return
         }
-                        
-        return responseData
-    }    
+                
+        array.forEach { item in
+            cardModels.append(CommonCardModel(data: item))
+        }
+        
+        self.homeData.append(HomeCardModel(index: index, items: cardModels))
+    }
 }

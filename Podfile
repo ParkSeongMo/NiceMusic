@@ -6,13 +6,13 @@ target 'NiceMuisc' do
   use_frameworks!
 
   # Pods for NiceMuisc
-pod 'RxSwift'
-pod 'RxCocoa'
-pod 'RxFlow'
-pod 'Action'
-pod 'Then'
-pod 'Moya/RxSwift'
-pod 'Kingfisher'
-pod 'SnapKit'
-pod 'SwiftyJSON'
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  pod 'RxFlow'
+  pod 'Action'
+  pod 'Then'
+  pod 'Moya/RxSwift'
+  pod 'Kingfisher'
+  pod 'SnapKit'
+  pod 'SwiftyJSON'
 end

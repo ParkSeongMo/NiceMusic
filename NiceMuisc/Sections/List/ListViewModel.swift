@@ -34,6 +34,7 @@ final class ListViewModel: ViewModelType, Stepper {
     private var page = 1
     private let limit = 20
     private var responseData:[CommonCardModel] = []
+    private var isLoading = false
     var index = HomeIndex.none
         
     private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
@@ -55,21 +56,27 @@ final class ListViewModel: ViewModelType, Stepper {
         guard let `self` = self else { return Observable.empty() }
         return ServiceApi.Artist.topLocal(page: self.page, limit: self.limit).asObservable()
     }
-        
+                
     private lazy var buttonAction = Action<ListActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         switch action {
-        case .none:
-            return .empty()
         case .execute, .refresh:
+            if self.isLoading {
+                return .empty()
+            }
             self.page = self.defaultPageNum
             self.responseData.removeAll()
             self.requestListApi()
         case .more:
+            if self.isLoading {
+                return .empty()
+            }
             self.page += 1
             self.requestListApi()
         case .tapItemForDetail(let artist, let name):
             Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")
+        case .none:
+            return .empty()
         }
         
         return .empty()
@@ -108,15 +115,33 @@ final class ListViewModel: ViewModelType, Stepper {
         
         req.actionTrigger.bind(to: buttonAction.inputs).disposed(by: disposeBag)
         
-        subscribeServerRequestionAction(action: requestTopTrackDataAction)
-        subscribeServerRequestionAction(action: requestTopLocalTrackDataAction)
-        subscribeServerRequestionAction(action: requestTopArtistDataAction)
-        subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
-        
+        subscribeServerRequestionAction()
+                
         return Output(response: resDataRelay.asObservable(), loadChanger: changerRelay.asObservable())
     }
     
+    private func subscribeServerRequestionAction() {
+        switch index {
+        case .topArtist:
+            subscribeServerRequestionAction(action: requestTopArtistDataAction)
+        case .topTrack:
+            subscribeServerRequestionAction(action: requestTopTrackDataAction)
+        case .topLocalArtist:
+            subscribeServerRequestionAction(action: requestTopLocalTrackDataAction)
+        case .topLocalTrack:
+            subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
+        default:
+            Log.d("none")
+        }
+    }
+    
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
+        
+        let disposable = action.executing.bind { [weak self] element in
+            guard let `self` = self else { return }
+            self.isLoading = element
+        }
+        disposable.disposed(by: disposeBag)
         
         action.elements
             .subscribe(onNext: { [weak self] element in
