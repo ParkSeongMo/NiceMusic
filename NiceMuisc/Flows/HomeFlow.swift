@@ -26,6 +26,8 @@ final class HomeFlow: Flow {
             return coordinateToList(index: index)
         case .detailIsRequired(let type, let artist, let name):
             return coordinateToDetail(type: type, artist: artist, name: name)
+        case .loginIsRequired:
+            return .end(forwardToParentFlowWithStep: MainSteps.loginIsRequired)
         default:
             return .none
         }

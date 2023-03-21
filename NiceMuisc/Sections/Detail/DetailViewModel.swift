@@ -13,6 +13,7 @@ import RxSwift
 enum DetailActionType {
     case none
     case execute
+    case logout
 }
 
 enum DetailType {
@@ -54,8 +55,10 @@ final class DetailViewModel: ViewModelType, Stepper {
             return .empty()
         case .execute:
             self.requestDetailApi(type: self.detailType, artist: self.artist, name: self.name)
-            return .empty()
+        case .logout:
+            self.steps.accept(MainSteps.loginIsRequired)
         }
+        return .empty()
     }
     
     struct Input {

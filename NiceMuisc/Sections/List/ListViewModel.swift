@@ -75,6 +75,8 @@ final class ListViewModel: ViewModelType, Stepper {
             self.requestListApi()
         case .tapItemForDetail(let artist, let name):
             Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")
+            
+                self.steps.accept(MainSteps.loginIsRequired)
         case .none:
             return .empty()
         }
@@ -131,7 +133,7 @@ final class ListViewModel: ViewModelType, Stepper {
         case .topLocalTrack:
             subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
         default:
-            Log.d("none")
+            return            
         }
     }
     

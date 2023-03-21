@@ -9,6 +9,8 @@ import RxFlow
 
 enum MainSteps: Step {
     case appStartIsRequired
+    case loginIsRequired
+    case loginIsComplete
     case mainTabBarIsRequired
     case homeIsRequired
     case searchIsRequired

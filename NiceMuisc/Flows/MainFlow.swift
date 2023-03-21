@@ -40,10 +40,12 @@ final class MainFlow: Flow {
     func navigate(to step: Step) -> FlowContributors {
         guard let step = step as? MainSteps else { return .none }
         
-        print("navigate \(step)")
+        Log.d("navigate \(step)")
         switch step {
         case .mainTabBarIsRequired:
             return coordinateToMainTabBar()
+        case .loginIsRequired:
+            return .end(forwardToParentFlowWithStep: MainSteps.appStartIsRequired)
         default:
             return .none
         }

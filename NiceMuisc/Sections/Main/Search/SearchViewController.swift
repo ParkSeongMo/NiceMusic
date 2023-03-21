@@ -23,7 +23,7 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("HomeViewController viewDidLoad()")
+        Log.d("HomeViewController viewDidLoad()")
         setupLayout()
     }
     

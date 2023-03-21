@@ -15,7 +15,13 @@ final class DetailView: BaseSubView {
         
     var detailType: DetailType = .artist
     
-    var subViews: [UIView] = []
+    var subViews: [DescendantView] = [] {
+        willSet {
+            newValue.forEach {
+                $0.delegate = self
+            }
+        }
+    }
     
     private lazy var scrollView = UIScrollView().then {
         $0.isScrollEnabled = true
@@ -32,12 +38,11 @@ final class DetailView: BaseSubView {
     }
     
     private lazy var detailImageView = DetailImageView()
-           
-    
+              
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
-        setupLayout()
+        setupLayout()        
     }
     
     required init?(coder: NSCoder) {
@@ -57,7 +62,7 @@ final class DetailView: BaseSubView {
         
         subViews.forEach {
             stackView.addArrangedSubview($0)
-        }       
+        }
     }
     
     

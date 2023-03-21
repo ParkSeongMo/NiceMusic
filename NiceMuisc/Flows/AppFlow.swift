@@ -24,24 +24,38 @@ final class AppFlow: Flow {
         
         switch step {
         case .appStartIsRequired:
-            return coordinateToMain()
-            
+            return coordinateToLogin()
+        case .mainTabBarIsRequired:
+            return coordinateToHome()
         default:
             return .none
         }
     }
     
-    private func coordinateToMain() -> FlowContributors {
+    private func coordinateToLogin() -> FlowContributors {
         
-        let mainFlow = MainFlow()
-        let stepper = MainStepper.shared
+        let flow = LoginFlow()
+        let stepper = LoginStepper.shared
         
-        Flows.use(mainFlow, when: .created) {
+        Flows.use(flow, when: .created) {
             [unowned self] root in
             rootWindow.rootViewController = root
         }
         
-        return .one(flowContributor: .contribute(withNextPresentable: mainFlow, withNextStepper: stepper))
+        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: stepper))
+    }
+    
+    private func coordinateToHome() -> FlowContributors {
+        
+        let flow = MainFlow()
+        let stepper = MainStepper.shared
+        
+        Flows.use(flow, when: .created) {
+            [unowned self] root in
+            rootWindow.rootViewController = root
+        }
+        
+        return .one(flowContributor: .contribute(withNextPresentable: flow, withNextStepper: stepper))
     }
 }
 
