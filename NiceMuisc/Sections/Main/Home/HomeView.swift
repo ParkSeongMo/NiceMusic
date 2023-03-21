@@ -38,16 +38,12 @@ extension HomeIndex {
     }
 }
 
-final class HomeView: UIView, SubViewDI {    
+final class HomeView: BaseSubView {
         
     typealias Model = HomeViewModel
     
     private let tableViewHeight = 270.0
-    private let disposeBag = DisposeBag()
-    
-    var inputRelay = PublishRelay<Any>()
-    var outputRelay = PublishRelay<Any>()
-            
+                
     private let refreshControl = UIRefreshControl()
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {

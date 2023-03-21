@@ -10,7 +10,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-final class ListViewController: BaseViewController {
+final class ListViewController: UIViewController {
                 
     typealias ActionType = ListActionType
     
@@ -58,7 +58,6 @@ final class ListViewController: BaseViewController {
         subView
             .setupDI(generic: action)
             .setupDI(observable: output.response)
-        
-        setupLoadChager(observable: output.loadChanger)
+            .setupDI(loadChanger: output.loadChanger)
     }
 }

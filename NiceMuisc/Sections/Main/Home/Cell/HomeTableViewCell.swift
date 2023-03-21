@@ -134,7 +134,7 @@ final class HomeTableViewCell: UITableViewCell {
         self.titleLabel.text = index.title
         
         self.items = items ?? [CommonCardModel]()
-//        collectionView.reloadData()
+        collectionView.reloadData()
         collectionView.performBatchUpdates {
             collectionView.scrollsToTop = true
         }

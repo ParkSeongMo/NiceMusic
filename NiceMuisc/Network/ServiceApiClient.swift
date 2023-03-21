@@ -30,7 +30,7 @@ struct ServiceApiClient {
       
     static func request<T: Decodable>(_ api: ServiceApiProvider, visibleIndicator: Bool = true) -> Single<T> {
       
-        Log.d("network requests \(api.path)")
+        Log.d("network requests \(api.apiMethod)")
         let request = Single<T>.create { observer in
             let observable = ServiceApiClient.apiProvider.rx.request(api).subscribe { event in
                 switch event {
@@ -62,12 +62,12 @@ struct ServiceApiClient {
 
 class CustomPlugIn : PluginType {
     func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
-        Log.d("URL Request - \(target) : \(request.url?.absoluteString ?? "없음")")
+//        Log.d("URL Request - \(target) : \(request.url?.absoluteString ?? "없음")")
         return request
     }
 
     func process(_ result: Result<Moya.Response, MoyaError>, target: TargetType) -> Result<Moya.Response, MoyaError> {
-        Log.d("URL Response - \(target) : \(result)")
+//        Log.d("URL Response - \(target) : \(result)")
         return result
     }
 }

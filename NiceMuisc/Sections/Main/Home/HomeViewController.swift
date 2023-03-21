@@ -11,7 +11,7 @@ import SnapKit
 import Moya
 import Then
 
-final class HomeViewController: BaseViewController {
+final class HomeViewController: UIViewController {
     
     typealias ActionType = HomeActionType
     
@@ -56,8 +56,7 @@ final class HomeViewController: BaseViewController {
         homeView
             .setupDI(generic: action)
             .setupDI(observable: output.response)
-        
-        setupLoadChager(observable: output.loadChanger)
+            .setupDI(loadChanger: output.loadChanger)
     }
     
     private func setupLayout() {

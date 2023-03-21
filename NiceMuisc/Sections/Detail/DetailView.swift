@@ -11,13 +11,8 @@ import RxRelay
 import UIKit
 
 
-final class DetailView: UIView, SubViewDI {
-    
-    var inputRelay = RxRelay.PublishRelay<Any>()
-    var outputRelay = RxRelay.PublishRelay<Any>()
-    
-    private let disposeBag = DisposeBag()
-    
+final class DetailView: BaseSubView {
+        
     var detailType: DetailType = .artist
     
     var subViews: [UIView] = []

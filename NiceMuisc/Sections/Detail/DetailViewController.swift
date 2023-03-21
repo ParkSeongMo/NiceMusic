@@ -10,7 +10,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-final class DetailViewController: BaseViewController {
+final class DetailViewController: UIViewController {
                 
     typealias ActionType = DetailActionType
     
@@ -60,7 +60,6 @@ final class DetailViewController: BaseViewController {
 
         subView
             .setupDI(observable: output.response)
-
-        setupLoadChager(observable: output.loadChanger)
+            .setupDI(loadChanger: output.loadChanger)
     }
 }

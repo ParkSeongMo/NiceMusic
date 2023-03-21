@@ -9,13 +9,8 @@ import RxCocoa
 import RxSwift
 import UIKit
 
-class ListView: UIView, SubViewDI {
-        
-    private let disposeBag = DisposeBag()
-    
-    var inputRelay = PublishRelay<Any>()
-    var outputRelay = PublishRelay<Any>()
-        
+class ListView: BaseSubView {
+                
     private let refreshControl = UIRefreshControl()
     private let action = PublishRelay<ListActionType>()
     private var fetchingMore = false
