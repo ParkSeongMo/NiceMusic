@@ -37,6 +37,9 @@ final class DetailView: BaseSubView {
     }
     
     private lazy var detailImageView = DetailImageView()
+    private lazy var infoView = DetailInfoView()
+    private lazy var trackView = DetailTrackView()
+    private lazy var descView = DetailDescView()
               
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -62,12 +65,18 @@ final class DetailView: BaseSubView {
         subViews.forEach {
             stackView.addArrangedSubview($0)
         }
+        
+        if detailType != .album {
+            trackView.isHidden = true
+        }
     }
-    
-    
+        
     private func setupSubviews() {
         subViews = [
-            detailImageView
+            detailImageView,
+            infoView,
+            trackView,
+            descView
         ]
     }
     
@@ -86,6 +95,12 @@ final class DetailView: BaseSubView {
     @discardableResult
     func setupDI<T>(observable: Observable<T>) -> Self {
                                     
+        if let observable = observable as? Observable<DetailModel> {
+            observable.subscribe(onNext: { [weak self] element in
+                self?.outputRelay.accept(element)
+            })
+            .disposed(by: disposeBag)
+        }
         return self
     }        
 }

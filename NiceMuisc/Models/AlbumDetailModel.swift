@@ -18,9 +18,21 @@ struct AlbumDetail: Codable {
     let tags:Tags?
     let wiki:Desciption?
     let tracks:AlbumTrack?
+    let playcount: String?
+    let listeners: String?
 }
 
 struct AlbumTrack: Codable {
-    let track:[Track]?
+    let track:[AlbumTrackDetail]?
 }
 
+struct AlbumTrackDetail: Codable {
+    let name:String?
+    let artist:AlbumArtist?
+    let duration:Int?
+    var image:String?
+}
+
+struct AlbumArtist: Codable {
+    let name:String?
+}

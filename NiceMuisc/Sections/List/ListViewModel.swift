@@ -59,6 +59,7 @@ final class ListViewModel: ViewModelType, Stepper {
                 
     private lazy var buttonAction = Action<ListActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
+        
         switch action {
         case .execute, .refresh:
             if self.isLoading {
@@ -74,8 +75,9 @@ final class ListViewModel: ViewModelType, Stepper {
             self.page += 1
             self.requestListApi()
         case .tapItemForDetail(let artist, let name):
-            Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")            
-        case .none:
+//            Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")
+            self.steps.accept(MainSteps.detailIsRequired(type: self.index.detailType, artist: artist, name: name))
+        default:
             return .empty()
         }
         

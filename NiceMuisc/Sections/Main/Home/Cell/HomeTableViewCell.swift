@@ -116,7 +116,7 @@ final class HomeTableViewCell: UITableViewCell {
             .subscribe(onNext: { [weak self] indexPath in
                 guard let `self` = self else { return }
                 self.action.accept(HomeActionType.tapItemForDetail(
-                    self.parsingHomeIndexToDetailType(index: self.index),
+                    self.index.detailType,
                     self.items[indexPath.item].title,
                     self.items[indexPath.item].subTitle))
             })
@@ -142,17 +142,6 @@ final class HomeTableViewCell: UITableViewCell {
     
     func bindAction(reley: PublishRelay<Any>) {
         self.action = reley
-    }
-    
-    private func parsingHomeIndexToDetailType(index: HomeIndex) -> DetailType {
-        switch index {
-        case .topArtist, .topLocalArtist:
-            return .artist
-        case .topTrack, .topLocalTrack:
-            return .track
-        default:
-            return .none
-        }
     }
 }
 

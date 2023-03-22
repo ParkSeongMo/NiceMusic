@@ -59,14 +59,14 @@ class HomeViewModel: ViewModelType, Stepper {
         
         Log.d("buttonAction:\(action)")
         switch action {
-        case .none:
-            return .empty()
         case .execute, .refresh:
             self.requestMainApi()
         case .tapAllforList(let index):
             self.steps.accept(MainSteps.listIsRequired(index: index))
         case .tapItemForDetail(let type, let artist, let name):
             self.steps.accept(MainSteps.detailIsRequired(type: type, artist: artist, name: name))
+        default:
+            return .empty()
         }
         
         return .empty()

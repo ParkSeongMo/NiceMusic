@@ -15,9 +15,9 @@ import UIKit
 // 홈화면에 표출되는 항목 순서
 enum HomeIndex: Int {
     case none = -1
-    case topArtist = 0      // Top 뮤지션
+    case topArtist = 0      // Top 가수
     case topTrack = 1       // Top 음원
-    case topLocalArtist = 2 // Top 국내 뮤지션
+    case topLocalArtist = 2 // Top 국내 가수
     case topLocalTrack = 3  // Top 국내 음원
 }
 
@@ -25,15 +25,28 @@ extension HomeIndex {
     var title: String {
         switch self {
         case .topArtist:
-            return "Top 뮤지션"
+            return "Top 가수"
         case .topTrack:
             return "Top 음원"
         case .topLocalArtist:
-            return "Top 국내 뮤지션"
+            return "Top 국내 가수"
         case .topLocalTrack:
             return "Top 국내 음원"
         default:
             return "None"
+        }
+    }
+}
+
+extension HomeIndex {
+    var detailType: DetailType {
+        switch self {
+        case .topArtist, .topLocalArtist:
+            return .artist
+        case .topTrack, .topLocalTrack:
+            return .track
+        default:
+            return .none
         }
     }
 }

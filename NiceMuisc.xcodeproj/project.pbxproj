@@ -39,6 +39,8 @@
 		A57ADCAA29C434B500C9FDDF /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCA929C434B500C9FDDF /* DetailView.swift */; };
 		A57ADCAC29C4415300C9FDDF /* DetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCAB29C4415300C9FDDF /* DetailModel.swift */; };
 		A57ADCAF29C463AC00C9FDDF /* DetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */; };
+		A5BA29D129CAC9F00038B36D /* DetailInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D029CAC9F00038B36D /* DetailInfoView.swift */; };
+		A5BA29D329CAE1AC0038B36D /* DetailTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D229CAE1AC0038B36D /* DetailTrackView.swift */; };
 		A5BD78EE29C93D2800F61807 /* BaseSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78ED29C93D2800F61807 /* BaseSubView.swift */; };
 		A5BD78F029C998FF00F61807 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78EF29C998FF00F61807 /* LoginViewController.swift */; };
 		A5BD78F229C99A1500F61807 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78F129C99A1500F61807 /* LoginViewModel.swift */; };
@@ -102,6 +104,8 @@
 		A57ADCA929C434B500C9FDDF /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		A57ADCAB29C4415300C9FDDF /* DetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailModel.swift; sourceTree = "<group>"; };
 		A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageView.swift; sourceTree = "<group>"; };
+		A5BA29D029CAC9F00038B36D /* DetailInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoView.swift; sourceTree = "<group>"; };
+		A5BA29D229CAE1AC0038B36D /* DetailTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTrackView.swift; sourceTree = "<group>"; };
 		A5BD78ED29C93D2800F61807 /* BaseSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSubView.swift; sourceTree = "<group>"; };
 		A5BD78EF29C998FF00F61807 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A5BD78F129C99A1500F61807 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -195,6 +199,8 @@
 			isa = PBXGroup;
 			children = (
 				A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */,
+				A5BA29D029CAC9F00038B36D /* DetailInfoView.swift */,
+				A5BA29D229CAE1AC0038B36D /* DetailTrackView.swift */,
 				A5BD78FA29CA8B8B00F61807 /* DetailDescView.swift */,
 			);
 			path = Subviews;
@@ -548,11 +554,13 @@
 				A57ADC7C29BF2D7200C9FDDF /* AlbumDetailModel.swift in Sources */,
 				A57ADC7629BF290100C9FDDF /* ArtistLocalTopModel.swift in Sources */,
 				A5BD78F229C99A1500F61807 /* LoginViewModel.swift in Sources */,
+				A5BA29D129CAC9F00038B36D /* DetailInfoView.swift in Sources */,
 				A57ADC6429BEB6B300C9FDDF /* ServiceApi.swift in Sources */,
 				A5DF79F829B0610D00799BEA /* ViewModelType.swift in Sources */,
 				A5DF79E529B05D8500799BEA /* HomeFlow.swift in Sources */,
 				A57ADC6929BEE3E100C9FDDF /* ArtistDetailModel.swift in Sources */,
 				A57ADCA229C4071E00C9FDDF /* BaseViewController.swift in Sources */,
+				A5BA29D329CAE1AC0038B36D /* DetailTrackView.swift in Sources */,
 				A57ADC7A29BF2C3900C9FDDF /* TrackDetailModel.swift in Sources */,
 				A5BD78F929C9AE3B00F61807 /* LoginStepper.swift in Sources */,
 				A5DF79D229B05BA600799BEA /* MainSteps.swift in Sources */,

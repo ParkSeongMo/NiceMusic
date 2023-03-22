@@ -55,6 +55,7 @@ final class DetailViewModel: ViewModelType, Stepper {
         case .none:
             return .empty()
         case .execute:
+//            self.requestDetailApi(type: .album, artist: "BTS", name: "Dynamite")
             self.requestDetailApi(type: self.detailType, artist: self.artist, name: self.name)
         case .logout:
             self.steps.accept(MainSteps.loginIsRequired)            
@@ -78,15 +79,12 @@ final class DetailViewModel: ViewModelType, Stepper {
     
     init(detailType: DetailType, artist: String?, name: String?) {
         self.detailType = detailType
-        if let artist = artist {
-            self.artist = artist
+        if detailType == .track {
+            self.artist = name ?? ""
+            self.name = artist ?? ""
         } else {
-            self.artist = ""
-        }
-        if let name = name {
-            self.name = name
-        } else {
-            self.name = ""
+            self.artist = artist ?? ""
+            self.name = name ?? ""
         }
     }
     
@@ -123,17 +121,8 @@ final class DetailViewModel: ViewModelType, Stepper {
                 guard let `self` = self else { return }
                 
                 self.changerRelay.accept(.loaderStop)
-                
-                switch element {
-                case let data as ArtistDetailModel:
-                    self.resDataRelay.accept(DetailModel(data: data))
-                case let data as AlbumDetailModel:
-                    self.resDataRelay.accept(DetailModel(data: data))
-                case let data as TrackDetailModel:
-                    self.resDataRelay.accept(DetailModel(data: data))
-                default:
-                    return
-                }
+                self.resDataRelay.accept(DetailModel(detailType: self.detailType,
+                                                     data: element))
             }, onError: { code in
                 Log.d("RequestHomeData Error: \(code)")
                 self.changerRelay.accept(.loaderStop)
