@@ -45,6 +45,7 @@
 		A5BD78F429C99BFB00F61807 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78F329C99BFB00F61807 /* LoginView.swift */; };
 		A5BD78F629C9ABA000F61807 /* LoginFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78F529C9ABA000F61807 /* LoginFlow.swift */; };
 		A5BD78F929C9AE3B00F61807 /* LoginStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78F829C9AE3B00F61807 /* LoginStepper.swift */; };
+		A5BD78FB29CA8B8B00F61807 /* DetailDescView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78FA29CA8B8B00F61807 /* DetailDescView.swift */; };
 		A5DD6F7329C86063008D2B80 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DD6F7229C86063008D2B80 /* UIView+.swift */; };
 		A5DF79B929B0275A00799BEA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79B829B0275A00799BEA /* AppDelegate.swift */; };
 		A5DF79BB29B0275A00799BEA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF79BA29B0275A00799BEA /* SceneDelegate.swift */; };
@@ -107,6 +108,7 @@
 		A5BD78F329C99BFB00F61807 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A5BD78F529C9ABA000F61807 /* LoginFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFlow.swift; sourceTree = "<group>"; };
 		A5BD78F829C9AE3B00F61807 /* LoginStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginStepper.swift; sourceTree = "<group>"; };
+		A5BD78FA29CA8B8B00F61807 /* DetailDescView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescView.swift; sourceTree = "<group>"; };
 		A5DD6F7229C86063008D2B80 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		A5DF79B529B0275A00799BEA /* NiceMuisc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NiceMuisc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5DF79B829B0275A00799BEA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */,
+				A5BD78FA29CA8B8B00F61807 /* DetailDescView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -522,6 +525,7 @@
 				A57ADC9B29C2D63700C9FDDF /* ListTableViewCell.swift in Sources */,
 				A5BD78F429C99BFB00F61807 /* LoginView.swift in Sources */,
 				A5DF79F429B0609600799BEA /* SearchViewModel.swift in Sources */,
+				A5BD78FB29CA8B8B00F61807 /* DetailDescView.swift in Sources */,
 				A57ADCA629C4349F00C9FDDF /* DetailViewController.swift in Sources */,
 				A5BD78EE29C93D2800F61807 /* BaseSubView.swift in Sources */,
 				A57ADC6629BEB84200C9FDDF /* ServiceApiProvider.swift in Sources */,

@@ -46,7 +46,7 @@ final class DetailViewController: UIViewController {
 //        self.navigationController?.navigationBar.backgroundColor = .black
 //        self.navigationController?.navigationBar.tintColor = .white
 //        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        
+                
         self.view.addSubview(subView)
         subView.snp.makeConstraints {
             $0.directionalEdges.equalToSuperview()
@@ -59,6 +59,7 @@ final class DetailViewController: UIViewController {
             req: DetailViewModel.Input(actionTrigger: action.asObservable()))
 
         subView
+            .setupDI(generic: action)
             .setupDI(observable: output.response)
             .setupDI(loadChanger: output.loadChanger)
     }

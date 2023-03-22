@@ -31,7 +31,6 @@ final class DetailView: BaseSubView {
     }
            
     private lazy var stackView = UIStackView().then {
-        $0.backgroundColor = .red
         $0.distribution = .equalSpacing
         $0.alignment = .fill
         $0.axis = .vertical
@@ -48,9 +47,9 @@ final class DetailView: BaseSubView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-        
+    
     private func setupLayout() {
-                
+             
         addSubview(scrollView)
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -70,6 +69,18 @@ final class DetailView: BaseSubView {
         subViews = [
             detailImageView
         ]
+    }
+    
+    
+    @discardableResult
+    func setupDI<T>(generic: PublishRelay<T>) -> Self {
+        if let generic = generic as? PublishRelay<DetailActionType> {
+            inputRelay.compactMap { $0 as? DetailActionType }
+                .bind(to: generic)
+                .disposed(by: disposeBag)
+        }
+        
+        return self
     }
     
     @discardableResult

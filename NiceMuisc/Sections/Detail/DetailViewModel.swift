@@ -50,13 +50,14 @@ final class DetailViewModel: ViewModelType, Stepper {
     private lazy var buttonAction = Action<DetailActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         
+        Log.d("buttonAction \(action)")
         switch action {
         case .none:
             return .empty()
         case .execute:
             self.requestDetailApi(type: self.detailType, artist: self.artist, name: self.name)
         case .logout:
-            self.steps.accept(MainSteps.loginIsRequired)
+            self.steps.accept(MainSteps.loginIsRequired)            
         }
         return .empty()
     }

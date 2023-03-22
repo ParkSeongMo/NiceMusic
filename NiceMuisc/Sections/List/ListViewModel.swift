@@ -74,9 +74,7 @@ final class ListViewModel: ViewModelType, Stepper {
             self.page += 1
             self.requestListApi()
         case .tapItemForDetail(let artist, let name):
-            Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")
-            
-                self.steps.accept(MainSteps.loginIsRequired)
+            Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")            
         case .none:
             return .empty()
         }
