@@ -80,7 +80,6 @@ final class HomeView: BaseSubView {
     }
     
     private func setupLayout() {
-        
         addSubview(tableView)
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()

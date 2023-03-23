@@ -10,6 +10,42 @@ import RxSwift
 import RxRelay
 import UIKit
 
+enum DetailType {
+    case none
+    case artist
+    case album
+    case track
+}
+
+extension DetailType {
+    var title: String {
+        switch self {
+        case .artist:
+            return "가수"
+        case .track:
+            return "음원"
+        case .album:
+            return "앨범"
+        case .none:
+            return "가수"
+        }
+    }
+}
+
+extension DetailType {
+    var searchIndex: Int {
+        switch self {
+        case .track:
+            return 0
+        case .artist:
+            return 1
+        case .album:
+            return 2
+        case .none:
+            return -1
+        }
+    }
+}
 
 final class DetailView: BaseSubView {
         

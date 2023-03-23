@@ -13,7 +13,6 @@
 		A57ADC6929BEE3E100C9FDDF /* ArtistDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC6829BEE3E100C9FDDF /* ArtistDetailModel.swift */; };
 		A57ADC6B29BEE5EF00C9FDDF /* ServiceApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC6A29BEE5EF00C9FDDF /* ServiceApiClient.swift */; };
 		A57ADC6E29BEE73900C9FDDF /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC6D29BEE73900C9FDDF /* Log.swift */; };
-		A57ADC7229BF22AC00C9FDDF /* ArtistSearhModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC7129BF22AC00C9FDDF /* ArtistSearhModel.swift */; };
 		A57ADC7429BF278400C9FDDF /* ArtistTopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC7329BF278400C9FDDF /* ArtistTopModel.swift */; };
 		A57ADC7629BF290100C9FDDF /* ArtistLocalTopModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC7529BF290100C9FDDF /* ArtistLocalTopModel.swift */; };
 		A57ADC7A29BF2C3900C9FDDF /* TrackDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC7929BF2C3900C9FDDF /* TrackDetailModel.swift */; };
@@ -41,6 +40,12 @@
 		A57ADCAF29C463AC00C9FDDF /* DetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */; };
 		A5BA29D129CAC9F00038B36D /* DetailInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D029CAC9F00038B36D /* DetailInfoView.swift */; };
 		A5BA29D329CAE1AC0038B36D /* DetailTrackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D229CAE1AC0038B36D /* DetailTrackView.swift */; };
+		A5BA29D529CBD2160038B36D /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D429CBD2160038B36D /* SearchView.swift */; };
+		A5BA29D729CBD31B0038B36D /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D629CBD31B0038B36D /* UITextField+.swift */; };
+		A5BA29DA29CBEB890038B36D /* SearchTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D929CBEB890038B36D /* SearchTabView.swift */; };
+		A5BA29DD29CBF2750038B36D /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29DC29CBF2750038B36D /* HeaderCell.swift */; };
+		A5BA29DF29CBF2AE0038B36D /* TabHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29DE29CBF2AE0038B36D /* TabHeaderView.swift */; };
+		A5BA29E129CC2A690038B36D /* ArtistSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29E029CC2A690038B36D /* ArtistSearchModel.swift */; };
 		A5BD78EE29C93D2800F61807 /* BaseSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78ED29C93D2800F61807 /* BaseSubView.swift */; };
 		A5BD78F029C998FF00F61807 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78EF29C998FF00F61807 /* LoginViewController.swift */; };
 		A5BD78F229C99A1500F61807 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78F129C99A1500F61807 /* LoginViewModel.swift */; };
@@ -78,7 +83,6 @@
 		A57ADC6829BEE3E100C9FDDF /* ArtistDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetailModel.swift; sourceTree = "<group>"; };
 		A57ADC6A29BEE5EF00C9FDDF /* ServiceApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceApiClient.swift; sourceTree = "<group>"; };
 		A57ADC6D29BEE73900C9FDDF /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
-		A57ADC7129BF22AC00C9FDDF /* ArtistSearhModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistSearhModel.swift; sourceTree = "<group>"; };
 		A57ADC7329BF278400C9FDDF /* ArtistTopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistTopModel.swift; sourceTree = "<group>"; };
 		A57ADC7529BF290100C9FDDF /* ArtistLocalTopModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistLocalTopModel.swift; sourceTree = "<group>"; };
 		A57ADC7929BF2C3900C9FDDF /* TrackDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackDetailModel.swift; sourceTree = "<group>"; };
@@ -106,6 +110,12 @@
 		A57ADCAE29C463AC00C9FDDF /* DetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailImageView.swift; sourceTree = "<group>"; };
 		A5BA29D029CAC9F00038B36D /* DetailInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInfoView.swift; sourceTree = "<group>"; };
 		A5BA29D229CAE1AC0038B36D /* DetailTrackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailTrackView.swift; sourceTree = "<group>"; };
+		A5BA29D429CBD2160038B36D /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		A5BA29D629CBD31B0038B36D /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
+		A5BA29D929CBEB890038B36D /* SearchTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTabView.swift; sourceTree = "<group>"; };
+		A5BA29DC29CBF2750038B36D /* HeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderCell.swift; sourceTree = "<group>"; };
+		A5BA29DE29CBF2AE0038B36D /* TabHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabHeaderView.swift; sourceTree = "<group>"; };
+		A5BA29E029CC2A690038B36D /* ArtistSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistSearchModel.swift; sourceTree = "<group>"; };
 		A5BD78ED29C93D2800F61807 /* BaseSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSubView.swift; sourceTree = "<group>"; };
 		A5BD78EF29C998FF00F61807 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A5BD78F129C99A1500F61807 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -191,6 +201,7 @@
 			children = (
 				A57ADC9F29C30D7700C9FDDF /* UIScrollView+.swift */,
 				A5DD6F7229C86063008D2B80 /* UIView+.swift */,
+				A5BA29D629CBD31B0038B36D /* UITextField+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -204,6 +215,23 @@
 				A5BD78FA29CA8B8B00F61807 /* DetailDescView.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		A5BA29D829CBEB720038B36D /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				A5BA29D929CBEB890038B36D /* SearchTabView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		A5BA29DB29CBF26C0038B36D /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				A5BA29DC29CBF2750038B36D /* HeaderCell.swift */,
+				A5BA29DE29CBF2AE0038B36D /* TabHeaderView.swift */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		A5BD78F729C9AD2100F61807 /* Login */ = {
@@ -265,8 +293,9 @@
 			children = (
 				A57ADC8B29C05D6900C9FDDF /* CommonCardModel.swift */,
 				A57ADC8F29C14DCC00C9FDDF /* HomeCardModel.swift */,
+				A57ADCAB29C4415300C9FDDF /* DetailModel.swift */,
 				A57ADC6829BEE3E100C9FDDF /* ArtistDetailModel.swift */,
-				A57ADC7129BF22AC00C9FDDF /* ArtistSearhModel.swift */,
+				A5BA29E029CC2A690038B36D /* ArtistSearchModel.swift */,
 				A57ADC7329BF278400C9FDDF /* ArtistTopModel.swift */,
 				A57ADC7529BF290100C9FDDF /* ArtistLocalTopModel.swift */,
 				A57ADC7B29BF2D7200C9FDDF /* AlbumDetailModel.swift */,
@@ -275,7 +304,6 @@
 				A57ADC7F29BF3C1F00C9FDDF /* TrackSearchModel.swift */,
 				A57ADC8129BF3F2300C9FDDF /* TrackTopModel.swift */,
 				A57ADC8529C0284D00C9FDDF /* TrackLocalTopModel.swift */,
-				A57ADCAB29C4415300C9FDDF /* DetailModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -283,6 +311,7 @@
 		A5DF79CF29B043EF00799BEA /* Sections */ = {
 			isa = PBXGroup;
 			children = (
+				A5BA29DB29CBF26C0038B36D /* Common */,
 				A5BD78F729C9AD2100F61807 /* Login */,
 				A5DF79EC29B0605F00799BEA /* Main */,
 				A5DF79EB29B0602600799BEA /* Detail */,
@@ -342,7 +371,9 @@
 		A5DF79E929B0601F00799BEA /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				A5BA29D829CBEB720038B36D /* Subviews */,
 				A5DF79F129B0608E00799BEA /* SearchViewController.swift */,
+				A5BA29D429CBD2160038B36D /* SearchView.swift */,
 				A5DF79F329B0609600799BEA /* SearchViewModel.swift */,
 			);
 			path = Search;
@@ -526,7 +557,6 @@
 				A57ADC6E29BEE73900C9FDDF /* Log.swift in Sources */,
 				A57ADC8029BF3C1F00C9FDDF /* TrackSearchModel.swift in Sources */,
 				A5DF79D829B05CA600799BEA /* MainStepper.swift in Sources */,
-				A57ADC7229BF22AC00C9FDDF /* ArtistSearhModel.swift in Sources */,
 				A57ADC8C29C05D6900C9FDDF /* CommonCardModel.swift in Sources */,
 				A57ADC9B29C2D63700C9FDDF /* ListTableViewCell.swift in Sources */,
 				A5BD78F429C99BFB00F61807 /* LoginView.swift in Sources */,
@@ -535,6 +565,7 @@
 				A57ADCA629C4349F00C9FDDF /* DetailViewController.swift in Sources */,
 				A5BD78EE29C93D2800F61807 /* BaseSubView.swift in Sources */,
 				A57ADC6629BEB84200C9FDDF /* ServiceApiProvider.swift in Sources */,
+				A5BA29DD29CBF2750038B36D /* HeaderCell.swift in Sources */,
 				A57ADCA829C434AB00C9FDDF /* DetailViewModel.swift in Sources */,
 				A57ADC8429C008FD00C9FDDF /* SubViewDI.swift in Sources */,
 				A5BD78F629C9ABA000F61807 /* LoginFlow.swift in Sources */,
@@ -554,6 +585,8 @@
 				A57ADC7C29BF2D7200C9FDDF /* AlbumDetailModel.swift in Sources */,
 				A57ADC7629BF290100C9FDDF /* ArtistLocalTopModel.swift in Sources */,
 				A5BD78F229C99A1500F61807 /* LoginViewModel.swift in Sources */,
+				A5BA29D529CBD2160038B36D /* SearchView.swift in Sources */,
+				A5BA29DA29CBEB890038B36D /* SearchTabView.swift in Sources */,
 				A5BA29D129CAC9F00038B36D /* DetailInfoView.swift in Sources */,
 				A57ADC6429BEB6B300C9FDDF /* ServiceApi.swift in Sources */,
 				A5DF79F829B0610D00799BEA /* ViewModelType.swift in Sources */,
@@ -564,11 +597,14 @@
 				A57ADC7A29BF2C3900C9FDDF /* TrackDetailModel.swift in Sources */,
 				A5BD78F929C9AE3B00F61807 /* LoginStepper.swift in Sources */,
 				A5DF79D229B05BA600799BEA /* MainSteps.swift in Sources */,
+				A5BA29E129CC2A690038B36D /* ArtistSearchModel.swift in Sources */,
+				A5BA29DF29CBF2AE0038B36D /* TabHeaderView.swift in Sources */,
 				A57ADC8629C0284D00C9FDDF /* TrackLocalTopModel.swift in Sources */,
 				A5DD6F7329C86063008D2B80 /* UIView+.swift in Sources */,
 				A57ADC9029C14DCC00C9FDDF /* HomeCardModel.swift in Sources */,
 				A5DF79DA29B05CB500799BEA /* HomeStepper.swift in Sources */,
 				A5DF79F029B0608300799BEA /* HomeViewModel.swift in Sources */,
+				A5BA29D729CBD31B0038B36D /* UITextField+.swift in Sources */,
 				A57ADC8229BF3F2300C9FDDF /* TrackTopModel.swift in Sources */,
 				A57ADC8829C0573300C9FDDF /* HomeTableViewCell.swift in Sources */,
 				A5DF79E729B05D8C00799BEA /* SearchFlow.swift in Sources */,

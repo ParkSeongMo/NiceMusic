@@ -16,13 +16,6 @@ enum DetailActionType {
     case logout
 }
 
-enum DetailType {
-    case none
-    case artist
-    case album
-    case track
-}
-
 final class DetailViewModel: ViewModelType, Stepper {
       
      // MARK: - Stepper

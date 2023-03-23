@@ -15,4 +15,5 @@ target 'NiceMuisc' do
   pod 'Kingfisher'
   pod 'SnapKit'
   pod 'SwiftyJSON'
+  pod 'RxSwiftExt'
 end

@@ -27,16 +27,7 @@ final class DetailDescView: DescendantView {
         $0.numberOfLines = 0
         $0.textColor = .white
     }
-    
-    private lazy var logoutButton = UIButton().then {
-        $0.titleLabel?.font = .systemFont(ofSize: 15)
-        $0.setTitleColor(.white, for: .normal)
-        $0.setTitle("Logout2", for: .normal)
-        $0.layer.borderWidth = 2
-        $0.layer.borderColor = UIColor.white.cgColor
-        $0.layer.cornerRadius = 10
-    }
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
