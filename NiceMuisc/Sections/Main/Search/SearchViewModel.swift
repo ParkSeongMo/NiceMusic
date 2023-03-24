@@ -53,6 +53,9 @@ class SearchViewModel: ViewModelType, Stepper {
             self.resData[DetailType.track.searchIndex] = [CommonCardModel]()
             self.resData[DetailType.album.searchIndex] = [CommonCardModel]()
             self.requestSearchApi(keyword: keyword)
+        case .tapItemForDetail(let type, let title, let subTitle):
+            self.steps.accept(MainSteps.detailIsRequired(type: type, artist: title, name: subTitle))
+            return .empty()
         default:
             return .empty()
         }

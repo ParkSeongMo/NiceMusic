@@ -15,7 +15,7 @@ struct AlbumDetail: Codable {
     let name:String?
     let artist:String?
     let image:[Image]?
-    let tags:Tags?
+//    let tags:Tags?
     let wiki:Desciption?
     let tracks:AlbumTrack?
     let playcount: String?

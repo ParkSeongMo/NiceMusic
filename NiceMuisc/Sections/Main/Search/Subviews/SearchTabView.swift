@@ -14,34 +14,32 @@ import RxCocoa
 final class SearchTabView: DescendantView {
     
     private let disposeBag = DisposeBag()
+    private let items: [String:Int] = [DetailType.track.title : DetailType.track.searchIndex,
+                                       DetailType.artist.title : DetailType.artist.searchIndex,
+                                       DetailType.album.title : DetailType.album.searchIndex]
+    private let types: [Int:DetailType] = [DetailType.track.searchIndex : DetailType.track,
+                                       DetailType.artist.searchIndex : DetailType.artist,
+                                       DetailType.album.searchIndex : DetailType.album,]
+    private var currentSearchIndex = DetailType.track.searchIndex
     
-    
-     
     private lazy var buttonStackView = UIStackView().then {
         $0.spacing = 5
         $0.distribution = .fillEqually
         $0.alignment = .fill
         $0.axis = .horizontal
     }
-    
     private lazy var emptyLabel = UILabel().then {
         $0.text = "검색 결과가 없습니다."
         $0.font = .boldSystemFont(ofSize: 15)
         $0.numberOfLines = 1
         $0.textColor = .white
     }
-    
-    private var items: [String:Int] = [DetailType.track.title : DetailType.track.searchIndex,
-                                       DetailType.artist.title : DetailType.artist.searchIndex,
-                                       DetailType.album.title : DetailType.album.searchIndex]
-    
     private var buttons:[UIButton] = []
     private var tableViews:[UITableView] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        items.keys.sorted()
         setupLayout()
     }
     
@@ -62,8 +60,8 @@ final class SearchTabView: DescendantView {
         }
         emptyLabel.isHidden = true
         
-        setButtonSelection(btn: buttons[0], isSelected: true)
-        showSelectedTableView(tag: 1)
+        showSelectedButton(tag: currentSearchIndex)
+        showSelectedTableView(tag: currentSearchIndex)
     }
     
     
@@ -77,7 +75,8 @@ final class SearchTabView: DescendantView {
             $0.height.equalTo(40)
         }
         
-        for (key, value) in items {
+        let sortedItem = items.sorted { $0.1 < $1.1 }
+        for (key, value) in sortedItem {
             Log.d("button key:\(key), value:\(value)")
             let button = UIButton().then {
                 $0.titleLabel?.font = .systemFont(ofSize: 15)
@@ -94,14 +93,9 @@ final class SearchTabView: DescendantView {
             
             button.rx.tap.bind { [weak self] in
                 guard let `self` = self else { return }
-                
+                self.currentSearchIndex = button.tag
                 self.showSelectedTableView(tag: button.tag)
-                
-                for btn in self.buttons {
-                    self.setButtonSelection(
-                        btn: btn,
-                        isSelected: (btn.tag == button.tag))
-                }
+                self.showSelectedButton(tag: button.tag)
             }
             .disposed(by: disposeBag)
             
@@ -109,14 +103,17 @@ final class SearchTabView: DescendantView {
         }
     }
     
-    private func setButtonSelection(btn: UIButton, isSelected: Bool) {
-        if isSelected {
-            btn.isSelected = true
-            btn.layer.borderColor = UIColor.gray.cgColor
-        } else {
-            btn.isSelected = false
-            btn.layer.borderColor = UIColor.white.cgColor
+    private func showSelectedButton(tag: Int) {
+        for btn in self.buttons {
+            if btn.tag == tag {
+                btn.isSelected = true
+                btn.layer.borderColor = UIColor.gray.cgColor
+            } else {
+                btn.isSelected = false
+                btn.layer.borderColor = UIColor.white.cgColor
+            }
         }
+        
     }
     
     private func setupTableView() {
@@ -144,31 +141,29 @@ final class SearchTabView: DescendantView {
                 $0.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.id)
             }
             
-            tableViews.append(tableView)
             view.addSubview(tableView)
-            
             tableView.snp.makeConstraints {
                 $0.directionalEdges.equalToSuperview()
             }
             
             tableView.rx.modelSelected(CommonCardModel.self)
-                .map { item in ListActionType.tapItemForDetail(item.title, item.subTitle) }
-                .subscribe(onNext: { [weak self] _ in
+                .subscribe(onNext: { [weak self] item in
                     guard let `self` = self else { return }
-//                    self.delegate?.inputRelay.accept(<#T##event: Any##Any#>)
+                    self.delegate?.inputRelay.accept(SearchActionType.tapItemForDetail(self.types[self.currentSearchIndex]!, item.title, item.subTitle))
                 })
-//                .bind(to: self.delegate?.inputRelay)
                 .disposed(by: disposeBag)
             
             tableView.rx.contentOffset
                 .subscribe({ [weak self] _ in
                     guard let `self` = self else { return }
-//                    if self.tableView.isNearBottomEdge() {
-//                        self.inputRelay.accept(ListActionType.more)
-//                    }
+                    if tableView.isNearBottomEdge() {
+                        Log.d("click isNearBottomEdge")
+//                        self.delegate?.inputRelay.accept(ListActionType.more)
+                    }
                 }).disposed(by: disposeBag)
             
             
+            tableViews.append(tableView)
             
         }
     }
@@ -191,7 +186,6 @@ final class SearchTabView: DescendantView {
     func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {
         
         if let observable = observable as? Observable<(DetailType, [CommonCardModel])> {
-            
             bindTableView(observable: observable, type: .track)
             bindTableView(observable: observable, type: .artist)
             bindTableView(observable: observable, type: .album)
@@ -206,8 +200,6 @@ final class SearchTabView: DescendantView {
             .filter { ($0.0 as DetailType) == type }
             .map { $0.1 }
             .bind(to: tableViews[type.searchIndex].rx.items) {  tableView, _, element in
-                
-                    Log.d("bind item ")
                 if let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as? ListTableViewCell {
                     cell.prepare(
                         title: element.title,

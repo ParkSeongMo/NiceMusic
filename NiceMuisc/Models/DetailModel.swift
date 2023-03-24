@@ -64,7 +64,8 @@ struct DetailModel {
             self.image = "https://lastfm.freetls.fastly.net/i/u/174s/bfb84f4aa2ac69a5ffa98c0406b8bf10.png"//someData.image?[4].text
             self.name = someData.album?.name
             self.artistName = someData.album?.artist
-            self.tags = someData.album?.tags
+//            self.tags = someData.album?.tags            
+            self.tags = Tags()
             self.desc = someData.album?.wiki
             self.duration = nil
             self.playcount = someData.album?.playcount

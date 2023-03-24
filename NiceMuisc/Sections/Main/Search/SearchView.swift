@@ -8,8 +8,6 @@
 import UIKit
 import RxSwift
 import RxRelay
-import SnapKit
-import Then
 
 final class SearchView: BaseSubView, UITextFieldDelegate {
     
@@ -55,7 +53,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     }
     
     private let searchTabView = SearchTabView()
-    
+        
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -68,10 +66,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     }
     
     private func setupSubviews() {
-        subViews = [
-            searchBarTextField,
-            searchButton,
-            deleteButton,
+        subViews = [            
             searchTabView
         ]
     }
@@ -119,6 +114,18 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             self.searchBarTextField.text = ""
         }
         .disposed(by: disposeBag)
+    }
+    
+    @discardableResult
+    func setupDI<T>(generic: PublishRelay<T>) -> Self {
+        
+        if let generic = generic as? PublishRelay<SearchActionType> {
+            inputRelay.compactMap { $0 as? SearchActionType }
+                .bind(to: generic)
+                .disposed(by: disposeBag)
+        }
+        
+        return self
     }
     
     @discardableResult

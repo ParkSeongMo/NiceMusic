@@ -58,7 +58,6 @@ final class DetailView: BaseSubView {
             }
         }
     }
-    
     private lazy var scrollView = UIScrollView().then {
         $0.isScrollEnabled = true
         $0.alwaysBounceVertical = true
@@ -115,7 +114,6 @@ final class DetailView: BaseSubView {
             descView
         ]
     }
-    
     
     @discardableResult
     func setupDI<T>(generic: PublishRelay<T>) -> Self {
