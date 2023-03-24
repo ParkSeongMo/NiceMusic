@@ -5,10 +5,15 @@
 //  Created by Seongmo Park on 2023/03/02.
 //
 
+import RxCocoa
 import SnapKit
 import UIKit
 
 class SearchViewController: UIViewController {
+    
+    typealias ActionType = SearchActionType
+    
+    private let action = PublishRelay<ActionType>()
     
     private let viewModel:SearchViewModel
     
@@ -26,8 +31,10 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Log.d("HomeViewController viewDidLoad()")
         setupLayout()
+        bindViewModel()
+        
+        action.accept(.execute("BTS"))
     }
     
     private func setupLayout() {
@@ -37,5 +44,13 @@ class SearchViewController: UIViewController {
         subView.snp.makeConstraints {
             $0.directionalEdges.equalToSuperview()
         }
+    }
+        
+    private func bindViewModel() {
+        let output = viewModel.transform(req: SearchViewModel.Input(actionTrigger: action.asObservable()))
+        
+        subView.setupDI(generic: action)
+            .setupDI(observable: output.response)
+            .setupDI(loadChanger: output.loadChanger)
     }
 }

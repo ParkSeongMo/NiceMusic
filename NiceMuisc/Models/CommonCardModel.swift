@@ -34,6 +34,13 @@ final class CommonCardModel {
         case let someData as TrackDetail:
             title = someData.name
             subTitle = someData.artist?.name
+        case let someData as Track:
+            title = someData.name
+            subTitle = someData.artist
+//            image = someData.album?.image
+        case let someData as AlbumDetail:
+            title = someData.name
+            subTitle = someData.artist
 //            image = someData.album?.image
         default:
             title = nil

@@ -85,7 +85,7 @@ class ListView: BaseSubView {
     
     @discardableResult
     func setupDI<T>(observable: Observable<T>) -> Self {
-                          
+         
         if let observable = observable as? Observable<[CommonCardModel]> {
             observable
                 .bind(to: tableView.rx.items) { tableView, _, element in

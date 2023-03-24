@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import RxSwift
+import RxRelay
 import SnapKit
 import Then
 
 final class SearchView: BaseSubView, UITextFieldDelegate {
+    
+    var responseRelay = PublishRelay<(DetailType, [CommonCardModel])>()
     
     var subViews: [DescendantView] = [] {
         willSet {
@@ -115,6 +119,20 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             self.searchBarTextField.text = ""
         }
         .disposed(by: disposeBag)
+    }
+    
+    @discardableResult
+    func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {
+        
+        if let observable = observable as? Observable<(DetailType, [CommonCardModel])> {
+            observable.subscribe { (detailType, items) in
+//                self.responseRelay.accept((detailType, items))
+            }
+            .disposed(by: disposeBag)
+        }
+        
+        searchTabView.setupDI(observable: observable)
+        return self
     }
 }
 

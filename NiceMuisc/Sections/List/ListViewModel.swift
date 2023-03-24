@@ -150,13 +150,13 @@ final class ListViewModel: ViewModelType, Stepper {
                 guard let `self` = self else { return }
                 switch element {
                 case let data as ArtistTopModel:
-                    self.responseData.append(contentsOf: self.makeLimitedHomeData(array: data.artists?.artist))
+                    self.responseData.append(contentsOf: self.makeLimitedData(array: data.artists?.artist))
                 case let data as TrackTopModel:
-                    self.responseData.append(contentsOf: self.makeLimitedHomeData(array: data.tracks?.track))
+                    self.responseData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
                 case let data as ArtistLocalTopModel:
-                    self.responseData.append(contentsOf: self.makeLimitedHomeData(array: data.topartists?.artist))
+                    self.responseData.append(contentsOf: self.makeLimitedData(array: data.topartists?.artist))
                 case let data as TrackLocalTopModel:
-                    self.responseData.append(contentsOf: self.makeLimitedHomeData(array: data.tracks?.track))
+                    self.responseData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
                 default:
                     return
                 }
@@ -169,7 +169,7 @@ final class ListViewModel: ViewModelType, Stepper {
             }).disposed(by: disposeBag)
     }
     
-    private func makeLimitedHomeData<T>(array: [T]?) -> [CommonCardModel] {
+    private func makeLimitedData<T>(array: [T]?) -> [CommonCardModel] {
         
         var responseData:[CommonCardModel] = []
         

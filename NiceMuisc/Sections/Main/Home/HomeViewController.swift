@@ -8,7 +8,6 @@
 import RxCocoa
 import RxSwift
 import SnapKit
-import Moya
 import Then
 
 final class HomeViewController: UIViewController {
@@ -62,7 +61,7 @@ final class HomeViewController: UIViewController {
     private func setupLayout() {
         self.view.addSubview(homeView)
         homeView.snp.makeConstraints {
-            $0.directionalEdges.equalToSuperview()            
+            $0.directionalEdges.equalToSuperview()
         }
         
         

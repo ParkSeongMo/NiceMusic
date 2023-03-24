@@ -14,6 +14,8 @@ import RxCocoa
 final class SearchTabView: DescendantView {
     
     private let disposeBag = DisposeBag()
+    
+    
      
     private lazy var buttonStackView = UIStackView().then {
         $0.spacing = 5
@@ -38,7 +40,8 @@ final class SearchTabView: DescendantView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-                
+        
+        items.keys.sorted()
         setupLayout()
     }
     
@@ -75,6 +78,7 @@ final class SearchTabView: DescendantView {
         }
         
         for (key, value) in items {
+            Log.d("button key:\(key), value:\(value)")
             let button = UIButton().then {
                 $0.titleLabel?.font = .systemFont(ofSize: 15)
                 $0.setTitleColor(.white, for: .normal)
@@ -124,7 +128,7 @@ final class SearchTabView: DescendantView {
         }
         
         for (_, value) in items {
-            
+                        
             let tableView = UITableView(frame: .zero, style: .plain).then {
                 $0.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
                 $0.separatorInsetReference = .fromCellEdges
@@ -138,6 +142,13 @@ final class SearchTabView: DescendantView {
                 $0.showsVerticalScrollIndicator = true
                 $0.contentInset = .zero
                 $0.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.id)
+            }
+            
+            tableViews.append(tableView)
+            view.addSubview(tableView)
+            
+            tableView.snp.makeConstraints {
+                $0.directionalEdges.equalToSuperview()
             }
             
             tableView.rx.modelSelected(CommonCardModel.self)
@@ -158,15 +169,14 @@ final class SearchTabView: DescendantView {
                 }).disposed(by: disposeBag)
             
             
-            tableViews.append(tableView)
-            view.addSubview(tableView)
+            
         }
     }
     
     private func showSelectedTableView(tag: Int) {
              
         for index in 0...tableViews.count-1 {
-            Log.d("index:\(index)")
+            Log.d("index:\(index), tag:\(tag)")
             
             // TODO 서버 응답에 따라 결과가 없는 테이블뷰는 결과 없음 표출
             if index == (tag) {
@@ -176,8 +186,38 @@ final class SearchTabView: DescendantView {
             }
         }
     }
+        
+    @discardableResult
+    func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {
+        
+        if let observable = observable as? Observable<(DetailType, [CommonCardModel])> {
+            
+            bindTableView(observable: observable, type: .track)
+            bindTableView(observable: observable, type: .artist)
+            bindTableView(observable: observable, type: .album)
+        }
+        
+        return self
+    }
     
-    override func setupDI() {
-        delegate?.outputRelay.su
+    private func bindTableView(observable: Observable<(DetailType, [CommonCardModel])>, type: DetailType) {
+        
+        observable
+            .filter { ($0.0 as DetailType) == type }
+            .map { $0.1 }
+            .bind(to: tableViews[type.searchIndex].rx.items) {  tableView, _, element in
+                
+                    Log.d("bind item ")
+                if let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as? ListTableViewCell {
+                    cell.prepare(
+                        title: element.title,
+                        subTitle: element.subTitle,
+                        imageUrl: element.image?.isEmpty == true ? "" : element.image?[2].text)
+                    cell.selectionStyle = .none
+                    return cell
+                }
+                return UITableViewCell()
+            }
+            .disposed(by: disposeBag)
     }
 }
