@@ -24,12 +24,12 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
             
     // MARK: - Output properties
     private let resDataRelay = BehaviorRelay<[CommonCardModel]>(value: [CommonCardModel()])
-    private let changerRelay = BehaviorRelay<LoadChangeAction>(value: .none)
+    private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     
     private var resData: [CommonCardModel] = []
     private let defaultPageNum = 1
-    private var page = 1
     private let limit = 20
+    private var page = 1
     private var isLoading = false
     var index = HomeIndex.none
         
@@ -84,7 +84,7 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func requestListApi() {
-        self.changerRelay.accept(.loaderStart)
+        self.loaderRelay.accept(.loaderStart)
         switch index {
         case .topArtist:
             self.requestTopArtistDataAction.execute()
@@ -114,7 +114,7 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         
         subscribeServerRequestionAction()
                 
-        return Output(response: resDataRelay.asObservable(), loadChanger: changerRelay.asObservable())
+        return Output(response: resDataRelay.asObservable(), loadChanger: loaderRelay.asObservable())
     }
     
     private func subscribeServerRequestionAction() {
@@ -137,6 +137,7 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         let disposable = action.executing.bind { [weak self] element in
             guard let `self` = self else { return }
             self.isLoading = element
+            Log.d("isLoading \(element)")
         }
         disposable.disposed(by: disposeBag)
         
@@ -156,11 +157,11 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
                     return
                 }
                 self.resDataRelay.accept(self.resData)
-                self.changerRelay.accept(.loaderStop)
+                self.loaderRelay.accept(.loaderStop)
             }, onError: { code in
                 Log.d("RequestHomeData Error: \(code)")
                 // TODO 에러 처리 필요
-                self.changerRelay.accept(.loaderStop)
+                self.loaderRelay.accept(.loaderStop)
             }).disposed(by: disposeBag)
     }
     

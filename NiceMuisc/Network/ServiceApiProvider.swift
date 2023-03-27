@@ -13,9 +13,9 @@ enum ServiceApiProvider {
     case topTrackList(page: Int, limit: Int)                            // Top 음원 조회
     case topArtistListInLocal(page: Int, limit: Int, country: String)   // 국내 Top 아티스트 조회
     case topTrackListInLocal(page: Int, limit: Int, country: String)    // 국내 Top 음원 조회
-    case artistSearch(artist: String)                       // 아티스트 검색
-    case trackSearch(track: String)                         // 음원 검색
-    case albumSearch(album: String)                         // 엘범 검색
+    case artistSearch(artist: String, page: Int, limit: Int)            // 아티스트 검색
+    case trackSearch(track: String, page: Int, limit: Int)              // 음원 검색
+    case albumSearch(album: String, page: Int, limit: Int)              // 엘범 검색
     case artistDetail(artist: String)                       // 아티스트 상세 조회
     case trackDetail(artist: String, track: String)         // 음원 상세 조회
     case albumDetail(artist: String, album: String)         // 엘범 상세 조회

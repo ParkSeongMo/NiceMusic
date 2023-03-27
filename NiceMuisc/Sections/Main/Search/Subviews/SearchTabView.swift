@@ -17,9 +17,6 @@ final class SearchTabView: DescendantView {
     private let items: [String:Int] = [DetailType.track.title : DetailType.track.searchIndex,
                                        DetailType.artist.title : DetailType.artist.searchIndex,
                                        DetailType.album.title : DetailType.album.searchIndex]
-    private let types: [Int:DetailType] = [DetailType.track.searchIndex : DetailType.track,
-                                       DetailType.artist.searchIndex : DetailType.artist,
-                                       DetailType.album.searchIndex : DetailType.album,]
     private var currentSearchIndex = DetailType.track.searchIndex
     
     private lazy var buttonStackView = UIStackView().then {
@@ -45,8 +42,7 @@ final class SearchTabView: DescendantView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
+    }    
     
     private func setupLayout() {
        
@@ -149,7 +145,8 @@ final class SearchTabView: DescendantView {
             tableView.rx.modelSelected(CommonCardModel.self)
                 .subscribe(onNext: { [weak self] item in
                     guard let `self` = self else { return }
-                    self.delegate?.inputRelay.accept(SearchActionType.tapItemForDetail(self.types[self.currentSearchIndex]!, item.title, item.subTitle))
+                    self.delegate?.inputRelay.accept(SearchActionType.tapItemForDetail(
+                        self.currentSearchIndex, item.title, item.subTitle))
                 })
                 .disposed(by: disposeBag)
             
@@ -158,7 +155,8 @@ final class SearchTabView: DescendantView {
                     guard let `self` = self else { return }
                     if tableView.isNearBottomEdge() {
                         Log.d("click isNearBottomEdge")
-//                        self.delegate?.inputRelay.accept(ListActionType.more)
+                        self.delegate?.inputRelay.accept(SearchActionType.more(
+                            self.currentSearchIndex))
                     }
                 }).disposed(by: disposeBag)
             

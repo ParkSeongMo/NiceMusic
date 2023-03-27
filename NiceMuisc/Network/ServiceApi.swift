@@ -20,8 +20,8 @@ extension ServiceApi.Artist {
         return ServiceApiClient.request(.artistDetail(artist: artist))
     }
     
-    static func search(artist: String) -> Single<ArtistSearchModel> {
-        return ServiceApiClient.request(.artistSearch(artist: artist))
+    static func search(artist: String, page: Int, limit: Int) -> Single<ArtistSearchModel> {
+        return ServiceApiClient.request(.artistSearch(artist: artist, page: page, limit: limit))
     }
     
     static func top(page: Int=1, limit: Int=10) -> Single<ArtistTopModel> {
@@ -39,8 +39,8 @@ extension ServiceApi.Track {
         return ServiceApiClient.request(.trackDetail(artist: artist, track: track))
     }
     
-    static func search(track: String) -> Single<TrackSearchModel> {
-        return ServiceApiClient.request(.trackSearch(track: track))
+    static func search(track: String, page: Int, limit: Int) -> Single<TrackSearchModel> {
+        return ServiceApiClient.request(.trackSearch(track: track, page: page, limit: limit))
     }
     
     static func top(page: Int=1, limit: Int=10) -> Single<TrackTopModel> {
@@ -58,7 +58,7 @@ extension ServiceApi.Album {
         return ServiceApiClient.request(.albumDetail(artist: artist, album: album))
     }
     
-    static func search(album: String) -> Single<AlbumSearchModel> {
-        return ServiceApiClient.request(.albumSearch(album: album))
+    static func search(album: String, page: Int, limit: Int) -> Single<AlbumSearchModel> {
+        return ServiceApiClient.request(.albumSearch(album: album, page: page, limit: limit))
     }
 }
