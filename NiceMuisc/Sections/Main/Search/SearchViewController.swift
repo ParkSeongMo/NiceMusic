@@ -33,8 +33,6 @@ class SearchViewController: UIViewController {
         
         setupLayout()
         bindViewModel()
-        
-        action.accept(.execute("BTS"))
     }
     
     private func setupLayout() {

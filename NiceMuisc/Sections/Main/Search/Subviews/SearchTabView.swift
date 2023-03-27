@@ -14,10 +14,13 @@ import RxCocoa
 final class SearchTabView: DescendantView {
     
     private let disposeBag = DisposeBag()
-    private let items: [String:Int] = [DetailType.track.title : DetailType.track.searchIndex,
-                                       DetailType.artist.title : DetailType.artist.searchIndex,
-                                       DetailType.album.title : DetailType.album.searchIndex]
+    private let items = [DetailType.track.title : DetailType.track.searchIndex,
+                         DetailType.artist.title : DetailType.artist.searchIndex,
+                         DetailType.album.title : DetailType.album.searchIndex]
     private var currentSearchIndex = DetailType.track.searchIndex
+    private var isHiddenEmptyView = [DetailType.track.searchIndex : true,
+                                   DetailType.artist.searchIndex : true,
+                                   DetailType.album.searchIndex : true]
     
     private lazy var buttonStackView = UIStackView().then {
         $0.spacing = 5
@@ -42,7 +45,7 @@ final class SearchTabView: DescendantView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }    
+    }
     
     private func setupLayout() {
        
@@ -58,6 +61,7 @@ final class SearchTabView: DescendantView {
         
         showSelectedButton(tag: currentSearchIndex)
         showSelectedTableView(tag: currentSearchIndex)
+        showEmptyView(index: currentSearchIndex)
     }
     
     
@@ -73,7 +77,6 @@ final class SearchTabView: DescendantView {
         
         let sortedItem = items.sorted { $0.1 < $1.1 }
         for (key, value) in sortedItem {
-            Log.d("button key:\(key), value:\(value)")
             let button = UIButton().then {
                 $0.titleLabel?.font = .systemFont(ofSize: 15)
                 $0.setTitleColor(.white, for: .normal)
@@ -92,6 +95,7 @@ final class SearchTabView: DescendantView {
                 self.currentSearchIndex = button.tag
                 self.showSelectedTableView(tag: button.tag)
                 self.showSelectedButton(tag: button.tag)
+                self.showEmptyView(index: button.tag)
             }
             .disposed(by: disposeBag)
             
@@ -169,14 +173,7 @@ final class SearchTabView: DescendantView {
     private func showSelectedTableView(tag: Int) {
              
         for index in 0...tableViews.count-1 {
-            Log.d("index:\(index), tag:\(tag)")
-            
-            // TODO 서버 응답에 따라 결과가 없는 테이블뷰는 결과 없음 표출
-            if index == (tag) {
-                tableViews[index].isHidden = false
-            } else {
-                tableViews[index].isHidden = true
-            }
+            tableViews[index].isHidden = (index != (tag))
         }
     }
         
@@ -193,6 +190,15 @@ final class SearchTabView: DescendantView {
     }
     
     private func bindTableView(observable: Observable<(DetailType, [CommonCardModel])>, type: DetailType) {
+        observable
+            .filter { ($0.0 as DetailType) == type }
+            .map { $0.1 }
+            .subscribe(onNext: { [weak self] item in
+                guard let `self` = self else { return }
+                self.isHiddenEmptyView[type.searchIndex] = item.count > 0
+                self.showEmptyView(index: type.searchIndex)
+            })
+            .disposed(by: disposeBag)
         
         observable
             .filter { ($0.0 as DetailType) == type }
@@ -209,5 +215,11 @@ final class SearchTabView: DescendantView {
                 return UITableViewCell()
             }
             .disposed(by: disposeBag)
+    }
+    
+   private func showEmptyView(index: Int) {
+       if index == currentSearchIndex {
+           emptyLabel.isHidden = isHiddenEmptyView[currentSearchIndex]!
+       }
     }
 }
