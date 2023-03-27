@@ -109,6 +109,12 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     
     private func bindRx() {
                 
+        searchButton.rx.tap.bind { [weak self] in
+            guard let `self` = self else { return }
+            self.inputRelay.accept(SearchActionType.execute(self.searchBarTextField.text ?? ""))
+        }
+        .disposed(by: disposeBag)
+        
         deleteButton.rx.tap.bind { [weak self] in
             guard let `self` = self else { return }
             self.searchBarTextField.text = ""

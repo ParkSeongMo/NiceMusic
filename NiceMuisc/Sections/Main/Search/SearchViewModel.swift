@@ -21,7 +21,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     // MARK: - Output properties
     private let resDataRelay = BehaviorRelay<(DetailType, [CommonCardModel])>(value:(.none, [CommonCardModel]()))
-    private let LoaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
+    private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     
     private var resData: [Int:[CommonCardModel]] = [:]
     
@@ -73,14 +73,14 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         
         subscribeServerRequestionAction()
         
-        return Output(response: resDataRelay.asObservable(), loadChanger: LoaderRelay.asObservable())
+        return Output(response: resDataRelay.asObservable(), loadChanger: loaderRelay.asObservable())
     }
     
     private func requestSearchApi(keyword: String) {
-        
-        self.requestArtistDataAction.execute(keyword)
-        self.requestTrackDataAction.execute(keyword)
-        self.requestAblumDataAction.execute(keyword)
+        loaderRelay.accept(.loaderStart)
+        requestArtistDataAction.execute(keyword)
+        requestTrackDataAction.execute(keyword)
+        requestAblumDataAction.execute(keyword)
     }
         
     private func subscribeServerRequestionAction() {
@@ -94,6 +94,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
                 self.responseSearchData(type: .track, array: track.results?.trackmatches?.track)
                 self.responseSearchData(type: .artist, array: artist.results?.artistmatches?.artist)
                 self.responseSearchData(type: .album, array: album.results?.albummatches?.album)
+                self.loaderRelay.accept(.loaderStop)
             }
         
         observable.disposed(by: disposeBag)
@@ -101,11 +102,11 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     private func responseSearchData<T>(type:DetailType, array: [T]?) {
         
-        self.resData[type.searchIndex] = self.makeLimitedData(
-            orgData: self.resData[type.searchIndex],
+        resData[type.searchIndex] = makeLimitedData(
+            orgData: resData[type.searchIndex],
             array: array)
         
-        self.resDataRelay.accept((type, self.resData[type.searchIndex] ?? [CommonCardModel]()))
+        resDataRelay.accept((type, resData[type.searchIndex] ?? [CommonCardModel]()))
     }
         
     private func makeLimitedData<T>(orgData:[CommonCardModel]?, array: [T]?) -> [CommonCardModel] {
