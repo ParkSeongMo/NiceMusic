@@ -44,6 +44,7 @@
 		A5BA29D729CBD31B0038B36D /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D629CBD31B0038B36D /* UITextField+.swift */; };
 		A5BA29DA29CBEB890038B36D /* SearchTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D929CBEB890038B36D /* SearchTabView.swift */; };
 		A5BA29E129CC2A690038B36D /* ArtistSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29E029CC2A690038B36D /* ArtistSearchModel.swift */; };
+		A5BA29E529D1259D0038B36D /* BaseListViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29E429D1259D0038B36D /* BaseListViewModelType.swift */; };
 		A5BD78EE29C93D2800F61807 /* BaseSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78ED29C93D2800F61807 /* BaseSubView.swift */; };
 		A5BD78F029C998FF00F61807 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78EF29C998FF00F61807 /* LoginViewController.swift */; };
 		A5BD78F229C99A1500F61807 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78F129C99A1500F61807 /* LoginViewModel.swift */; };
@@ -112,6 +113,7 @@
 		A5BA29D629CBD31B0038B36D /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		A5BA29D929CBEB890038B36D /* SearchTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTabView.swift; sourceTree = "<group>"; };
 		A5BA29E029CC2A690038B36D /* ArtistSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistSearchModel.swift; sourceTree = "<group>"; };
+		A5BA29E429D1259D0038B36D /* BaseListViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseListViewModelType.swift; sourceTree = "<group>"; };
 		A5BD78ED29C93D2800F61807 /* BaseSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSubView.swift; sourceTree = "<group>"; };
 		A5BD78EF29C998FF00F61807 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A5BD78F129C99A1500F61807 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -307,6 +309,7 @@
 				A5BD78ED29C93D2800F61807 /* BaseSubView.swift */,
 				A57ADCA129C4071E00C9FDDF /* BaseViewController.swift */,
 				A57ADCA329C42DEC00C9FDDF /* LoadingIndicator.swift */,
+				A5BA29E429D1259D0038B36D /* BaseListViewModelType.swift */,
 			);
 			path = Sections;
 			sourceTree = "<group>";
@@ -550,6 +553,7 @@
 				A5BD78FB29CA8B8B00F61807 /* DetailDescView.swift in Sources */,
 				A57ADCA629C4349F00C9FDDF /* DetailViewController.swift in Sources */,
 				A5BD78EE29C93D2800F61807 /* BaseSubView.swift in Sources */,
+				A5BA29E529D1259D0038B36D /* BaseListViewModelType.swift in Sources */,
 				A57ADC6629BEB84200C9FDDF /* ServiceApiProvider.swift in Sources */,
 				A57ADCA829C434AB00C9FDDF /* DetailViewModel.swift in Sources */,
 				A57ADC8429C008FD00C9FDDF /* SubViewDI.swift in Sources */,

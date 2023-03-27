@@ -20,20 +20,16 @@ enum ListActionType {
     case tapItemForDetail(String?, String?)   // 상세 보기
 }
 
-final class ListViewModel: ViewModelType, Stepper {
-   
-    // MARK: - Stepper
-    var steps = RxRelay.PublishRelay<RxFlow.Step>()
+final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
             
     // MARK: - Output properties
     private let resDataRelay = BehaviorRelay<[CommonCardModel]>(value: [CommonCardModel()])
     private let changerRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     
-    private let disposeBag = DisposeBag()
+    private var resData: [CommonCardModel] = []
     private let defaultPageNum = 1
     private var page = 1
     private let limit = 20
-    private var responseData:[CommonCardModel] = []
     private var isLoading = false
     var index = HomeIndex.none
         
@@ -66,7 +62,7 @@ final class ListViewModel: ViewModelType, Stepper {
                 return .empty()
             }
             self.page = self.defaultPageNum
-            self.responseData.removeAll()
+            self.resData.removeAll()
             self.requestListApi()
         case .more:
             if self.isLoading {
@@ -74,9 +70,8 @@ final class ListViewModel: ViewModelType, Stepper {
             }
             self.page += 1
             self.requestListApi()
-        case .tapItemForDetail(let artist, let name):
-//            Log.d("tap list artist:\(String(describing: artist)), name:\(String(describing: name))")
-            self.steps.accept(MainSteps.detailIsRequired(type: self.index.detailType, artist: artist, name: name))
+        case .tapItemForDetail(let title, let subTitle):
+            self.detailIsRequired(title: title, subTitle: subTitle)
         default:
             return .empty()
         }
@@ -150,17 +145,17 @@ final class ListViewModel: ViewModelType, Stepper {
                 guard let `self` = self else { return }
                 switch element {
                 case let data as ArtistTopModel:
-                    self.responseData.append(contentsOf: self.makeLimitedData(array: data.artists?.artist))
+                    self.resData.append(contentsOf: self.makeLimitedData(array: data.artists?.artist))
                 case let data as TrackTopModel:
-                    self.responseData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
+                    self.resData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
                 case let data as ArtistLocalTopModel:
-                    self.responseData.append(contentsOf: self.makeLimitedData(array: data.topartists?.artist))
+                    self.resData.append(contentsOf: self.makeLimitedData(array: data.topartists?.artist))
                 case let data as TrackLocalTopModel:
-                    self.responseData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
+                    self.resData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
                 default:
                     return
                 }
-                self.resDataRelay.accept(self.responseData)
+                self.resDataRelay.accept(self.resData)
                 self.changerRelay.accept(.loaderStop)
             }, onError: { code in
                 Log.d("RequestHomeData Error: \(code)")
@@ -180,5 +175,9 @@ final class ListViewModel: ViewModelType, Stepper {
         }
                 
         return responseData
+    }
+    
+    func detailIsRequired(title: String?, subTitle: String?) {
+        super.parsingTitleToArtist(type: index.detailType, title: title, subTitle: subTitle, task: MainSteps.detailIsRequired)
     }
 }

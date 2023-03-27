@@ -72,13 +72,8 @@ final class DetailViewModel: ViewModelType, Stepper {
     
     init(detailType: DetailType, artist: String?, name: String?) {
         self.detailType = detailType
-        if detailType == .track {
-            self.artist = name ?? ""
-            self.name = artist ?? ""
-        } else {
-            self.artist = artist ?? ""
-            self.name = name ?? ""
-        }
+        self.artist = artist ?? ""
+        self.name = name ?? ""
     }
     
     func transform(req: Input) -> Output {

@@ -19,16 +19,12 @@ enum HomeActionType {
     case tapItemForDetail(DetailType, String?, String?)   // 상세 보기
 }
 
-class HomeViewModel: ViewModelType, Stepper {
-    
-    // MARK: - Stepper
-    var steps = RxRelay.PublishRelay<RxFlow.Step>()
+class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     // MARK: - ViewModelType, Protocal
     typealias ViewModel = HomeViewModel
-    private let disposeBag = DisposeBag()
     
-    private var homeData: [HomeCardModel] = []
+    var resData: [HomeCardModel] = []
     
     // MARK: - Output properties
     private let homeDataRelay = BehaviorRelay<[HomeCardModel]>(value: [HomeCardModel()])
@@ -63,15 +59,16 @@ class HomeViewModel: ViewModelType, Stepper {
             self.requestMainApi()
         case .tapAllforList(let index):
             self.steps.accept(MainSteps.listIsRequired(index: index))
-        case .tapItemForDetail(let type, let artist, let name):
-            self.steps.accept(MainSteps.detailIsRequired(type: type, artist: artist, name: name))
+        case .tapItemForDetail(let type, let title, let subTitle):
+            self.detailIsRequired(type: type, title: title, subTitle: subTitle)
+            return .empty()
         default:
             return .empty()
         }
         
         return .empty()
     }
-    
+      
     struct Input {
         let actionTrigger: Observable<HomeActionType>
     }
@@ -93,7 +90,7 @@ class HomeViewModel: ViewModelType, Stepper {
     private func requestMainApi() {
         self.changerRelay.accept(.loaderStart)
         
-        self.homeData.removeAll()
+        self.resData.removeAll()
         self.requestTopTrackDataAction.execute()
         self.requestTopLocalTrackDataAction.execute()
         self.requestTopArtistDataAction.execute()
@@ -113,8 +110,8 @@ class HomeViewModel: ViewModelType, Stepper {
                 self.appendHomeData(index: HomeIndex.topTrack, array: topTrack.tracks?.track)
                 self.appendHomeData(index: HomeIndex.topLocalArtist, array: topLocalArtist.topartists?.artist)
                 self.appendHomeData(index: HomeIndex.topLocalTrack, array: topLocalTrack.tracks?.track)
-                self.homeData.sort { return $0.index.rawValue < $1.index.rawValue }
-                self.homeDataRelay.accept(self.homeData)
+                self.resData.sort { return $0.index.rawValue < $1.index.rawValue }
+                self.homeDataRelay.accept(self.resData)
                 self.changerRelay.accept(.loaderStop)
             }
             
@@ -126,7 +123,7 @@ class HomeViewModel: ViewModelType, Stepper {
         var cardModels:[CommonCardModel] = []
         
         guard let array = array else {
-            self.homeData.append(HomeCardModel(index: index, items: []))
+            self.resData.append(HomeCardModel(index: index, items: []))
             return
         }
                 
@@ -134,6 +131,10 @@ class HomeViewModel: ViewModelType, Stepper {
             cardModels.append(CommonCardModel(data: item))
         }
         
-        self.homeData.append(HomeCardModel(index: index, items: cardModels))
+        self.resData.append(HomeCardModel(index: index, items: cardModels))
+    }
+    
+    func detailIsRequired(type: DetailType, title: String?, subTitle: String?) {
+        super.parsingTitleToArtist(type: type, title: title, subTitle: subTitle, task: MainSteps.detailIsRequired)
     }
 }

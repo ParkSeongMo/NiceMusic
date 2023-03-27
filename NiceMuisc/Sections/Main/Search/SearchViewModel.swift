@@ -17,17 +17,13 @@ enum SearchActionType {
     case tapItemForDetail(DetailType, String?, String?)
 }
 
-class SearchViewModel: ViewModelType, Stepper {
+class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
-    // MARK: - Stepper
-    var steps = RxRelay.PublishRelay<RxFlow.Step>()
-    
-    // MARK: - ViewModelType, Protocal
-    typealias ViewModel = HomeViewModel
-    private let disposeBag = DisposeBag()
-    
+    // MARK: - Output properties
     private let resDataRelay = BehaviorRelay<(DetailType, [CommonCardModel])>(value:(.none, [CommonCardModel]()))
     private let LoaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
+    
+    private var resData: [Int:[CommonCardModel]] = [:]
     
     private lazy var requestArtistDataAction = Action<String, ArtistSearchModel> { [weak self] artist in
         guard let `self` = self else { return Observable.empty()}
@@ -54,8 +50,7 @@ class SearchViewModel: ViewModelType, Stepper {
             self.resData[DetailType.album.searchIndex] = [CommonCardModel]()
             self.requestSearchApi(keyword: keyword)
         case .tapItemForDetail(let type, let title, let subTitle):
-            self.steps.accept(MainSteps.detailIsRequired(type: type, artist: title, name: subTitle))
-            return .empty()
+            self.detailIsRequired(type: type, title: title, subTitle: subTitle)
         default:
             return .empty()
         }
@@ -87,9 +82,7 @@ class SearchViewModel: ViewModelType, Stepper {
         self.requestTrackDataAction.execute(keyword)
         self.requestAblumDataAction.execute(keyword)
     }
-    
-    private var resData: [Int:[CommonCardModel]] = [:]
-    
+        
     private func subscribeServerRequestionAction() {
         let observable = Observable.zip(
             requestArtistDataAction.elements,
@@ -126,6 +119,10 @@ class SearchViewModel: ViewModelType, Stepper {
         }
                 
         return orgData
+    }
+    
+    func detailIsRequired(type: DetailType, title: String?, subTitle: String?) {
+        super.parsingTitleToArtist(type: type, title: title, subTitle: subTitle, task: MainSteps.detailIsRequired)
     }
 }
 
