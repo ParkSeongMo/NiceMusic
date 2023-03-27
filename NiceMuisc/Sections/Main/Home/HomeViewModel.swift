@@ -60,8 +60,7 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
         case .tapAllforList(let index):
             self.steps.accept(MainSteps.listIsRequired(index: index))
         case .tapItemForDetail(let type, let title, let subTitle):
-            self.detailIsRequired(type: type, title: title, subTitle: subTitle)
-            return .empty()
+            self.steps.accept(MainSteps.detailIsRequired(type: type, artist: title, name: subTitle))
         default:
             return .empty()
         }
@@ -132,9 +131,5 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
         }
         
         self.resData.append(HomeCardModel(index: index, items: cardModels))
-    }
-    
-    func detailIsRequired(type: DetailType, title: String?, subTitle: String?) {
-        super.parsingTitleToArtist(type: type, title: title, subTitle: subTitle, task: MainSteps.detailIsRequired)
-    }
+    }       
 }
