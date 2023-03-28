@@ -45,6 +45,11 @@
 		A5BA29DA29CBEB890038B36D /* SearchTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29D929CBEB890038B36D /* SearchTabView.swift */; };
 		A5BA29E129CC2A690038B36D /* ArtistSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29E029CC2A690038B36D /* ArtistSearchModel.swift */; };
 		A5BA29E529D1259D0038B36D /* BaseListViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29E429D1259D0038B36D /* BaseListViewModelType.swift */; };
+		A5BA29E729D18B400038B36D /* SearchKeywordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29E629D18B400038B36D /* SearchKeywordView.swift */; };
+		A5BA29E929D18EEE0038B36D /* RecentSearchWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29E829D18EEE0038B36D /* RecentSearchWord.swift */; };
+		A5BA29EC29D192500038B36D /* SearchKeywordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29EB29D192500038B36D /* SearchKeywordCell.swift */; };
+		A5BA29EE29D1A01B0038B36D /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29ED29D1A01B0038B36D /* Date+.swift */; };
+		A5BA29F029D1A77B0038B36D /* RecentlySearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29EF29D1A77B0038B36D /* RecentlySearchManager.swift */; };
 		A5BD78EE29C93D2800F61807 /* BaseSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78ED29C93D2800F61807 /* BaseSubView.swift */; };
 		A5BD78F029C998FF00F61807 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78EF29C998FF00F61807 /* LoginViewController.swift */; };
 		A5BD78F229C99A1500F61807 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78F129C99A1500F61807 /* LoginViewModel.swift */; };
@@ -114,6 +119,11 @@
 		A5BA29D929CBEB890038B36D /* SearchTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTabView.swift; sourceTree = "<group>"; };
 		A5BA29E029CC2A690038B36D /* ArtistSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistSearchModel.swift; sourceTree = "<group>"; };
 		A5BA29E429D1259D0038B36D /* BaseListViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseListViewModelType.swift; sourceTree = "<group>"; };
+		A5BA29E629D18B400038B36D /* SearchKeywordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchKeywordView.swift; sourceTree = "<group>"; };
+		A5BA29E829D18EEE0038B36D /* RecentSearchWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchWord.swift; sourceTree = "<group>"; };
+		A5BA29EB29D192500038B36D /* SearchKeywordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchKeywordCell.swift; sourceTree = "<group>"; };
+		A5BA29ED29D1A01B0038B36D /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
+		A5BA29EF29D1A77B0038B36D /* RecentlySearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlySearchManager.swift; sourceTree = "<group>"; };
 		A5BD78ED29C93D2800F61807 /* BaseSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSubView.swift; sourceTree = "<group>"; };
 		A5BD78EF29C998FF00F61807 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A5BD78F129C99A1500F61807 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -200,6 +210,7 @@
 				A57ADC9F29C30D7700C9FDDF /* UIScrollView+.swift */,
 				A5DD6F7229C86063008D2B80 /* UIView+.swift */,
 				A5BA29D629CBD31B0038B36D /* UITextField+.swift */,
+				A5BA29ED29D1A01B0038B36D /* Date+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -219,8 +230,17 @@
 			isa = PBXGroup;
 			children = (
 				A5BA29D929CBEB890038B36D /* SearchTabView.swift */,
+				A5BA29E629D18B400038B36D /* SearchKeywordView.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		A5BA29EA29D1923E0038B36D /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				A5BA29EB29D192500038B36D /* SearchKeywordCell.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		A5BD78F729C9AD2100F61807 /* Login */ = {
@@ -273,6 +293,7 @@
 			children = (
 				A5DF79D629B05C2700799BEA /* Steppers */,
 				A5DF79D529B05C1C00799BEA /* Steps */,
+				A5BA29EF29D1A77B0038B36D /* RecentlySearchManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -293,6 +314,7 @@
 				A57ADC7F29BF3C1F00C9FDDF /* TrackSearchModel.swift */,
 				A57ADC8129BF3F2300C9FDDF /* TrackTopModel.swift */,
 				A57ADC8529C0284D00C9FDDF /* TrackLocalTopModel.swift */,
+				A5BA29E829D18EEE0038B36D /* RecentSearchWord.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -360,6 +382,7 @@
 		A5DF79E929B0601F00799BEA /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				A5BA29EA29D1923E0038B36D /* Cell */,
 				A5BA29D829CBEB720038B36D /* Subviews */,
 				A5DF79F129B0608E00799BEA /* SearchViewController.swift */,
 				A5DF79F329B0609600799BEA /* SearchViewModel.swift */,
@@ -542,7 +565,9 @@
 				A57ADC9429C2B0F600C9FDDF /* ListViewController.swift in Sources */,
 				A57ADC8E29C065BE00C9FDDF /* HomeCollectionViewCell.swift in Sources */,
 				A57ADC6B29BEE5EF00C9FDDF /* ServiceApiClient.swift in Sources */,
+				A5BA29E929D18EEE0038B36D /* RecentSearchWord.swift in Sources */,
 				A5DF79F229B0608E00799BEA /* SearchViewController.swift in Sources */,
+				A5BA29F029D1A77B0038B36D /* RecentlySearchManager.swift in Sources */,
 				A57ADC6E29BEE73900C9FDDF /* Log.swift in Sources */,
 				A57ADC8029BF3C1F00C9FDDF /* TrackSearchModel.swift in Sources */,
 				A5DF79D829B05CA600799BEA /* MainStepper.swift in Sources */,
@@ -569,7 +594,9 @@
 				A5BD78F029C998FF00F61807 /* LoginViewController.swift in Sources */,
 				A5DF7A2829B0821C00799BEA /* HomeView.swift in Sources */,
 				A57ADCAC29C4415300C9FDDF /* DetailModel.swift in Sources */,
+				A5BA29EC29D192500038B36D /* SearchKeywordCell.swift in Sources */,
 				A5DF79B929B0275A00799BEA /* AppDelegate.swift in Sources */,
+				A5BA29EE29D1A01B0038B36D /* Date+.swift in Sources */,
 				A5DF79D429B05C1300799BEA /* AppStepper.swift in Sources */,
 				A57ADC7C29BF2D7200C9FDDF /* AlbumDetailModel.swift in Sources */,
 				A57ADC7629BF290100C9FDDF /* ArtistLocalTopModel.swift in Sources */,
@@ -578,6 +605,7 @@
 				A5BA29DA29CBEB890038B36D /* SearchTabView.swift in Sources */,
 				A5BA29D129CAC9F00038B36D /* DetailInfoView.swift in Sources */,
 				A57ADC6429BEB6B300C9FDDF /* ServiceApi.swift in Sources */,
+				A5BA29E729D18B400038B36D /* SearchKeywordView.swift in Sources */,
 				A5DF79F829B0610D00799BEA /* ViewModelType.swift in Sources */,
 				A5DF79E529B05D8500799BEA /* HomeFlow.swift in Sources */,
 				A57ADC6929BEE3E100C9FDDF /* ArtistDetailModel.swift in Sources */,

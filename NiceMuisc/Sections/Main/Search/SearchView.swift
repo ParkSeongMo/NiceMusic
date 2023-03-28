@@ -53,6 +53,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     }
     
     private let searchTabView = SearchTabView()
+    private let searchKeywordView = SearchKeywordView()
         
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -67,7 +68,8 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     
     private func setupSubviews() {
         subViews = [            
-            searchTabView
+            searchTabView,
+            searchKeywordView
         ]
     }
     
@@ -77,7 +79,8 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             searchBarTextField,
             searchButton,
             deleteButton,
-            searchTabView)
+            searchTabView,
+            searchKeywordView)
         
         searchButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(100)
@@ -105,19 +108,28 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             $0.trailing.equalTo(searchButton.snp.trailing)
             $0.bottom.equalToSuperview()
         }
+        
+        searchKeywordView.snp.makeConstraints {
+            $0.top.equalTo(searchBarTextField.snp.bottom).offset(20)
+            $0.leading.equalTo(searchBarTextField.snp.leading)
+            $0.trailing.equalTo(searchButton.snp.trailing)
+        }
     }
     
     private func bindRx() {
                 
         searchButton.rx.tap.bind { [weak self] in
             guard let `self` = self else { return }
-            self.inputRelay.accept(SearchActionType.execute(self.searchBarTextField.text ?? ""))
+            let keyword = self.searchBarTextField.text ?? ""
+            self.inputRelay.accept(SearchActionType.execute(keyword))
+            self.inputRelay.accept(SearchActionType.saveKeyword(keyword))
         }
         .disposed(by: disposeBag)
         
         deleteButton.rx.tap.bind { [weak self] in
             guard let `self` = self else { return }
             self.searchBarTextField.text = ""
+            self.showSearchKeywordView(isHidden: false)
         }
         .disposed(by: disposeBag)
     }
@@ -136,16 +148,38 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     
     @discardableResult
     func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {
-        
-        if let observable = observable as? Observable<(DetailType, [CommonCardModel])> {
-            observable.subscribe { (detailType, items) in
-//                self.responseRelay.accept((detailType, items))
-            }
-            .disposed(by: disposeBag)
-        }
-        
         searchTabView.setupDI(observable: observable)
         return self
+    }
+    
+    @discardableResult
+    func setupDI<T>(observable: Observable<[T]>) -> Self {
+        if let observable = observable as? Observable<[RecentSearchWord]> {
+            observable.subscribe(onNext: { [weak self] element in
+                guard let `self` = self else { return }
+                self.changeTableViewHeight(count: element.count)
+            })
+            .disposed(by: disposeBag)
+            searchKeywordView.setupDI(observable: observable)
+        }
+        return self
+    }
+    
+    private func changeTableViewHeight(count: Int) {
+        if count == 0 {
+            return
+        }
+        searchKeywordView.snp.makeConstraints {
+            $0.height.equalTo(30*count)
+        }
+    }
+    
+    private func showSearchKeywordView(isHidden: Bool) {
+        
+        if !isHidden && searchKeywordView.isHidden {
+            inputRelay.accept(SearchActionType.getKeyword)
+        }
+        searchKeywordView.isHidden = isHidden        
     }
 }
 
@@ -155,6 +189,7 @@ extension SearchView: UITextViewDelegate {
         guard let stringRange = Range(range, in: currentText) else { return false }
         let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
         let newLength = currentText.count + string.count - range.length
+        showSearchKeywordView(isHidden: newLength > 0)
         if newLength > 40 {
             return false
         }

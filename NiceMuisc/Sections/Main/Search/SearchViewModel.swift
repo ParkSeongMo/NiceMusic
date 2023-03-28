@@ -14,6 +14,8 @@ enum SearchActionType {
     case none
     case execute(String)
     case more(Int)
+    case getKeyword
+    case saveKeyword(String)
     case tapItemForDetail(Int, String?, String?)
 }
 
@@ -22,6 +24,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     // MARK: - Output properties
     private let resDataRelay = BehaviorRelay<(DetailType, [CommonCardModel])>(value:(.none, [CommonCardModel]()))
     private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
+    private let keywordRelay = BehaviorRelay<[RecentSearchWord]>(value: [RecentSearchWord]())
     
     private var resData: [Int:[CommonCardModel]] = [:]
     private let defaultPageNum = 1
@@ -55,6 +58,11 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
             limit: self.limit).asObservable()
     }
     
+    private lazy var getRecentlySearchWordsAction = Action<Void, [RecentSearchWord]> { [weak self] _ in
+        return Observable.just(RecentlySearchManager.shared.getRecentSearchData())
+    }
+    
+    
     private lazy var action = Action<SearchActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         Log.d("action \(action)")
@@ -72,6 +80,10 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
             }
             self.searchIndex = searchIndex
             self.requestSearchApi(keyword: self.keyword)
+        case .getKeyword:
+            self.getRecentlySearchWordsAction.execute()
+        case .saveKeyword(let keyword):
+            self.setRecentSearchData(keyword: keyword)
         case .tapItemForDetail(let searchIndex, let title, let subTitle):
             self.detailIsRequired(searchIndex: searchIndex, title: title, subTitle: subTitle)
         default:
@@ -88,6 +100,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     struct Output {
         let response: Observable<(DetailType, [CommonCardModel])>
         let loadChanger: Observable<LoadChangeAction>
+        let keyword: Observable<[RecentSearchWord]>
     }
     
     func transform(req: Input) -> Output {
@@ -97,8 +110,12 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         subscribeServerRequestionAction(action: requestTrackDataAction)
         subscribeServerRequestionAction(action: requestArtistDataAction)
         subscribeServerRequestionAction(action: requestAblumDataAction)
+        subscribeRecetlyWordAction()
         
-        return Output(response: resDataRelay.asObservable(), loadChanger: loaderRelay.asObservable())
+        return Output(
+            response: resDataRelay.asObservable(),
+            loadChanger: loaderRelay.asObservable(),
+            keyword: keywordRelay.asObservable())
     }
     
     private func requestSearchApi(keyword: String) {
@@ -174,6 +191,17 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         return responseData
     }
     
+    private func subscribeRecetlyWordAction() {
+        getRecentlySearchWordsAction.elements
+            .subscribe(onNext: { [weak self] element in
+                guard let `self` = self else { return }
+//                let data = element as? [RecentSearchWord]
+                Log.d("\(element.count)")
+                self.keywordRelay.accept(element)
+            })
+            .disposed(by: disposeBag)
+    }
+    
     func detailIsRequired(searchIndex: Int, title: String?, subTitle: String?) {
         super.parsingTitleToArtist(
             type: parsingSearchIndexToDetailType(searchIndex: searchIndex),
@@ -193,6 +221,23 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         default:
             return DetailType.none
         }
+    }
+    
+    private func getRecentSearchKeyword() {
+        
+        var keywords = [RecentSearchWord]()
+        for i in 1...10 {
+            keywords.append(RecentSearchWord(keyword: "keyword \(i)", date: Date()))
+        }
+        
+        keywordRelay.accept(keywords)
+    }
+    
+    private func setRecentSearchData(keyword: String) {
+//        let date = Date().timeIntervalSince1970 * 1000
+     
+        let data = RecentSearchWord(keyword: keyword, date: Date())
+        RecentlySearchManager.shared.setRecentSearchData(data)
     }
 }
 

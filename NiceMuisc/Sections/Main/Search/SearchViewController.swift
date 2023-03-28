@@ -33,6 +33,8 @@ class SearchViewController: UIViewController {
         
         setupLayout()
         bindViewModel()
+        
+        action.accept(.getKeyword)
     }
     
     private func setupLayout() {
@@ -49,6 +51,7 @@ class SearchViewController: UIViewController {
         
         subView.setupDI(generic: action)
             .setupDI(observable: output.response)
+            .setupDI(observable: output.keyword)
             .setupDI(loadChanger: output.loadChanger)
     }
 }
