@@ -128,10 +128,14 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
         
         deleteButton.rx.tap.bind { [weak self] in
             guard let `self` = self else { return }
-            self.searchBarTextField.text = ""
+            self.removeKeywordInputTextField()
             self.showSearchKeywordView(isHidden: false)
         }
         .disposed(by: disposeBag)
+    }
+    
+    private func removeKeywordInputTextField() {
+        searchBarTextField.text = ""
     }
     
     @discardableResult
@@ -141,6 +145,18 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             inputRelay.compactMap { $0 as? SearchActionType }
                 .bind(to: generic)
                 .disposed(by: disposeBag)
+            
+            generic.subscribe { [weak self] action in
+                guard let `self` = self else { return }
+                switch action {
+                case .executeRecently(let keyword):
+                    self.searchBarTextField.text = keyword
+                    self.showSearchKeywordView(isHidden: true)
+                default:
+                    return
+                }
+            }
+            .disposed(by: disposeBag)
         }
         
         return self
@@ -148,7 +164,13 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     
     @discardableResult
     func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {
-        searchTabView.setupDI(observable: observable)
+        if let observable = observable as? Observable<(DetailType, [CommonCardModel])> {
+            observable.subscribe { [weak self] _ in
+                guard let `self` = self else { return }
+            }
+            .disposed(by: disposeBag)
+            searchTabView.setupDI(observable: observable)
+        }
         return self
     }
     
@@ -179,7 +201,8 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
         if !isHidden && searchKeywordView.isHidden {
             inputRelay.accept(SearchActionType.getKeyword)
         }
-        searchKeywordView.isHidden = isHidden        
+        searchKeywordView.isHidden = isHidden
+        Log.d("isHidden:\(isHidden)")
     }
 }
 

@@ -34,6 +34,7 @@ final class SearchKeywordView: DescendantView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        bindRx()
     }
     
     required init?(coder: NSCoder) {
@@ -47,6 +48,16 @@ final class SearchKeywordView: DescendantView {
         tableView.snp.makeConstraints {
             $0.directionalEdges.equalToSuperview()
         }
+    }
+    
+    private func bindRx() {
+        tableView.rx.modelSelected(RecentSearchWord.self)
+            .subscribe(onNext: { [weak self] item in
+                guard let `self` = self else { return }
+                self.delegate?.inputRelay.accept(SearchActionType.executeRecently(item.keyword))
+                self.delegate?.inputRelay.accept(SearchActionType.saveKeyword(item.keyword))
+            })
+            .disposed(by: disposeBag)
     }
     
     @discardableResult

@@ -13,6 +13,7 @@ import RxSwift
 enum SearchActionType {
     case none
     case execute(String)
+    case executeRecently(String)
     case more(Int)
     case getKeyword
     case saveKeyword(String)
@@ -71,13 +72,14 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         guard let `self` = self else { return .empty() }
         Log.d("action \(action)")
         switch action {
-        case .execute(let keyword):
+        case .execute(let keyword), .executeRecently(let keyword):
             if self.isLoading {
                 return .empty()
             }
             self.keyword = keyword
             self.searchIndex = DetailType.none.searchIndex
             self.requestSearchApi(keyword: keyword)
+            self.setRecentSearchData(keyword: keyword)
         case .more(let searchIndex):
             if self.isLoading {
                 return .empty()
