@@ -24,6 +24,7 @@ final class HomeTableViewCell: UITableViewCell {
     private var index: HomeIndex = .none
         
     private var action = PublishRelay<Any>()
+    private var response = PublishRelay<[CommonCardModel]>()
     private let disposeBag = DisposeBag()
             
     private lazy var titleLabel = UILabel().then {
@@ -55,7 +56,6 @@ final class HomeTableViewCell: UITableViewCell {
     }
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout).then {
-        $0.dataSource = self
         $0.isScrollEnabled = true
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = true
@@ -121,6 +121,22 @@ final class HomeTableViewCell: UITableViewCell {
                     self.items[indexPath.item].subTitle))
             })
             .disposed(by: disposeBag)
+        
+        
+        response.bind(to: collectionView.rx.items) { collectionView, row, element in
+            let indexPath = IndexPath(row: row, section: 0)
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.id, for: indexPath) as? HomeCollectionViewCell {
+                cell.prepare(
+                    title: element.title,
+                    subTitle: element.subTitle,
+                    rank: String(describing: indexPath.row+1),
+                    imageUrl: element.image?[3].text)
+                return cell
+                
+            }
+            return UICollectionViewCell()
+        }
+        .disposed(by: disposeBag)
     }
     
     override func prepareForReuse() {
@@ -134,7 +150,9 @@ final class HomeTableViewCell: UITableViewCell {
         self.titleLabel.text = index.title
         
         self.items = items ?? [CommonCardModel]()
-        collectionView.reloadData()
+        
+        response.accept(self.items)
+        
         collectionView.performBatchUpdates {
             collectionView.scrollsToTop = true
         }
@@ -142,21 +160,5 @@ final class HomeTableViewCell: UITableViewCell {
     
     func bindAction(reley: PublishRelay<Any>) {
         self.action = reley
-    }
-}
-
-extension HomeTableViewCell: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return items.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.id, for: indexPath) as! HomeCollectionViewCell
-        cell.prepare(
-            title: items[indexPath.row].title,
-            subTitle: items[indexPath.row].subTitle,
-            rank: String(describing: indexPath.row+1),
-            imageUrl: items[indexPath.row].image?[3].text)
-        return cell
     }
 }
