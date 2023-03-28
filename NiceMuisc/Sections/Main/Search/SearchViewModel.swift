@@ -16,6 +16,7 @@ enum SearchActionType {
     case more(Int)
     case getKeyword
     case saveKeyword(String)
+    case removeKeyword(String)
     case tapItemForDetail(Int, String?, String?)
 }
 
@@ -62,6 +63,9 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         return Observable.just(RecentlySearchManager.shared.getRecentSearchData())
     }
     
+    private lazy var removeRecentlySearchWordsAction = Action<String, [RecentSearchWord]> { [weak self] keyword in
+        return Observable.just(RecentlySearchManager.shared.removeSameSearchData(keyword: keyword))
+    }
     
     private lazy var action = Action<SearchActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
@@ -84,6 +88,8 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
             self.getRecentlySearchWordsAction.execute()
         case .saveKeyword(let keyword):
             self.setRecentSearchData(keyword: keyword)
+        case .removeKeyword(let keyword):
+            self.removeRecentlySearchWordsAction.execute(keyword)
         case .tapItemForDetail(let searchIndex, let title, let subTitle):
             self.detailIsRequired(searchIndex: searchIndex, title: title, subTitle: subTitle)
         default:
@@ -192,14 +198,22 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func subscribeRecetlyWordAction() {
-        getRecentlySearchWordsAction.elements
-            .subscribe(onNext: { [weak self] element in
-                guard let `self` = self else { return }
-//                let data = element as? [RecentSearchWord]
-                Log.d("\(element.count)")
-                self.keywordRelay.accept(element)
-            })
-            .disposed(by: disposeBag)
+        Observable.merge(getRecentlySearchWordsAction.elements,
+                         removeRecentlySearchWordsAction.elements)
+        .subscribe {  [weak self] element in
+            guard let `self` = self else { return }
+            self.keywordRelay.accept(element)
+        }
+        .disposed(by: disposeBag)
+        
+//        getRecentlySearchWordsAction.elements
+//            .subscribe(onNext: { [weak self] element in
+//                guard let `self` = self else { return }
+////                let data = element as? [RecentSearchWord]
+//                Log.d("\(element.count)")
+//                self.keywordRelay.accept(element)
+//            })
+//            .disposed(by: disposeBag)
     }
     
     func detailIsRequired(searchIndex: Int, title: String?, subTitle: String?) {

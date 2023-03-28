@@ -30,10 +30,8 @@ class RecentlySearchManager {
     func getOrgRecentSearchData() -> [Data] {
         return UserDefaults.standard.array(forKey: recentlySearchWordKey) as? [Data]  ?? []
     }
-    
-        
+            
     func setRecentSearchData(_ data: RecentSearchWord) {
-        
         var savedOrgData = getOrgRecentSearchData()
         savedOrgData = removeSameSearchData(wordData: data, savedData: savedOrgData)
                 
@@ -47,14 +45,16 @@ class RecentlySearchManager {
         }
         
         UserDefaults.standard.set(savedOrgData, forKey: recentlySearchWordKey)
-        Log.d("\(getRecentSearchData())")
     }
     
     private func removeSameSearchData(wordData: RecentSearchWord, savedData: [Data]) -> [Data] {
+        if savedData.count < 1 {
+            return savedData
+        }
         
         var savedData = savedData
         let decoder = JSONDecoder()
-        
+       
         for index in 0...savedData.count-1 {
             if let decodedData = try? decoder.decode(RecentSearchWord.self, from: savedData[index]) {
                 if wordData.keyword == decodedData.keyword {
@@ -65,5 +65,15 @@ class RecentlySearchManager {
         }
         
         return savedData
+    }
+    
+    func removeSameSearchData(keyword: String) -> [RecentSearchWord] {
+        var savedOrgData = getOrgRecentSearchData()
+        let searchWord = RecentSearchWord(keyword: keyword, date: Date())
+        let data = removeSameSearchData(wordData: searchWord, savedData: savedOrgData)
+        
+        UserDefaults.standard.set(data, forKey: recentlySearchWordKey)
+        
+        return getRecentSearchData()
     }
 }

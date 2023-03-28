@@ -52,9 +52,13 @@ final class SearchKeywordView: DescendantView {
     @discardableResult
     func setupDI(observable: Observable<[RecentSearchWord]>) -> Self {
                 
-        observable.bind(to: tableView.rx.items) { tableView, _, element in
+        observable.bind(to: tableView.rx.items) { [weak self] tableView, _, element in
+            guard let `self` = self else { return UITableViewCell() }
             if let cell = tableView.dequeueReusableCell(withIdentifier: SearchKeywordCell.id) as? SearchKeywordCell {
-                cell.prepare(title: element.keyword, date: element.date ?? Date())
+                cell.prepare(
+                    title: element.keyword,
+                    date: element.date,
+                    inputRelay: self.delegate?.inputRelay ?? PublishRelay<Any>())
                 cell.selectionStyle = .none
                 return cell
             }
