@@ -29,6 +29,7 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
     // MARK: - Output properties
     private let homeDataRelay = BehaviorRelay<[HomeCardModel]>(value: [HomeCardModel()])
     private let changerRelay = BehaviorRelay<LoadChangeAction>(value: .none)
+    private let alertRelay = PublishRelay<AlertAction>()
     
     private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
@@ -83,6 +84,8 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
                                 
         subscribeServerRequestionAction()
         
+        subscribeAlert()
+        
         return Output(response: homeDataRelay.asObservable(), loadChanger: changerRelay.asObservable())
     }
     
@@ -97,24 +100,33 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func subscribeServerRequestionAction() {
-                       
-        let observable = Observable.zip(
+              
+        Observable.zip(
+            requestTopArtistDataAction.errors,
+            requestTopTrackDataAction.errors,
+            requestTopLocalArtistDataAction.errors,
+            requestTopLocalTrackDataAction.errors).subscribe { code in
+                self.changerRelay.accept(.loaderStop)
+                self.showApiErrorAlert()
+            }
+            .disposed(by: disposeBag)
+        
+        Observable.zip(
             requestTopArtistDataAction.elements,
             requestTopTrackDataAction.elements,
             requestTopLocalArtistDataAction.elements,
-            requestTopLocalTrackDataAction.elements)
-            .subscribe {  [weak self] (topArtist, topTrack, topLocalArtist, topLocalTrack) in
-                guard let `self` = self else { return }
-                self.appendHomeData(index: HomeIndex.topArtist, array: topArtist.artists?.artist)
-                self.appendHomeData(index: HomeIndex.topTrack, array: topTrack.tracks?.track)
-                self.appendHomeData(index: HomeIndex.topLocalArtist, array: topLocalArtist.topartists?.artist)
-                self.appendHomeData(index: HomeIndex.topLocalTrack, array: topLocalTrack.tracks?.track)
-                self.resData.sort { return $0.index.rawValue < $1.index.rawValue }
-                self.homeDataRelay.accept(self.resData)
-                self.changerRelay.accept(.loaderStop)
-            }
-            
-        observable.disposed(by: disposeBag)
+            requestTopLocalTrackDataAction.elements)           
+            .subscribe(onNext: { [weak self] (topArtist, topTrack, topLocalArtist, topLocalTrack) in
+                       guard let `self` = self else { return }
+                       self.appendHomeData(index: HomeIndex.topArtist, array: topArtist.artists?.artist)
+                       self.appendHomeData(index: HomeIndex.topTrack, array: topTrack.tracks?.track)
+                       self.appendHomeData(index: HomeIndex.topLocalArtist, array: topLocalArtist.topartists?.artist)
+                       self.appendHomeData(index: HomeIndex.topLocalTrack, array: topLocalTrack.tracks?.track)
+                       self.resData.sort { return $0.index.rawValue < $1.index.rawValue }
+                       self.homeDataRelay.accept(self.resData)
+                       self.changerRelay.accept(.loaderStop)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func appendHomeData<T>(index: HomeIndex, array: [T]?) {
@@ -131,5 +143,22 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
         }
         
         self.resData.append(HomeCardModel(index: index, items: cardModels))
-    }       
+    }
+    
+    private func subscribeAlert() {
+        alertRelay.subscribe { [weak self] action in
+            guard let `self` = self else { return }
+            switch action {
+            case .okBtnTap:
+                self.requestMainApi()
+            case .cancelBtnTap:
+                return
+            }
+        }
+        .disposed(by: disposeBag)
+    }
+    
+    private func showApiErrorAlert() {
+        AlertDialogManager.shared.showAlertDialog(observable: alertRelay)
+    }
 }

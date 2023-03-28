@@ -25,6 +25,7 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     // MARK: - Output properties
     private let resDataRelay = BehaviorRelay<[CommonCardModel]>(value: [CommonCardModel()])
     private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
+    private let alertRelay = PublishRelay<AlertAction>()
     
     private var resData: [CommonCardModel] = []
     private let defaultPageNum = 1
@@ -113,7 +114,9 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         req.actionTrigger.bind(to: buttonAction.inputs).disposed(by: disposeBag)
         
         subscribeServerRequestionAction()
-                
+        
+        subscribeAlert()
+        
         return Output(response: resDataRelay.asObservable(), loadChanger: loaderRelay.asObservable())
     }
     
@@ -124,9 +127,9 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         case .topTrack:
             subscribeServerRequestionAction(action: requestTopTrackDataAction)
         case .topLocalArtist:
-            subscribeServerRequestionAction(action: requestTopLocalTrackDataAction)
-        case .topLocalTrack:
             subscribeServerRequestionAction(action: requestTopLocalArtistDataAction)
+        case .topLocalTrack:
+            subscribeServerRequestionAction(action: requestTopLocalTrackDataAction)
         default:
             return            
         }
@@ -134,12 +137,17 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
         
-        let disposable = action.executing.bind { [weak self] element in
+        action.executing.bind { [weak self] element in
             guard let `self` = self else { return }
             self.isLoading = element
-            Log.d("isLoading \(element)")
         }
-        disposable.disposed(by: disposeBag)
+        .disposed(by: disposeBag)
+        
+        action.errors.subscribe { code in
+            self.loaderRelay.accept(.loaderStop)
+            self.showApiErrorAlert()
+        }
+        .disposed(by: disposeBag)
         
         action.elements
             .subscribe(onNext: { [weak self] element in
@@ -158,11 +166,8 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
                 }
                 self.resDataRelay.accept(self.resData)
                 self.loaderRelay.accept(.loaderStop)
-            }, onError: { code in
-                Log.d("RequestHomeData Error: \(code)")
-                // TODO 에러 처리 필요
-                self.loaderRelay.accept(.loaderStop)
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func makeLimitedData<T>(array: [T]?) -> [CommonCardModel] {
@@ -180,5 +185,23 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     func detailIsRequired(title: String?, subTitle: String?) {
         super.parsingTitleToArtist(type: index.detailType, title: title, subTitle: subTitle, task: MainSteps.detailIsRequired)
+    }
+    
+    private func subscribeAlert() {
+        alertRelay.subscribe { [weak self] action in
+            guard let `self` = self else { return }
+            switch action {
+            case .okBtnTap:
+                self.requestListApi()
+            case .cancelBtnTap:
+                // TODO 이전화면으로 되돌아가기
+                return
+            }
+        }
+        .disposed(by: disposeBag)
+    }
+    
+    private func showApiErrorAlert() {
+        AlertDialogManager.shared.showAlertDialog(observable: alertRelay)
     }
 }

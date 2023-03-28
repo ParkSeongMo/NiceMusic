@@ -50,6 +50,8 @@
 		A5BA29EC29D192500038B36D /* SearchKeywordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29EB29D192500038B36D /* SearchKeywordCell.swift */; };
 		A5BA29EE29D1A01B0038B36D /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29ED29D1A01B0038B36D /* Date+.swift */; };
 		A5BA29F029D1A77B0038B36D /* RecentlySearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29EF29D1A77B0038B36D /* RecentlySearchManager.swift */; };
+		A5BA29F429D2E4990038B36D /* AlertDialogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29F329D2E4990038B36D /* AlertDialogManager.swift */; };
+		A5BA29F629D2E4E20038B36D /* UIWindow+.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BA29F529D2E4E20038B36D /* UIWindow+.swift */; };
 		A5BD78EE29C93D2800F61807 /* BaseSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78ED29C93D2800F61807 /* BaseSubView.swift */; };
 		A5BD78F029C998FF00F61807 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78EF29C998FF00F61807 /* LoginViewController.swift */; };
 		A5BD78F229C99A1500F61807 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BD78F129C99A1500F61807 /* LoginViewModel.swift */; };
@@ -124,6 +126,8 @@
 		A5BA29EB29D192500038B36D /* SearchKeywordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchKeywordCell.swift; sourceTree = "<group>"; };
 		A5BA29ED29D1A01B0038B36D /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
 		A5BA29EF29D1A77B0038B36D /* RecentlySearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlySearchManager.swift; sourceTree = "<group>"; };
+		A5BA29F329D2E4990038B36D /* AlertDialogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertDialogManager.swift; sourceTree = "<group>"; };
+		A5BA29F529D2E4E20038B36D /* UIWindow+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+.swift"; sourceTree = "<group>"; };
 		A5BD78ED29C93D2800F61807 /* BaseSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSubView.swift; sourceTree = "<group>"; };
 		A5BD78EF29C998FF00F61807 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A5BD78F129C99A1500F61807 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -192,6 +196,7 @@
 			children = (
 				A57ADC9E29C30D5500C9FDDF /* Extension */,
 				A57ADC6D29BEE73900C9FDDF /* Log.swift */,
+				A5BA29F329D2E4990038B36D /* AlertDialogManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -211,6 +216,7 @@
 				A5DD6F7229C86063008D2B80 /* UIView+.swift */,
 				A5BA29D629CBD31B0038B36D /* UITextField+.swift */,
 				A5BA29ED29D1A01B0038B36D /* Date+.swift */,
+				A5BA29F529D2E4E20038B36D /* UIWindow+.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -568,6 +574,7 @@
 				A5BA29E929D18EEE0038B36D /* RecentSearchWord.swift in Sources */,
 				A5DF79F229B0608E00799BEA /* SearchViewController.swift in Sources */,
 				A5BA29F029D1A77B0038B36D /* RecentlySearchManager.swift in Sources */,
+				A5BA29F429D2E4990038B36D /* AlertDialogManager.swift in Sources */,
 				A57ADC6E29BEE73900C9FDDF /* Log.swift in Sources */,
 				A57ADC8029BF3C1F00C9FDDF /* TrackSearchModel.swift in Sources */,
 				A5DF79D829B05CA600799BEA /* MainStepper.swift in Sources */,
@@ -629,6 +636,7 @@
 				A57ADCA029C30D7700C9FDDF /* UIScrollView+.swift in Sources */,
 				A5DF79DC29B05CC000799BEA /* SearchStepper.swift in Sources */,
 				A57ADC7429BF278400C9FDDF /* ArtistTopModel.swift in Sources */,
+				A5BA29F629D2E4E20038B36D /* UIWindow+.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -48,5 +48,5 @@ final class LoginViewController: UIViewController {
             req: LoginViewModel.Input(actionTrigger: action.asObservable()))
 
         subView.setupDI(generic: action)
-    }
+    }    
 }

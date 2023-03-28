@@ -27,6 +27,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     private let resDataRelay = BehaviorRelay<(DetailType, [CommonCardModel])>(value:(.none, [CommonCardModel]()))
     private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     private let keywordRelay = BehaviorRelay<[RecentSearchWord]>(value: [RecentSearchWord]())
+    private let alertRelay = PublishRelay<AlertAction>()
     
     private var resData: [Int:[CommonCardModel]] = [:]
     private let defaultPageNum = 1
@@ -125,6 +126,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         subscribeServerRequestionAction(action: requestArtistDataAction)
         subscribeServerRequestionAction(action: requestAblumDataAction)
         subscribeRecetlyWordAction()
+        subscribeAlert()
         
         return Output(
             response: resDataRelay.asObservable(),
@@ -161,6 +163,15 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     private func subscribeServerRequestionAction<T>(action: Action<String, T>) {
         
+        action.errors.subscribe { code in
+            self.loaderRelay.accept(.loaderStop)
+            if self.isLoading == true {
+                self.isLoading = false
+                self.showApiErrorAlert()
+            }
+        }
+        .disposed(by: disposeBag)
+        
         action.elements.subscribe(onNext: { [weak self] element in
             guard let `self` = self else { return }
             
@@ -177,12 +188,6 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
             default:
                 return
             }
-        },
-        onError: { code in
-            Log.d("RequestHomeData Error: \(code)")
-            // TODO 에러 처리 필요
-            self.loaderRelay.accept(.loaderStop)
-            self.isLoading = false
         }).disposed(by: disposeBag)
     }
     
@@ -213,15 +218,6 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
             self.keywordRelay.accept(element)
         }
         .disposed(by: disposeBag)
-        
-//        getRecentlySearchWordsAction.elements
-//            .subscribe(onNext: { [weak self] element in
-//                guard let `self` = self else { return }
-////                let data = element as? [RecentSearchWord]
-//                Log.d("\(element.count)")
-//                self.keywordRelay.accept(element)
-//            })
-//            .disposed(by: disposeBag)
     }
     
     func detailIsRequired(searchIndex: Int, title: String?, subTitle: String?) {
@@ -256,10 +252,25 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func setRecentSearchData(keyword: String) {
-//        let date = Date().timeIntervalSince1970 * 1000
-     
         let data = RecentSearchWord(keyword: keyword, date: Date())
         RecentlySearchManager.shared.setRecentSearchData(data)
+    }
+    
+    private func subscribeAlert() {
+        alertRelay.subscribe { [weak self] action in
+            guard let `self` = self else { return }            
+            switch action {
+            case .okBtnTap:
+                self.requestSearchApi(keyword: self.keyword)
+            case .cancelBtnTap:
+                return
+            }
+        }
+        .disposed(by: disposeBag)
+    }
+    
+    private func showApiErrorAlert() {
+        AlertDialogManager.shared.showAlertDialog(observable: alertRelay)
     }
 }
 

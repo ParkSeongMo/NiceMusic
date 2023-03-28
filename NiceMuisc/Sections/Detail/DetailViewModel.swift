@@ -24,6 +24,7 @@ final class DetailViewModel: ViewModelType, Stepper {
     // MARK: - Output properties
     private let resDataRelay = BehaviorRelay<DetailModel>(value: DetailModel())
     private let changerRelay = BehaviorRelay<LoadChangeAction>(value: .none)
+    private let alertRelay = PublishRelay<AlertAction>()
     
     private lazy var requestArtistDataAction = Action<String, ArtistDetailModel> { [weak self] artist in
         guard let `self` = self else { return Observable.empty() }
@@ -48,7 +49,6 @@ final class DetailViewModel: ViewModelType, Stepper {
         case .none:
             return .empty()
         case .execute:
-//            self.requestDetailApi(type: .album, artist: "BTS", name: "Dynamite")
             self.requestDetailApi(type: self.detailType, artist: self.artist, name: self.name)
         case .logout:
             self.steps.accept(MainSteps.loginIsRequired)            
@@ -84,6 +84,8 @@ final class DetailViewModel: ViewModelType, Stepper {
         subscribeServerRequestionAction(action: requestAlbumDataAction)
         subscribeServerRequestionAction(action: requestTrackDataAction)
         
+        subscribeAlert()
+        
         return Output(response: resDataRelay.asObservable(), loadChanger: changerRelay.asObservable())
     }
     
@@ -104,6 +106,12 @@ final class DetailViewModel: ViewModelType, Stepper {
     
     private func subscribeServerRequestionAction<T, E>(action: Action<T, E>) {
         
+        action.errors.subscribe { code in
+            self.changerRelay.accept(.loaderStop)
+            self.showApiErrorAlert()
+        }
+        .disposed(by: disposeBag)
+        
         action.elements
             .subscribe(onNext: { [weak self] element in
                 guard let `self` = self else { return }
@@ -111,11 +119,25 @@ final class DetailViewModel: ViewModelType, Stepper {
                 self.changerRelay.accept(.loaderStop)
                 self.resDataRelay.accept(DetailModel(detailType: self.detailType,
                                                      data: element))
-            }, onError: { code in
-                Log.d("RequestHomeData Error: \(code)")
-                self.changerRelay.accept(.loaderStop)
-                // TODO 에러 처리 필요
             })
             .disposed(by: disposeBag)
+    }
+    
+    private func subscribeAlert() {
+        alertRelay.subscribe { [weak self] action in
+            guard let `self` = self else { return }
+            switch action {
+            case .okBtnTap:
+                self.requestDetailApi(type: self.detailType, artist: self.artist, name: self.name)
+            case .cancelBtnTap:
+                // TODO 이전화면으로 되돌아가기
+                return
+            }
+        }
+        .disposed(by: disposeBag)
+    }
+    
+    private func showApiErrorAlert() {
+        AlertDialogManager.shared.showAlertDialog(observable: alertRelay)
     }
 }
