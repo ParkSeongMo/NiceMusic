@@ -73,7 +73,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         Log.d("action \(action)")
         switch action {
         case .execute(let keyword), .executeRecently(let keyword):
-            if self.isLoading {
+            if self.isLoading || keyword.isEmpty {
                 return .empty()
             }
             self.keyword = keyword
@@ -89,8 +89,14 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         case .getKeyword:
             self.getRecentlySearchWordsAction.execute()
         case .saveKeyword(let keyword):
+            if keyword.isEmpty {
+                return .empty()
+            }
             self.setRecentSearchData(keyword: keyword)
         case .removeKeyword(let keyword):
+            if self.isLoading || keyword.isEmpty {
+                return .empty()
+            }
             self.removeRecentlySearchWordsAction.execute(keyword)
         case .tapItemForDetail(let searchIndex, let title, let subTitle):
             self.detailIsRequired(searchIndex: searchIndex, title: title, subTitle: subTitle)

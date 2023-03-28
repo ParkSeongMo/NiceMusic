@@ -52,11 +52,12 @@ final class SearchKeywordCell: UITableViewCell {
         titleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(10)
-            $0.trailing.equalTo(dateLabel.snp.leading).offset(5)
+            $0.trailing.equalTo(dateLabel.snp.leading).offset(-5)
         }
         
         dateLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
+            $0.width.equalTo(78)
             $0.trailing.equalTo(deleteButton.snp.leading).offset(-5)
         }
         

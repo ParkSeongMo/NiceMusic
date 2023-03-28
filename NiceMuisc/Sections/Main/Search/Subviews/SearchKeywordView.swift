@@ -24,7 +24,6 @@ final class SearchKeywordView: DescendantView {
         
         $0.rowHeight = 30
         $0.backgroundColor = .gray
-        $0.bounces = true
         $0.contentInset = .zero
         $0.register(SearchKeywordCell.self, forCellReuseIdentifier: SearchKeywordCell.id)
         $0.layer.cornerRadius = 10
@@ -42,7 +41,6 @@ final class SearchKeywordView: DescendantView {
     }
     
     private func setupLayout() {
-        
         addSubview(tableView)
         
         tableView.snp.makeConstraints {

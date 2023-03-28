@@ -113,6 +113,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             $0.top.equalTo(searchBarTextField.snp.bottom).offset(20)
             $0.leading.equalTo(searchBarTextField.snp.leading)
             $0.trailing.equalTo(searchButton.snp.trailing)
+            $0.height.equalTo(0)
         }
     }
     
@@ -188,10 +189,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     }
     
     private func changeTableViewHeight(count: Int) {
-        if count == 0 {
-            return
-        }
-        searchKeywordView.snp.makeConstraints {
+        searchKeywordView.snp.updateConstraints {
             $0.height.equalTo(30*count)
         }
     }
@@ -202,7 +200,6 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             inputRelay.accept(SearchActionType.getKeyword)
         }
         searchKeywordView.isHidden = isHidden
-        Log.d("isHidden:\(isHidden)")
     }
 }
 

@@ -121,20 +121,16 @@ final class HomeTableViewCell: UITableViewCell {
                     self.items[indexPath.item].subTitle))
             })
             .disposed(by: disposeBag)
-        
-        
-        response.bind(to: collectionView.rx.items) { collectionView, row, element in
-            let indexPath = IndexPath(row: row, section: 0)
-            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.id, for: indexPath) as? HomeCollectionViewCell {
-                cell.prepare(
-                    title: element.title,
-                    subTitle: element.subTitle,
-                    rank: String(describing: indexPath.row+1),
-                    imageUrl: element.image?[3].text)
-                return cell
                 
-            }
-            return UICollectionViewCell()
+        response.bind(to: collectionView.rx.items(
+            cellIdentifier: HomeCollectionViewCell.id,
+            cellType: HomeCollectionViewCell.self)) {
+                index, item, cell in
+                cell.prepare(
+                    title: item.title,
+                    subTitle: item.subTitle,
+                    rank: String(describing: index+1),
+                    imageUrl: item.image?[3].text)
         }
         .disposed(by: disposeBag)
     }

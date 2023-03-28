@@ -18,7 +18,7 @@ protocol SubViewDI: AnyObject {
     var outputRelay: PublishRelay<Any> { get }
     
     // MARK: - Properties
-    var subViews: [UIView] { get set }    
+    var subViews: [UIView] { get set }
 }
 
 extension SubViewDI {
