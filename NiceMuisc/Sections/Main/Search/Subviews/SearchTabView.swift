@@ -158,7 +158,6 @@ final class SearchTabView: DescendantView {
                 .subscribe({ [weak self] _ in
                     guard let `self` = self else { return }
                     if tableView.isNearBottomEdge() {
-                        Log.d("click isNearBottomEdge")
                         self.delegate?.inputRelay.accept(SearchActionType.more(
                             self.currentSearchIndex))
                     }

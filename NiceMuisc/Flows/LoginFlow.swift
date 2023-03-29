@@ -36,7 +36,7 @@ final class LoginFlow: Flow {
     private func coordinateToLogin() -> FlowContributors {
         let vm = LoginViewModel()
         let vc = LoginViewController(viewModel: vm)
-        self.rootViewController.pushViewController(vc, animated: true)
+        rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
 }

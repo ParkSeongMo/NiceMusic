@@ -24,15 +24,18 @@ final class SearchFlow: Flow {
             return coordinateToSearch()
         case .detailIsRequired(let type, let artist, let name):
             return coordinateToDetail(type: type, artist: artist, name: name)
+        case .rootViewController(let animated):
+            self.rootViewController.dismiss(animated: animated)
         default:
             return .none
         }
+        return .none
     }
     
     private func coordinateToSearch() -> FlowContributors {
         let vm = SearchViewModel()
         let vc = SearchViewController(viewModel: vm)
-        self.rootViewController.pushViewController(vc, animated: false)
+        rootViewController.pushViewController(vc, animated: false)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     
@@ -40,7 +43,7 @@ final class SearchFlow: Flow {
         let vm = DetailViewModel(detailType: type, artist: artist, name: name)
         let vc = DetailViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
-        self.rootViewController.pushViewController(vc, animated: true)
+        rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
 }

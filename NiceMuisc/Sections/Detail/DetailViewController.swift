@@ -42,10 +42,6 @@ final class DetailViewController: UIViewController {
     private func setupLayout() {
         
         self.view.backgroundColor = .black
-//        self.title = index.title + " 목록"
-//        self.navigationController?.navigationBar.backgroundColor = .black
-//        self.navigationController?.navigationBar.tintColor = .white
-//        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
                 
         self.view.addSubview(subView)
         subView.snp.makeConstraints {

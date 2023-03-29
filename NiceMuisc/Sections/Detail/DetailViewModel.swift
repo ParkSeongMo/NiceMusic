@@ -16,6 +16,11 @@ enum DetailActionType {
     case logout
 }
 
+enum DetailAlertActionType {
+    case api
+    case logout
+}
+
 final class DetailViewModel: ViewModelType, Stepper {
       
      // MARK: - Stepper
@@ -44,14 +49,14 @@ final class DetailViewModel: ViewModelType, Stepper {
     private lazy var buttonAction = Action<DetailActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         
-        Log.d("buttonAction \(action)")
+        "buttonAction \(action)")
         switch action {
         case .none:
             return .empty()
         case .execute:
             self.requestDetailApi(type: self.detailType, artist: self.artist, name: self.name)
         case .logout:
-            self.steps.accept(MainSteps.loginIsRequired)            
+            self.showLogoutAlert()
         }
         return .empty()
     }
@@ -115,7 +120,6 @@ final class DetailViewModel: ViewModelType, Stepper {
         action.elements
             .subscribe(onNext: { [weak self] element in
                 guard let `self` = self else { return }
-                
                 self.changerRelay.accept(.loaderStop)
                 self.resDataRelay.accept(DetailModel(detailType: self.detailType,
                                                      data: element))
@@ -127,17 +131,45 @@ final class DetailViewModel: ViewModelType, Stepper {
         alertRelay.subscribe { [weak self] action in
             guard let `self` = self else { return }
             switch action {
-            case .okBtnTap:
-                self.requestDetailApi(type: self.detailType, artist: self.artist, name: self.name)
-            case .cancelBtnTap:
-                // TODO 이전화면으로 되돌아가기
+            case .okBtnTap(let type):
+                self.alertOkAction(type: type as? DetailAlertActionType)
+            case .cancelBtnTap(let type):
+                self.alertCancelAction(type: type as? DetailAlertActionType)
                 return
             }
         }
         .disposed(by: disposeBag)
     }
     
+    private func alertOkAction(type: DetailAlertActionType?) {
+        switch type {
+        case .api:
+            requestDetailApi(type: detailType, artist: artist, name: name)
+        case .logout:
+            steps.accept(MainSteps.loginIsRequired)
+        default:
+            return
+        }
+    }
+    
+    private func alertCancelAction(type: DetailAlertActionType?) {
+        switch type {
+        case .api:
+            steps.accept(MainSteps.rootViewController(animated: false))
+        default:
+            return
+        }
+    }
+    
     private func showApiErrorAlert() {
-        AlertDialogManager.shared.showAlertDialog(observable: alertRelay)
+        AlertDialogManager.shared.showApiErrorAndRetryAlertDialog(observable: alertRelay, actionType: DetailAlertActionType.api)
+    }
+    
+    private func showLogoutAlert() {
+        AlertDialogManager.shared.showAlertDialog(
+            title: "로그아웃",
+            message: "로그아웃 하시겠습니까?",
+            observable: alertRelay,
+            actionType: DetailAlertActionType.logout)
     }
 }

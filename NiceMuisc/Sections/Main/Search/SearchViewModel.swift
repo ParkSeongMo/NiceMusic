@@ -71,7 +71,6 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     private lazy var action = Action<SearchActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
-        Log.d("action \(action)")
         switch action {
         case .execute(let keyword), .executeRecently(let keyword):
             if self.isLoading || keyword.isEmpty {
@@ -270,7 +269,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func showApiErrorAlert() {
-        AlertDialogManager.shared.showAlertDialog(observable: alertRelay)
+        AlertDialogManager.shared.showApiErrorAndRetryAlertDialog(observable: alertRelay)
     }
 }
 

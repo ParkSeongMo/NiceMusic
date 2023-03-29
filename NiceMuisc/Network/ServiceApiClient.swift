@@ -55,7 +55,7 @@ struct ServiceApiClient {
                 observable.dispose()
             }
         }.observe(on: MainScheduler.instance)
-      
+        
         return request
     }
 }

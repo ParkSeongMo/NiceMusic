@@ -28,15 +28,18 @@ final class HomeFlow: Flow {
             return coordinateToDetail(type: type, artist: artist, name: name)
         case .loginIsRequired:
             return .end(forwardToParentFlowWithStep: MainSteps.loginIsRequired)
+        case .rootViewController(let animated):
+            self.rootViewController.popViewController(animated: animated)
         default:
             return .none
         }
+        return .none
     }
     
     private func coordinateToHome() -> FlowContributors {
         let vm = HomeViewModel()
         let vc = HomeViewController(viewModel: vm)
-        self.rootViewController.pushViewController(vc, animated: false)
+        rootViewController.pushViewController(vc, animated: false)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     
@@ -44,7 +47,7 @@ final class HomeFlow: Flow {
         let vm = ListViewModel(index: index)
         let vc = ListViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
-        self.rootViewController.pushViewController(vc, animated: true)
+        rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
     
@@ -52,7 +55,7 @@ final class HomeFlow: Flow {
         let vm = DetailViewModel(detailType: type, artist: artist, name: name)
         let vc = DetailViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
-        self.rootViewController.pushViewController(vc, animated: true)
+        rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vm))
     }
 }

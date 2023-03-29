@@ -53,8 +53,6 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     private lazy var buttonAction = Action<HomeActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
-        
-        Log.d("buttonAction:\(action)")
         switch action {
         case .execute, .refresh:
             self.requestMainApi()
@@ -148,7 +146,7 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
     private func subscribeAlert() {
         alertRelay.subscribe { [weak self] action in
             guard let `self` = self else { return }
-            switch action {
+            switch action{
             case .okBtnTap:
                 self.requestMainApi()
             case .cancelBtnTap:
@@ -159,6 +157,6 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func showApiErrorAlert() {
-        AlertDialogManager.shared.showAlertDialog(observable: alertRelay)
+        AlertDialogManager.shared.showApiErrorAndRetryAlertDialog(observable: alertRelay)
     }
 }

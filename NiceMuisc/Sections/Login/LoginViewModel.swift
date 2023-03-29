@@ -22,7 +22,6 @@ final class LoginViewModel: ViewModelType, Stepper {
     
     private lazy var buttonAction = Action<LoginActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
-        Log.d("buttonAction \(action)")
         switch action {
         case .tapForHome:
             self.steps.accept(MainSteps.loginIsComplete)

@@ -71,7 +71,6 @@ final class SearchKeywordCell: UITableViewCell {
     private func bindRx() {
         deleteButton.rx.tap.bind { [weak self] in
             guard let `self` = self else { return }
-            Log.d("remove keyword")
             self.deleteKeyword()
         }.disposed(by: disposeBag)
     }

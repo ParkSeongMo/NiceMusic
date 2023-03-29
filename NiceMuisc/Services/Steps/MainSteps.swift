@@ -16,4 +16,5 @@ enum MainSteps: Step {
     case searchIsRequired
     case listIsRequired(index: HomeIndex)
     case detailIsRequired(type: DetailType, artist: String?, name: String?)
+    case rootViewController(animated: Bool)
 }

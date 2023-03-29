@@ -202,6 +202,6 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func showApiErrorAlert() {
-        AlertDialogManager.shared.showAlertDialog(observable: alertRelay)
+        AlertDialogManager.shared.showApiErrorAndRetryAlertDialog(observable: alertRelay)
     }
 }
