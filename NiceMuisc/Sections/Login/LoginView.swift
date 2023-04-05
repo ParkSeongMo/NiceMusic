@@ -11,14 +11,37 @@ import Then
 
 final class LoginView: BaseSubView {
     
+    private lazy var idTextField = UITextField().then {
+        $0.backgroundColor = .white
+        $0.placeholder = "아이디"
+        $0.font = .systemFont(ofSize: 15)
+        $0.returnKeyType = .search
+        $0.layer.cornerRadius = 10
+        $0.leftPadding(5.0)
+        $0.rightPadding(40.0)
+        $0.delegate = self
+    }
+    
+    private lazy var passwdTextField = UITextField().then {
+        $0.backgroundColor = .white
+        $0.placeholder = "비밀번호"
+        $0.font = .systemFont(ofSize: 15)
+        $0.returnKeyType = .search
+        $0.layer.cornerRadius = 10
+        $0.leftPadding(5.0)
+        $0.rightPadding(40.0)
+        $0.delegate = self
+    }
+    
     private lazy var homeButton = UIButton().then {
-        $0.titleLabel?.font = .systemFont(ofSize: 15)
+        $0.titleLabel?.font = .systemFont(ofSize: 20)
         $0.setTitleColor(.white, for: .normal)
-        $0.setTitle("Go to home", for: .normal)
+        $0.setTitle("로그인", for: .normal)
         $0.layer.borderWidth = 2
         $0.layer.borderColor = UIColor.white.cgColor
         $0.layer.cornerRadius = 10
     }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
@@ -31,10 +54,24 @@ final class LoginView: BaseSubView {
     
     private func setupLayout() {
                 
-        addSubviews(homeButton)
+        addSubviews(homeButton, idTextField, passwdTextField)
+                
+        idTextField.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(300)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(40)
+            $0.width.equalTo(200)
+        }
+        
+        passwdTextField.snp.makeConstraints {
+            $0.top.equalTo(idTextField.snp.bottom).offset(10)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(40)
+            $0.width.equalTo(200)
+        }
         
         homeButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(100)
+            $0.top.equalTo(passwdTextField.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
             $0.height.equalTo(50)
             $0.width.equalTo(200)
@@ -60,4 +97,10 @@ final class LoginView: BaseSubView {
         }
         return self
     }
+}
+
+
+
+extension LoginView: UITextFieldDelegate {
+  
 }
