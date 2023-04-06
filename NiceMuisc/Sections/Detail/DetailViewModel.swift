@@ -49,7 +49,6 @@ final class DetailViewModel: ViewModelType, Stepper {
     private lazy var buttonAction = Action<DetailActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         
-        "buttonAction \(action)")
         switch action {
         case .none:
             return .empty()

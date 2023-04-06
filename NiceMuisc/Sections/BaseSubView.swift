@@ -40,19 +40,3 @@ class BaseSubView: UIView, SubViewDI {
             .disposed(by: disposeBag)
     }
 }
-
-extension BaseSubView {
-    func getRefreshControl(_ selector: Selector) -> UIRefreshControl {
-        
-        let refreshControl = UIRefreshControl()
-        let attributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.white,
-            NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
-        refreshControl.attributedTitle = NSAttributedString(string: "당겨서 새로고침", attributes: attributes)
-        refreshControl.addTarget(self, action: selector, for: .valueChanged)
-        refreshControl.tintColor = .white
-        
-        return refreshControl
-    }
-}
-

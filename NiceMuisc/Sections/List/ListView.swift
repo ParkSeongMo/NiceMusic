@@ -9,7 +9,7 @@ import RxCocoa
 import RxSwift
 import UIKit
 
-class ListView: BaseSubView {
+class ListView: BaseSubView, BaseRefreshContrl {
                 
     private let action = PublishRelay<ListActionType>()
         

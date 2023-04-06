@@ -51,7 +51,7 @@ extension HomeIndex {
     }
 }
 
-final class HomeView: BaseSubView {
+final class HomeView: BaseSubView, BaseRefreshContrl {
         
     typealias Model = HomeViewModel
     

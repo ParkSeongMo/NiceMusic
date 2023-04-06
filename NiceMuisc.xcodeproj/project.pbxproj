@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4B81EB7975760A08F8C883BC /* Pods_NiceMuisc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E40D583E4044753832CA6740 /* Pods_NiceMuisc.framework */; };
 		A55A1B2C29DE420A000CE1D7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A55A1B2E29DE420A000CE1D7 /* Localizable.strings */; };
+		A55A1B3229DE5024000CE1D7 /* BaseRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55A1B3129DE5024000CE1D7 /* BaseRefreshControl.swift */; };
 		A57ADC6429BEB6B300C9FDDF /* ServiceApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC6329BEB6B300C9FDDF /* ServiceApi.swift */; };
 		A57ADC6629BEB84200C9FDDF /* ServiceApiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC6529BEB84200C9FDDF /* ServiceApiProvider.swift */; };
 		A57ADC6929BEE3E100C9FDDF /* ArtistDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57ADC6829BEE3E100C9FDDF /* ArtistDetailModel.swift */; };
@@ -88,6 +89,7 @@
 		A55A1B2D29DE420A000CE1D7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A55A1B2F29DE4246000CE1D7 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		A55A1B3029DE4246000CE1D7 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A55A1B3129DE5024000CE1D7 /* BaseRefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseRefreshControl.swift; sourceTree = "<group>"; };
 		A57ADC6329BEB6B300C9FDDF /* ServiceApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceApi.swift; sourceTree = "<group>"; };
 		A57ADC6529BEB84200C9FDDF /* ServiceApiProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceApiProvider.swift; sourceTree = "<group>"; };
 		A57ADC6829BEE3E100C9FDDF /* ArtistDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistDetailModel.swift; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 				A5DF79F729B0610D00799BEA /* ViewModelType.swift */,
 				A57ADC8329C008FD00C9FDDF /* SubViewDI.swift */,
 				A5BD78ED29C93D2800F61807 /* BaseSubView.swift */,
+				A55A1B3129DE5024000CE1D7 /* BaseRefreshControl.swift */,
 				A57ADCA129C4071E00C9FDDF /* BaseViewController.swift */,
 				A57ADCA329C42DEC00C9FDDF /* LoadingIndicator.swift */,
 				A5BA29E429D1259D0038B36D /* BaseListViewModelType.swift */,
@@ -601,6 +604,7 @@
 				A57ADCA629C4349F00C9FDDF /* DetailViewController.swift in Sources */,
 				A5BD78EE29C93D2800F61807 /* BaseSubView.swift in Sources */,
 				A5BA29E529D1259D0038B36D /* BaseListViewModelType.swift in Sources */,
+				A55A1B3229DE5024000CE1D7 /* BaseRefreshControl.swift in Sources */,
 				A57ADC6629BEB84200C9FDDF /* ServiceApiProvider.swift in Sources */,
 				A57ADCA829C434AB00C9FDDF /* DetailViewModel.swift in Sources */,
 				A57ADC8429C008FD00C9FDDF /* SubViewDI.swift in Sources */,
