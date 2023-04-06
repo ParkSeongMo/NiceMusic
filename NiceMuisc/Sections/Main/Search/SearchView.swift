@@ -59,6 +59,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
         setupSubviews()
         setupLayout()
         bindRx()
+        tapViewGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -114,6 +115,8 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             $0.trailing.equalTo(searchButton.snp.trailing)
             $0.height.equalTo(0)
         }
+        
+        searchTabView.isHidden = true
     }
     
     private func bindRx() {
@@ -166,6 +169,14 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {
         if let observable = observable as? Observable<(DetailType, [CommonCardModel])> {
             searchTabView.setupDI(observable: observable)
+            observable
+                .subscribe(onNext: { [weak self] (type, items) in
+                    guard let `self` = self else { return }
+                    if items.count > 0 && self.searchTabView.isHidden {
+                        self.searchTabView.isHidden = false
+                    }
+                })
+                .disposed(by: disposeBag)            
         }
         return self
     }
@@ -209,5 +220,17 @@ extension SearchView: UITextViewDelegate {
             return false
         }
         return updatedText.count <= 40
+    }
+}
+
+extension SearchView {
+    func tapViewGesture() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        self.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboard() {
+        endEditing(true)
     }
 }
