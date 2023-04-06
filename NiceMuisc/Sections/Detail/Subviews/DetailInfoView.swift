@@ -15,7 +15,7 @@ final class DetailInfoView: DescendantView {
     private let disposeBag = DisposeBag()
 
     private lazy var titleLabel = UILabel().then {
-        $0.text = "기본 정보"
+        $0.text = NSLocalizedString("detail.basicInfo", comment: "")
         $0.font = .boldSystemFont(ofSize: 18)
         $0.numberOfLines = 1
         $0.textColor = .white

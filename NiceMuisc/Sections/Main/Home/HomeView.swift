@@ -25,13 +25,13 @@ extension HomeIndex {
     var title: String {
         switch self {
         case .topArtist:
-            return "Top 가수"
+            return NSLocalizedString("home.title.topArtist", comment: "")
         case .topTrack:
-            return "Top 음원"
+            return NSLocalizedString("home.title.topTrack", comment: "")
         case .topLocalArtist:
-            return "Top 국내 가수"
+            return NSLocalizedString("home.title.topLocalArtist", comment: "")
         case .topLocalTrack:
-            return "Top 국내 음원"
+            return NSLocalizedString("home.title.topLocalTrack", comment: "")
         default:
             return "None"
         }

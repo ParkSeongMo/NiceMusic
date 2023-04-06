@@ -39,7 +39,7 @@ final class ListViewController: UIViewController {
     
     private func setupLayout() {
         
-        self.title = self.viewModel.index.title + " 목록"
+        self.title = self.viewModel.index.title + " " + NSLocalizedString("common.list", comment: "")
         self.navigationController?.navigationBar.backgroundColor = .black
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]

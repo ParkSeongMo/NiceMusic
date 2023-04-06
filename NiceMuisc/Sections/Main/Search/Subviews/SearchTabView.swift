@@ -29,7 +29,7 @@ final class SearchTabView: DescendantView {
         $0.axis = .horizontal
     }
     private lazy var emptyLabel = UILabel().then {
-        $0.text = "검색 결과가 없습니다."
+        $0.text = NSLocalizedString("search.emptySearchResult", comment: "")
         $0.font = .boldSystemFont(ofSize: 15)
         $0.numberOfLines = 1
         $0.textColor = .white
@@ -149,8 +149,11 @@ final class SearchTabView: DescendantView {
             tableView.rx.modelSelected(CommonCardModel.self)
                 .subscribe(onNext: { [weak self] item in
                     guard let `self` = self else { return }
-                    self.delegate?.inputRelay.accept(SearchActionType.tapItemForDetail(
-                        self.currentSearchIndex, item.title, item.subTitle))
+                    self.delegate?.inputRelay.accept(
+                        SearchActionType.tapItemForDetail(
+                            self.currentSearchIndex,
+                            item.title,
+                            item.subTitle))
                 })
                 .disposed(by: disposeBag)
             
@@ -158,14 +161,12 @@ final class SearchTabView: DescendantView {
                 .subscribe({ [weak self] _ in
                     guard let `self` = self else { return }
                     if tableView.isNearBottomEdge() {
-                        self.delegate?.inputRelay.accept(SearchActionType.more(
-                            self.currentSearchIndex))
+                        self.delegate?.inputRelay.accept(
+                            SearchActionType.more(self.currentSearchIndex))
                     }
                 }).disposed(by: disposeBag)
             
-            
             tableViews.append(tableView)
-            
         }
     }
     

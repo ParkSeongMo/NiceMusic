@@ -21,13 +21,13 @@ extension DetailType {
     var title: String {
         switch self {
         case .artist:
-            return "가수"
+            return NSLocalizedString("common.artist", comment: "")
         case .track:
-            return "음원"
+            return NSLocalizedString("common.track", comment: "")
         case .album:
-            return "앨범"
+            return NSLocalizedString("common.album", comment: "")
         case .none:
-            return "가수"
+            return NSLocalizedString("common.artist", comment: "")
         }
     }
 }

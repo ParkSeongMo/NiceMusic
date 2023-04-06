@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  NiceMuisc
+
+  Created by Seongmo Park on 2023/04/06.
+  
+*/
+
+"login.id"="아이디";
+"login.passwd"="비밀번호";
+"login.login"="로그인";
+
+"home.title.topArtist"="Top 가수";
+"home.title.topTrack"="Top 음원";
+"home.title.topLocalArtist"="Top 국내 가수";
+"home.title.topLocalTrack"="Top 국내 음원";
+"home.title.none"="None";
+
+"common.artist"="가수";
+"common.track"="음원";
+"common.album"="앨범";
+"common.showAll"="전체보기";
+"common.list"="목록";
+
+"search.search"="검색";
+"search.inputSearchKeyword"="검색어를 입력하세요.";
+"search.emptySearchResult"="검색 결과가 없습니다.";
+
+"detail.basicInfo"="기본 정보";
+"detail.trackInfo"="음원 정보";
+"detail.detailInfo"="상세 정보";

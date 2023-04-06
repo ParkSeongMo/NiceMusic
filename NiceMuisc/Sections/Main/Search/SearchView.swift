@@ -23,10 +23,9 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     
     private lazy var searchBarTextField = UITextField().then {
         $0.backgroundColor = .white
-        $0.placeholder = "검색어를 입력하세요"
+        $0.placeholder = NSLocalizedString("search.inputSearchKeyword", comment: "")
         $0.font = .systemFont(ofSize: 15)
         $0.returnKeyType = .search
-//        $0.addDoneButtonOnKeyboard(title: "닫기")
         $0.layer.cornerRadius = 10
         $0.leftPadding(5.0)
         $0.rightPadding(40.0)
@@ -37,7 +36,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
         $0.titleLabel?.font = .systemFont(ofSize: 15)
         $0.setTitleColor(.white, for: .normal)
         $0.setTitleColor(.gray, for: .highlighted)
-        $0.setTitle("검색", for: .normal)
+        $0.setTitle(NSLocalizedString("search.search", comment: ""), for: .normal)
         $0.layer.borderWidth = 2
         $0.layer.borderColor = UIColor.white.cgColor
         $0.layer.cornerRadius = 10
@@ -166,10 +165,6 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     @discardableResult
     func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {
         if let observable = observable as? Observable<(DetailType, [CommonCardModel])> {
-            observable.subscribe { [weak self] _ in
-                guard let `self` = self else { return }
-            }
-            .disposed(by: disposeBag)
             searchTabView.setupDI(observable: observable)
         }
         return self

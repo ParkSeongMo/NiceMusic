@@ -1,0 +1,31 @@
+/* 
+  Localizable.strings
+  NiceMuisc
+
+  Created by Seongmo Park on 2023/04/06.
+  
+*/
+
+"login.id"="Id";
+"login.passwd"="Password";
+"login.login"="Login";
+
+"home.title.topArtist"="Top Artist";
+"home.title.topTrack"="Top Track";
+"home.title.topLocalArtist"="Top Local Artist";
+"home.title.topLocalTrack"="Top Local Track";
+"home.title.none"="None";
+
+"common.artist"="Artist";
+"common.track"="Track";
+"common.album"="Album";
+"common.showAll"="All";
+"common.list"="list";
+
+"search.search"="Search";
+"search.inputSearchKeyword"="Input search keyword.";
+"search.emptySearchResult"="Search result is empty.";
+
+"detail.basicInfo"="Basic Info";
+"detail.trackInfo"="Track Info";
+"detail.detailInfo"="Detail Info";

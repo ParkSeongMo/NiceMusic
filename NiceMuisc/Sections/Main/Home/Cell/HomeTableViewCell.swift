@@ -37,7 +37,7 @@ final class HomeTableViewCell: UITableViewCell {
     private lazy var moreLabel = UIButton().then {
         $0.titleLabel?.font = .systemFont(ofSize: moreFontSize)
         $0.setTitleColor(.gray, for: .normal)
-        $0.setTitle("전체보기", for: .normal)
+        $0.setTitle(NSLocalizedString("common.showAll", comment: ""), for: .normal)
     }
               
     private lazy var moreImageView = UIImageView().then {

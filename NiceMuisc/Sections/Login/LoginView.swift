@@ -13,7 +13,7 @@ final class LoginView: BaseSubView {
     
     private lazy var idTextField = UITextField().then {
         $0.backgroundColor = .white
-        $0.placeholder = "아이디"
+        $0.placeholder = NSLocalizedString("login.id", comment: "")
         $0.font = .systemFont(ofSize: 15)
         $0.returnKeyType = .search
         $0.layer.cornerRadius = 10
@@ -24,7 +24,7 @@ final class LoginView: BaseSubView {
     
     private lazy var passwdTextField = UITextField().then {
         $0.backgroundColor = .white
-        $0.placeholder = "비밀번호"
+        $0.placeholder = NSLocalizedString("login.passwd", comment: "")
         $0.font = .systemFont(ofSize: 15)
         $0.returnKeyType = .search
         $0.layer.cornerRadius = 10
@@ -36,7 +36,7 @@ final class LoginView: BaseSubView {
     private lazy var homeButton = UIButton().then {
         $0.titleLabel?.font = .systemFont(ofSize: 20)
         $0.setTitleColor(.white, for: .normal)
-        $0.setTitle("로그인", for: .normal)
+        $0.setTitle(NSLocalizedString("login.login", comment: ""), for: .normal)
         $0.layer.borderWidth = 2
         $0.layer.borderColor = UIColor.white.cgColor
         $0.layer.cornerRadius = 10
