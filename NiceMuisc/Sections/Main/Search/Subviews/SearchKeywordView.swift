@@ -48,13 +48,14 @@ final class SearchKeywordView: DescendantView {
         }
     }
     
-    private func bindRx() {
+    private func bindRx() {     
         tableView.rx.modelSelected(RecentSearchWord.self)
-            .subscribe(onNext: { [weak self] item in
+            .map { $0.keyword }
+            .bind { [weak self] keyword in
                 guard let `self` = self else { return }
-                self.delegate?.inputRelay.accept(SearchActionType.executeRecently(item.keyword))
-                self.delegate?.inputRelay.accept(SearchActionType.saveKeyword(item.keyword))
-            })
+                self.delegate?.inputRelay.accept(SearchActionType.executeRecently(keyword))
+                self.delegate?.inputRelay.accept(SearchActionType.saveKeyword(keyword))
+            }
             .disposed(by: disposeBag)
     }
     

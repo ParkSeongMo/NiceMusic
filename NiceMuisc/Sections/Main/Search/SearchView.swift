@@ -190,11 +190,12 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     @discardableResult
     func setupDI<T>(observable: Observable<[T]>) -> Self {
         if let observable = observable as? Observable<[RecentSearchWord]> {
-            observable.subscribe(onNext: { [weak self] element in
-                guard let `self` = self else { return }
-                self.changeTableViewHeight(count: element.count)
-            })
-            .disposed(by: disposeBag)
+            observable.map { $0.count }
+                .bind { [weak self] count in
+                    guard let `self` = self else { return }
+                    self.changeTableViewHeight(count: count)
+                }
+                .disposed(by: disposeBag)
             searchKeywordView.setupDI(observable: observable)
         }
         return self
