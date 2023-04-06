@@ -46,6 +46,7 @@ final class LoginView: BaseSubView {
         super.init(frame: frame)
         setupLayout()
         bindRx()
+        tapViewGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -53,7 +54,6 @@ final class LoginView: BaseSubView {
     }
     
     private func setupLayout() {
-                
         addSubviews(homeButton, idTextField, passwdTextField)
                 
         idTextField.snp.makeConstraints {
@@ -100,7 +100,18 @@ final class LoginView: BaseSubView {
 }
 
 
-
 extension LoginView: UITextFieldDelegate {
   
+}
+
+extension LoginView {
+    func tapViewGesture() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        self.addGestureRecognizer(tap)
+    }
+
+    @objc func dismissKeyboard() {
+        endEditing(true)
+    }
 }
