@@ -39,12 +39,15 @@ class ListView: BaseSubView, BaseRefreshContrl {
     
     private func setupLayout() {
         
+        backgroundColor = .black
+        
         addSubview(tableView)
         
         tableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         tableView.refreshControl = getRefreshControl(#selector(refreshTable(refresh:)))
+        tableView.isHidden = true
     }
         
     private func bindrx() {
@@ -98,6 +101,13 @@ class ListView: BaseSubView, BaseRefreshContrl {
                         return cell
                     }
                     return UITableViewCell()
+                }
+                .disposed(by: disposeBag)
+            observable.withUnretained(self)
+                .subscribe { owner, items in
+                    if items.count > 0 && owner.tableView.isHidden {
+                        owner.tableView.isHidden = false
+                    }
                 }
                 .disposed(by: disposeBag)
         }

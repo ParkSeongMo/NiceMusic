@@ -23,7 +23,7 @@ enum ListActionType {
 final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
             
     // MARK: - Output properties
-    private let resDataRelay = BehaviorRelay<[CommonCardModel]>(value: [CommonCardModel()])
+    private let resDataRelay = BehaviorRelay<[CommonCardModel]>(value: [])
     private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     private let alertRelay = PublishRelay<AlertAction>()
     
