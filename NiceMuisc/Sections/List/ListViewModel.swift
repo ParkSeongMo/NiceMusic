@@ -26,6 +26,8 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     private let resDataRelay = BehaviorRelay<[CommonCardModel]>(value: [])
     private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     private let alertRelay = PublishRelay<AlertAction>()
+    private let tableViewShowRelay = PublishRelay<Bool>()
+    
     
     private var resData: [CommonCardModel] = []
     private let defaultPageNum = 1
@@ -107,6 +109,7 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     struct Output {
         let response: Observable<[CommonCardModel]>
         let loadChanger: Observable<LoadChangeAction>
+        let tableViewShowRelay: Observable<Bool>
     }
     
     func transform(req: Input) -> Output {
@@ -117,7 +120,10 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         
         subscribeAlert()
         
-        return Output(response: resDataRelay.asObservable(), loadChanger: loaderRelay.asObservable())
+        return Output(
+            response: resDataRelay.asObservable(),
+            loadChanger: loaderRelay.asObservable(),
+            tableViewShowRelay: tableViewShowRelay.asObservable())
     }
     
     private func subscribeServerRequestionAction() {
@@ -166,6 +172,7 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
                 }
                 self.resDataRelay.accept(self.resData)
                 self.loaderRelay.accept(.loaderStop)
+                self.tableViewShowRelay.accept(self.resData.count < 1)
             })
             .disposed(by: disposeBag)
     }

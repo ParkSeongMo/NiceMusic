@@ -58,9 +58,11 @@ class ListView: BaseSubView, BaseRefreshContrl {
             .disposed(by: disposeBag)
         
         tableView.rx.contentOffset
+//            .throttle(.milliseconds(2000), scheduler: MainScheduler.instance)
             .subscribe({  [weak self] _ in
                 guard let `self` = self else { return }
                 if self.tableView.isNearBottomEdge() {
+                    Log.d("loading")
                     self.inputRelay.accept(ListActionType.more)
                 }
             }).disposed(by: disposeBag)
@@ -87,8 +89,7 @@ class ListView: BaseSubView, BaseRefreshContrl {
     }
     
     @discardableResult
-    func setupDI<T>(observable: Observable<T>) -> Self {
-         
+    func setupDI<T>(observable: Observable<[T]>) -> Self {
         if let observable = observable as? Observable<[CommonCardModel]> {
             observable
                 .bind(to: tableView.rx.items) { tableView, _, element in
@@ -103,11 +104,19 @@ class ListView: BaseSubView, BaseRefreshContrl {
                     return UITableViewCell()
                 }
                 .disposed(by: disposeBag)
-            observable.withUnretained(self)
-                .subscribe { owner, items in
-                    if items.count > 0 && owner.tableView.isHidden {
-                        owner.tableView.isHidden = false
-                    }
+        }
+        
+        return self
+    }
+    
+    @discardableResult
+    func setupDI<T>(observable: Observable<T>) -> Self {        
+        if let observable = observable as? Observable<Bool> {
+            observable
+                .distinctUntilChanged()
+                .subscribe { [weak self] isHidden in
+                    guard let `self` = self else { return }
+                    self.tableView.isHidden = isHidden
                 }
                 .disposed(by: disposeBag)
         }

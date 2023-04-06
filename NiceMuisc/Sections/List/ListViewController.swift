@@ -58,6 +58,7 @@ final class ListViewController: UIViewController {
         subView
             .setupDI(generic: action)
             .setupDI(observable: output.response)
+            .setupDI(observable: output.tableViewShowRelay)
             .setupDI(loadChanger: output.loadChanger)
     }
 }
