@@ -28,6 +28,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     private let keywordRelay = BehaviorRelay<[RecentSearchWord]>(value: [RecentSearchWord]())
     private let alertRelay = PublishRelay<AlertAction>()
+    private let searchTabViewShowRelay = PublishRelay<Bool>()
     
     private var resData: [Int:[CommonCardModel]] = [:]
     private let defaultPageNum = 1
@@ -115,6 +116,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         let response: Observable<(DetailType, [CommonCardModel])>
         let loadChanger: Observable<LoadChangeAction>
         let keyword: Observable<[RecentSearchWord]>
+        let searchTabViewShowRelay: Observable<Bool>
     }
     
     func transform(req: Input) -> Output {
@@ -130,7 +132,8 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         return Output(
             response: resDataRelay.asObservable(),
             loadChanger: loaderRelay.asObservable(),
-            keyword: keywordRelay.asObservable())
+            keyword: keywordRelay.asObservable(),
+            searchTabViewShowRelay: searchTabViewShowRelay.asObservable())
     }
     
     private func requestSearchApi(keyword: String) {
@@ -151,9 +154,9 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
             page[DetailType.artist.searchIndex] = defaultPageNum
             page[DetailType.track.searchIndex] = defaultPageNum
             page[DetailType.album.searchIndex] = defaultPageNum
-            resData[DetailType.artist.searchIndex] = [CommonCardModel]()
-            resData[DetailType.track.searchIndex] = [CommonCardModel]()
-            resData[DetailType.album.searchIndex] = [CommonCardModel]()
+            resData[DetailType.artist.searchIndex] = []
+            resData[DetailType.track.searchIndex] = []
+            resData[DetailType.album.searchIndex] = []
             requestArtistDataAction.execute(keyword)
             requestTrackDataAction.execute(keyword)
             requestAblumDataAction.execute(keyword)
@@ -193,7 +196,8 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     private func responseSearchData<T>(type: DetailType, array: [T]?) {
         
         resData[type.searchIndex]! += makeLimitedData(array: array)
-        resDataRelay.accept((type, resData[type.searchIndex] ?? [CommonCardModel]()))
+        resDataRelay.accept((type, resData[type.searchIndex] ?? []))
+        searchTabViewShowRelay.accept((array?.count ?? 0) < 1)
     }
             
     private func makeLimitedData<T>(array: [T]?) -> [CommonCardModel] {

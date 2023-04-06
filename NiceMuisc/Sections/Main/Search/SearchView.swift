@@ -169,14 +169,20 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {
         if let observable = observable as? Observable<(DetailType, [CommonCardModel])> {
             searchTabView.setupDI(observable: observable)
+        }
+        return self
+    }
+    
+    @discardableResult
+    func setupDI<T>(observable: Observable<T>) -> Self {
+        if let observable = observable as? Observable<Bool> {
             observable
-                .subscribe(onNext: { [weak self] (type, items) in
+                .distinctUntilChanged()
+                .subscribe { [weak self] isHidden in
                     guard let `self` = self else { return }
-                    if items.count > 0 && self.searchTabView.isHidden {
-                        self.searchTabView.isHidden = false
-                    }
-                })
-                .disposed(by: disposeBag)            
+                    self.searchTabView.isHidden = isHidden
+                }
+                .disposed(by: disposeBag)
         }
         return self
     }

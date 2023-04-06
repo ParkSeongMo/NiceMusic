@@ -52,6 +52,7 @@ class SearchViewController: UIViewController {
         subView.setupDI(generic: action)
             .setupDI(observable: output.response)
             .setupDI(observable: output.keyword)
+            .setupDI(observable: output.searchTabViewShowRelay)
             .setupDI(loadChanger: output.loadChanger)
     }
 }
