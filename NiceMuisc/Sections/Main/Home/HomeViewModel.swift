@@ -30,6 +30,7 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
     private let homeDataRelay = BehaviorRelay<[HomeCardModel]>(value: [HomeCardModel()])
     private let changerRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     private let alertRelay = PublishRelay<AlertAction>()
+    private var isFinishHomeApi = false
     
     private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
@@ -88,43 +89,53 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func requestMainApi() {
-        self.changerRelay.accept(.loaderStart)
+        isFinishHomeApi = false
+        changerRelay.accept(.loaderStart)
         
-        self.resData.removeAll()
-        self.requestTopTrackDataAction.execute()
-        self.requestTopLocalTrackDataAction.execute()
-        self.requestTopArtistDataAction.execute()
-        self.requestTopLocalArtistDataAction.execute()
+        resData.removeAll()
+        requestTopTrackDataAction.execute()
+        requestTopLocalTrackDataAction.execute()
+        requestTopArtistDataAction.execute()
+        requestTopLocalArtistDataAction.execute()
     }
     
     private func subscribeServerRequestionAction() {
               
-        Observable.zip(
+        Observable.of(
             requestTopArtistDataAction.errors,
             requestTopTrackDataAction.errors,
             requestTopLocalArtistDataAction.errors,
-            requestTopLocalTrackDataAction.errors).subscribe { code in
-                self.changerRelay.accept(.loaderStop)
-                self.showApiErrorAlert()
-            }
-            .disposed(by: disposeBag)
-        
+            requestTopLocalTrackDataAction.errors)
+        .merge()
+        .take(while: { [weak self] _ in
+            guard let `self` = self else { return true }
+            return !self.isFinishHomeApi
+        })
+        .bind { [weak self] code in
+            guard let `self` = self else { return }
+            self.isFinishHomeApi = true
+            self.changerRelay.accept(.loaderStop)
+            self.showApiErrorAlert()
+        }
+        .disposed(by: disposeBag)
+                
         Observable.zip(
             requestTopArtistDataAction.elements,
             requestTopTrackDataAction.elements,
             requestTopLocalArtistDataAction.elements,
-            requestTopLocalTrackDataAction.elements)           
-            .subscribe(onNext: { [weak self] (topArtist, topTrack, topLocalArtist, topLocalTrack) in
-                       guard let `self` = self else { return }
-                       self.appendHomeData(index: HomeIndex.topArtist, array: topArtist.artists?.artist)
-                       self.appendHomeData(index: HomeIndex.topTrack, array: topTrack.tracks?.track)
-                       self.appendHomeData(index: HomeIndex.topLocalArtist, array: topLocalArtist.topartists?.artist)
-                       self.appendHomeData(index: HomeIndex.topLocalTrack, array: topLocalTrack.tracks?.track)
-                       self.resData.sort { return $0.index.rawValue < $1.index.rawValue }
-                       self.homeDataRelay.accept(self.resData)
-                       self.changerRelay.accept(.loaderStop)
-            })
-            .disposed(by: disposeBag)
+            requestTopLocalTrackDataAction.elements)
+        .subscribe(onNext: { [weak self] (topArtist, topTrack, topLocalArtist, topLocalTrack) in
+            guard let `self` = self else { return }
+            self.isFinishHomeApi = true
+            self.appendHomeData(index: HomeIndex.topArtist, array: topArtist.artists?.artist)
+            self.appendHomeData(index: HomeIndex.topTrack, array: topTrack.tracks?.track)
+            self.appendHomeData(index: HomeIndex.topLocalArtist, array: topLocalArtist.topartists?.artist)
+            self.appendHomeData(index: HomeIndex.topLocalTrack, array: topLocalTrack.tracks?.track)
+            self.resData.sort { return $0.index.rawValue < $1.index.rawValue }
+            self.homeDataRelay.accept(self.resData)
+            self.changerRelay.accept(.loaderStop)
+        })
+        .disposed(by: disposeBag)
     }
     
     private func appendHomeData<T>(index: HomeIndex, array: [T]?) {
