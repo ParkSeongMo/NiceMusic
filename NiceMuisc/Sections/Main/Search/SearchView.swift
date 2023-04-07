@@ -53,7 +53,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     
     private let searchTabView = SearchTabView()
     private let searchKeywordView = SearchKeywordView()
-        
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -67,7 +67,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
     }
     
     private func setupSubviews() {
-        subViews = [            
+        subViews = [
             searchTabView,
             searchKeywordView
         ]
@@ -117,10 +117,11 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
         }
         
         searchTabView.isHidden = true
+        searchKeywordView.isHidden = true
     }
     
     private func bindRx() {
-                
+        
         searchButton.rx.tap.bind { [weak self] in
             guard let `self` = self else { return }
             let keyword = self.searchBarTextField.text ?? ""
@@ -132,7 +133,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
         deleteButton.rx.tap.bind { [weak self] in
             guard let `self` = self else { return }
             self.removeKeywordInputTextField()
-            self.showSearchKeywordView(isHidden: false)
+            self.searchBarTextField.becomeFirstResponder()
         }
         .disposed(by: disposeBag)
     }
@@ -154,7 +155,6 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
                 switch action {
                 case .executeRecently(let keyword):
                     self.searchBarTextField.text = keyword
-                    self.showSearchKeywordView(isHidden: true)
                 default:
                     return
                 }
@@ -228,6 +228,19 @@ extension SearchView: UITextViewDelegate {
         }
         return updatedText.count <= 40
     }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField == searchBarTextField {
+            let count = searchBarTextField.text?.count ?? 0
+            showSearchKeywordView(isHidden: count > 0)
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == searchBarTextField {
+            showSearchKeywordView(isHidden: true)
+        }
+    }
 }
 
 extension SearchView {
@@ -236,7 +249,7 @@ extension SearchView {
         tap.cancelsTouchesInView = false
         self.addGestureRecognizer(tap)
     }
-
+    
     @objc func dismissKeyboard() {
         endEditing(true)
     }
