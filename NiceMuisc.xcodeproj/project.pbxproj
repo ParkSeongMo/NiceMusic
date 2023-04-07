@@ -211,6 +211,7 @@
 				A57ADC9E29C30D5500C9FDDF /* Extension */,
 				A57ADC6D29BEE73900C9FDDF /* Log.swift */,
 				A5BA29F329D2E4990038B36D /* AlertDialogManager.swift */,
+				A57ADCA329C42DEC00C9FDDF /* LoadingIndicator.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -352,7 +353,6 @@
 				A5BD78ED29C93D2800F61807 /* BaseSubView.swift */,
 				A55A1B3129DE5024000CE1D7 /* BaseRefreshControl.swift */,
 				A57ADCA129C4071E00C9FDDF /* BaseViewController.swift */,
-				A57ADCA329C42DEC00C9FDDF /* LoadingIndicator.swift */,
 				A5BA29E429D1259D0038B36D /* BaseListViewModelType.swift */,
 			);
 			path = Sections;
