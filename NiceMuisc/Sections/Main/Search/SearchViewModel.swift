@@ -13,53 +13,56 @@ import RxSwift
 enum SearchActionType {
     case none
     case execute(String)
-    case executeRecently(String)
-    case more(Int)
+    case more(DetailType)
     case getKeyword
-    case saveKeyword(String)
     case removeKeyword(String)
-    case tapItemForDetail(Int, String?, String?)
+    case tapItemForDetail(DetailType, String?, String?)
 }
 
 class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     // MARK: - Output properties
+    private let reqApiDefaultPageNum = 1
+    private let reqApiLimitedCount = 20
+    
     private let resDataRelay = BehaviorRelay<(DetailType, [CommonCardModel])>(value:(.none, [CommonCardModel]()))
     private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     private let keywordRelay = BehaviorRelay<[RecentSearchWord]>(value: [RecentSearchWord]())
     private let alertRelay = PublishRelay<AlertAction>()
     private let searchTabViewShowRelay = PublishRelay<Bool>()
     
-    private var resData: [Int:[CommonCardModel]] = [:]
-    private let defaultPageNum = 1
-    private let limit = 20
-    private var page: [Int:Int] = [:]
-    private var keyword = ""
-    private var isLoading = false
-    private var searchIndex = DetailType.none.searchIndex
+    private var searchType = DetailType.none // 음원, 가수, 앨범
+    private var apiResData = [DetailType.track: [CommonCardModel](),
+                              DetailType.artist: [CommonCardModel](),
+                              DetailType.album: [CommonCardModel]()] // 타입별 서버 응답 데이터
+    private var apiReqPages = [DetailType.track: 0,
+                               DetailType.artist: 0,
+                               DetailType.album: 0] // 타입별 서버 요청 페이지
+    private var searchKeyword = ""
+    private var isFinishSearchApi = true
     
     private lazy var requestArtistDataAction = Action<String, ArtistSearchModel> { [weak self] artist in
         guard let `self` = self else { return Observable.empty()}
         return ServiceApi.Artist.search(
             artist: artist,
-            page: self.page[DetailType.artist.searchIndex]!,
-            limit: self.limit).asObservable()
+            page: self.apiReqPages[DetailType.artist]!,
+            limit: self.reqApiLimitedCount).asObservable()
     }
     
     private lazy var requestTrackDataAction = Action<String, TrackSearchModel> { [weak self] track in
         guard let `self` = self else { return Observable.empty() }
         return ServiceApi.Track.search(
             track: track,
-            page: self.page[DetailType.track.searchIndex]!,
-            limit: self.limit).asObservable()
+            page: self.apiReqPages[DetailType.track]!,
+            limit: self.reqApiLimitedCount).asObservable()
     }
     
     private lazy var requestAblumDataAction = Action<String, AlbumSearchModel> { [weak self] album in
         guard let `self` = self else { return Observable.empty() }
         return ServiceApi.Album.search(
             album: album,
-            page: self.page[DetailType.album.searchIndex]!,
-            limit: self.limit).asObservable()
+            page: self.apiReqPages[DetailType.album]!,
+            limit: self.reqApiLimitedCount).asObservable()
     }
     
     private lazy var getRecentlySearchWordsAction = Action<Void, [RecentSearchWord]> { [weak self] _ in
@@ -73,34 +76,32 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     private lazy var action = Action<SearchActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         switch action {
-        case .execute(let keyword), .executeRecently(let keyword):
-            if self.isLoading || keyword.isEmpty {
+        case .execute(let keyword):
+            if !self.isFinishSearchApi || keyword.isEmpty {
                 return .empty()
             }
-            self.keyword = keyword
-            self.searchIndex = DetailType.none.searchIndex
+            self.searchKeyword = keyword
+            self.searchType = DetailType.none
+            self.initApiReqPages()
+            self.initApiResData()
             self.requestSearchApi(keyword: keyword)
-            self.setRecentSearchData(keyword: keyword)
-        case .more(let searchIndex):
-            if self.isLoading {
+            self.saveRecentSearchKeyword(keyword: keyword)
+        case .more(let searchType):
+            if !self.isFinishSearchApi {
                 return .empty()
             }
-            self.searchIndex = searchIndex
-            self.requestSearchApi(keyword: self.keyword)
+            self.searchType = searchType
+            self.apiReqPages[searchType]! += 1
+            self.requestSearchApi(keyword: self.searchKeyword)
         case .getKeyword:
             self.getRecentlySearchWordsAction.execute()
-        case .saveKeyword(let keyword):
+        case .removeKeyword(let keyword):
             if keyword.isEmpty {
                 return .empty()
             }
-            self.setRecentSearchData(keyword: keyword)
-        case .removeKeyword(let keyword):
-            if self.isLoading || keyword.isEmpty {
-                return .empty()
-            }
             self.removeRecentlySearchWordsAction.execute(keyword)
-        case .tapItemForDetail(let searchIndex, let title, let subTitle):
-            self.detailIsRequired(searchIndex: searchIndex, title: title, subTitle: subTitle)
+        case .tapItemForDetail(let searchType, let title, let subTitle):
+            self.detailIsRequired(detailType: searchType, title: title, subTitle: subTitle)
         default:
             return .empty()
         }
@@ -123,9 +124,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         
         req.actionTrigger.bind(to: action.inputs).disposed(by: disposeBag)
         
-        subscribeServerRequestionAction(action: requestTrackDataAction)
-        subscribeServerRequestionAction(action: requestArtistDataAction)
-        subscribeServerRequestionAction(action: requestAblumDataAction)
+        subscribeServerRequestionAction()
         subscribeRecetlyWordAction()
         subscribeAlert()
         
@@ -137,70 +136,65 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func requestSearchApi(keyword: String) {
-        isLoading = true
+        isFinishSearchApi = false
         loaderRelay.accept(.loaderStart)
         
-        switch self.searchIndex {
-        case DetailType.track.searchIndex:
-            page[searchIndex]! += 1
+        switch self.searchType {
+        case DetailType.track:
             requestTrackDataAction.execute(keyword)
-        case DetailType.artist.searchIndex:
-            page[searchIndex]! += 1
+        case DetailType.artist:
             requestArtistDataAction.execute(keyword)
-        case DetailType.album.searchIndex:
-            page[searchIndex]! += 1
+        case DetailType.album:
             requestAblumDataAction.execute(keyword)
         default:
-            page[DetailType.artist.searchIndex] = defaultPageNum
-            page[DetailType.track.searchIndex] = defaultPageNum
-            page[DetailType.album.searchIndex] = defaultPageNum
-            resData[DetailType.artist.searchIndex] = []
-            resData[DetailType.track.searchIndex] = []
-            resData[DetailType.album.searchIndex] = []
             requestArtistDataAction.execute(keyword)
             requestTrackDataAction.execute(keyword)
             requestAblumDataAction.execute(keyword)
+            return
         }
     }
     
-    private func subscribeServerRequestionAction<T>(action: Action<String, T>) {
+    private func subscribeServerRequestionAction() {
         
-        action.errors.subscribe { code in
+        // 에러
+        Observable.of(requestArtistDataAction.errors,
+                      requestTrackDataAction.errors,
+                      requestAblumDataAction.errors)
+        .merge()
+        .take (while:{ [weak self] _ in
+            guard let `self` = self else { return true }
+            return !self.isFinishSearchApi
+        })
+        .bind { [weak self] code in
+            guard let `self` = self else { return }
+            self.isFinishSearchApi = true
             self.loaderRelay.accept(.loaderStop)
-            if self.isLoading == true {
-                self.isLoading = false
-                self.showApiErrorAlert()
-            }
+            self.showApiErrorAlert()
         }
         .disposed(by: disposeBag)
         
-        action.elements.subscribe(onNext: { [weak self] element in
+        // 성공
+        Observable.zip(requestArtistDataAction.elements,
+                       requestTrackDataAction.elements,
+                       requestAblumDataAction.elements)
+        .subscribe(onNext: { [weak self] (artist, track, album) in
             guard let `self` = self else { return }
-            
+            self.isFinishSearchApi = true
             self.loaderRelay.accept(.loaderStop)
-            self.isLoading = false
-            
-            switch element {
-            case let data as TrackSearchModel:
-                self.responseSearchData(type: .track, array: data.results?.trackmatches?.track)
-            case let data as ArtistSearchModel:
-                self.responseSearchData(type: .artist, array: data.results?.artistmatches?.artist)
-            case let data as AlbumSearchModel:
-                self.responseSearchData(type: .album, array: data.results?.albummatches?.album)
-            default:
-                return
-            }
-        }).disposed(by: disposeBag)
+            self.searchTabViewShowRelay.accept(false)
+            self.responseSearchData(type: .track, array: track.results?.trackmatches?.track)
+            self.responseSearchData(type: .artist, array: artist.results?.artistmatches?.artist)
+            self.responseSearchData(type: .album, array: album.results?.albummatches?.album)
+        })
+        .disposed(by: disposeBag)
     }
     
     private func responseSearchData<T>(type: DetailType, array: [T]?) {
-        
-        resData[type.searchIndex]! += makeLimitedData(array: array)
-        resDataRelay.accept((type, resData[type.searchIndex] ?? []))
-        searchTabViewShowRelay.accept((array?.count ?? 0) < 1)
+        apiResData[type]! += convertResDataToCommonCardModel(array: array)
+        resDataRelay.accept((type, apiResData[type] ?? []))
     }
-            
-    private func makeLimitedData<T>(array: [T]?) -> [CommonCardModel] {
+    
+    private func convertResDataToCommonCardModel<T>(array: [T]?) -> [CommonCardModel] {
         
         var responseData:[CommonCardModel] = []
         
@@ -209,62 +203,39 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         for item in array {
             responseData.append(CommonCardModel(data: item))
         }
-                
+        
         return responseData
+    }
+    
+    func detailIsRequired(detailType: DetailType, title: String?, subTitle: String?) {
+        super.parsingTitleToArtist(
+            type: detailType,
+            title: title,
+            subTitle: subTitle,
+            task: MainSteps.detailIsRequired)
     }
     
     private func subscribeRecetlyWordAction() {
         Observable.merge(getRecentlySearchWordsAction.elements,
                          removeRecentlySearchWordsAction.elements)
-        .subscribe {  [weak self] element in
+        .subscribe { [weak self] element in
             guard let `self` = self else { return }
             self.keywordRelay.accept(element)
         }
         .disposed(by: disposeBag)
     }
     
-    func detailIsRequired(searchIndex: Int, title: String?, subTitle: String?) {
-        super.parsingTitleToArtist(
-            type: parsingSearchIndexToDetailType(searchIndex: searchIndex),
-            title: title,
-            subTitle: subTitle,
-            task: MainSteps.detailIsRequired)
-    }
-    
-    private func parsingSearchIndexToDetailType(searchIndex: Int) -> DetailType {
-        switch searchIndex{
-        case DetailType.track.searchIndex:
-            return DetailType.track
-        case DetailType.artist.searchIndex:
-            return DetailType.artist
-        case DetailType.album.searchIndex:
-            return DetailType.album
-        default:
-            return DetailType.none
-        }
-    }
-    
-    private func getRecentSearchKeyword() {
-        
-        var keywords = [RecentSearchWord]()
-        for i in 1...10 {
-            keywords.append(RecentSearchWord(keyword: "keyword \(i)", date: Date()))
-        }
-        
-        keywordRelay.accept(keywords)
-    }
-    
-    private func setRecentSearchData(keyword: String) {
+    private func saveRecentSearchKeyword(keyword: String) {
         let data = RecentSearchWord(keyword: keyword, date: Date())
         RecentlySearchManager.shared.setRecentSearchData(data)
     }
     
     private func subscribeAlert() {
         alertRelay.subscribe { [weak self] action in
-            guard let `self` = self else { return }            
+            guard let `self` = self else { return }
             switch action {
             case .okBtnTap:
-                self.requestSearchApi(keyword: self.keyword)
+                self.requestSearchApi(keyword: self.searchKeyword)
             case .cancelBtnTap:
                 return
             }
@@ -274,6 +245,18 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     private func showApiErrorAlert() {
         AlertDialogManager.shared.showApiErrorAndRetryAlertDialog(observable: alertRelay)
+    }
+    
+    private func initApiReqPages() {
+        apiReqPages = [DetailType.track: reqApiDefaultPageNum,
+                       DetailType.artist: reqApiDefaultPageNum,
+                       DetailType.album: reqApiDefaultPageNum]
+    }
+    
+    private func initApiResData() {
+        apiResData = [DetailType.track: [],
+                      DetailType.artist: [],
+                      DetailType.album: []]
     }
 }
 

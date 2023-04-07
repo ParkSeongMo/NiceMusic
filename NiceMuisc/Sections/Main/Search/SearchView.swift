@@ -126,7 +126,6 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             guard let `self` = self else { return }
             let keyword = self.searchBarTextField.text ?? ""
             self.inputRelay.accept(SearchActionType.execute(keyword))
-            self.inputRelay.accept(SearchActionType.saveKeyword(keyword))
         }
         .disposed(by: disposeBag)
         
@@ -153,7 +152,7 @@ final class SearchView: BaseSubView, UITextFieldDelegate {
             generic.subscribe { [weak self] action in
                 guard let `self` = self else { return }
                 switch action {
-                case .executeRecently(let keyword):
+                case .execute(let keyword):
                     self.searchBarTextField.text = keyword
                 default:
                     return

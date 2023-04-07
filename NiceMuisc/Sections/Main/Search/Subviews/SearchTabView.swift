@@ -14,13 +14,12 @@ import RxCocoa
 final class SearchTabView: DescendantView {
     
     private let disposeBag = DisposeBag()
-    private let items = [DetailType.track.title : DetailType.track.searchIndex,
-                         DetailType.artist.title : DetailType.artist.searchIndex,
-                         DetailType.album.title : DetailType.album.searchIndex]
-    private var currentSearchIndex = DetailType.track.searchIndex
-    private var isHiddenEmptyView = [DetailType.track.searchIndex : true,
-                                   DetailType.artist.searchIndex : true,
-                                   DetailType.album.searchIndex : true]
+    private let items = [DetailType.track, DetailType.artist, DetailType.album]
+    
+    private var currentSearchType = DetailType.track
+    private var isHiddenEmptyView = [DetailType.track : true,
+                                   DetailType.artist : true,
+                                   DetailType.album : true]
     
     private lazy var buttonStackView = UIStackView().then {
         $0.spacing = 5
@@ -49,8 +48,8 @@ final class SearchTabView: DescendantView {
     
     private func setupLayout() {
        
-        setupButtonStackView()
-        setupTableView()
+        setupButtonStackViews()
+        setupTableViews()
         
         addSubview(emptyLabel)
         
@@ -59,13 +58,14 @@ final class SearchTabView: DescendantView {
         }
         emptyLabel.isHidden = true
         
-        showSelectedButton(tag: currentSearchIndex)
-        showSelectedTableView(tag: currentSearchIndex)
-        showEmptyView(index: currentSearchIndex)
+        let currentTag = currentSearchType.searchIndex
+        showSelectedButton(tag: currentTag)
+        showSelectedTableView(tag: currentTag)
+        showEmptyView(index: currentTag)
     }
     
     
-    private func setupButtonStackView() {
+    private func setupButtonStackViews() {
         
         addSubview(buttonStackView)
         
@@ -75,32 +75,39 @@ final class SearchTabView: DescendantView {
             $0.height.equalTo(40)
         }
         
-        let sortedItem = items.sorted { $0.1 < $1.1 }
-        for (key, value) in sortedItem {
-            let button = UIButton().then {
-                $0.titleLabel?.font = .systemFont(ofSize: 15)
-                $0.setTitleColor(.white, for: .normal)
-                $0.setTitleColor(.gray, for: .selected)
-                $0.setTitleColor(.gray, for: .highlighted)
-                $0.setTitle(key, for: .normal)
-                $0.tag = value
-                $0.layer.borderWidth = 2
-                $0.layer.borderColor = UIColor.white.cgColor
-                $0.layer.cornerRadius = 8
-            }
+        for detailType in items {
+            let button = setupTabButtonLayout(detailType: detailType)
             buttons.append(button)
-            
-            button.rx.tap.bind { [weak self] in
-                guard let `self` = self else { return }
-                self.currentSearchIndex = button.tag
-                self.showSelectedTableView(tag: button.tag)
-                self.showSelectedButton(tag: button.tag)
-                self.showEmptyView(index: button.tag)
-            }
-            .disposed(by: disposeBag)
-            
+            bindTabButtonRx(button: button)
             self.buttonStackView.addArrangedSubview(button)
         }
+    }
+    
+    private func setupTabButtonLayout(detailType: DetailType) -> UIButton {
+        let button = UIButton().then {
+            $0.titleLabel?.font = .systemFont(ofSize: 15)
+            $0.setTitleColor(.white, for: .normal)
+            $0.setTitleColor(.gray, for: .selected)
+            $0.setTitleColor(.gray, for: .highlighted)
+            $0.setTitle(detailType.title, for: .normal)
+            $0.tag = detailType.searchIndex
+            $0.layer.borderWidth = 2
+            $0.layer.borderColor = UIColor.white.cgColor
+            $0.layer.cornerRadius = 8
+        }
+        
+        return button
+    }
+    
+    private func bindTabButtonRx(button: UIButton) {
+        button.rx.tap.bind { [weak self] in
+            guard let `self` = self else { return }
+            self.currentSearchType = self.parsingSearchIndexToDetailType(searchIndex: button.tag)
+            self.showSelectedTableView(tag: button.tag)
+            self.showSelectedButton(tag: button.tag)
+            self.showEmptyView(index: button.tag)
+        }
+        .disposed(by: disposeBag)
     }
     
     private func showSelectedButton(tag: Int) {
@@ -113,73 +120,79 @@ final class SearchTabView: DescendantView {
                 btn.layer.borderColor = UIColor.white.cgColor
             }
         }
-        
     }
     
-    private func setupTableView() {
+    private func setupTableViews() {
         let view = UIView()
+        
         addSubview(view)
+        
         view.snp.makeConstraints {
             $0.top.equalTo(buttonStackView.snp.bottom).offset(10)
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
-        for (_, value) in items {
-                        
-            let tableView = UITableView(frame: .zero, style: .plain).then {
-                $0.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-                $0.separatorInsetReference = .fromCellEdges
-                $0.separatorStyle = .singleLine
-                $0.separatorColor = .gray
-                
-                $0.tag = value
-                $0.rowHeight = 70
-                $0.backgroundColor = .black
-                $0.bounces = true
-                $0.showsVerticalScrollIndicator = true
-                $0.contentInset = .zero
-                $0.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.id)
-            }
-            
-            view.addSubview(tableView)
-            tableView.snp.makeConstraints {
-                $0.directionalEdges.equalToSuperview()
-            }
-            
-            tableView.rx.modelSelected(CommonCardModel.self)
-                .subscribe(onNext: { [weak self] item in
-                    guard let `self` = self else { return }
-                    self.delegate?.inputRelay.accept(
-                        SearchActionType.tapItemForDetail(
-                            self.currentSearchIndex,
-                            item.title,
-                            item.subTitle))
-                })
-                .disposed(by: disposeBag)
-            
-            tableView.rx.contentOffset
-                .subscribe({ [weak self] _ in
-                    guard let `self` = self else { return }
-                    if tableView.isNearBottomEdge() {
-                        self.delegate?.inputRelay.accept(
-                            SearchActionType.more(self.currentSearchIndex))
-                    }
-                }).disposed(by: disposeBag)
-            
+        for _ in items {
+            let tableView = setupTableViewLayout(parentView: view)
+            bindTableViewRx(tableView: tableView)
             tableViews.append(tableView)
         }
     }
     
+    private func setupTableViewLayout(parentView: UIView) -> UITableView{
+        let tableView = UITableView(frame: .zero, style: .plain).then {
+            $0.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+            $0.separatorInsetReference = .fromCellEdges
+            $0.separatorStyle = .singleLine
+            $0.separatorColor = .gray
+            
+            $0.rowHeight = 70
+            $0.backgroundColor = .black
+            $0.bounces = true
+            $0.showsVerticalScrollIndicator = true
+            $0.contentInset = .zero
+            $0.register(ListTableViewCell.self, forCellReuseIdentifier: ListTableViewCell.id)
+        }
+        
+        parentView.addSubview(tableView)
+        
+        tableView.snp.makeConstraints {
+            $0.directionalEdges.equalToSuperview()
+        }
+                
+        return tableView
+    }
+    
+    private func bindTableViewRx(tableView: UITableView) {
+        tableView.rx.modelSelected(CommonCardModel.self)
+            .subscribe(onNext: { [weak self] item in
+                guard let `self` = self else { return }
+                self.delegate?.inputRelay.accept(
+                    SearchActionType.tapItemForDetail(
+                        self.currentSearchType,
+                        item.title,
+                        item.subTitle))
+            })
+            .disposed(by: disposeBag)
+        
+        tableView.rx.contentOffset
+            .subscribe({ [weak self] _ in
+                guard let `self` = self else { return }
+                if tableView.isNearBottomEdge() {
+                    self.delegate?.inputRelay.accept(
+                        SearchActionType.more(self.currentSearchType))
+                }
+            }).disposed(by: disposeBag)
+    }
+    
     private func showSelectedTableView(tag: Int) {
-             
         for index in 0...tableViews.count-1 {
             tableViews[index].isHidden = (index != (tag))
         }
     }
         
     @discardableResult
-    func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {
-        
+    func setupDI<T>(observable: Observable<(DetailType,[T])>) -> Self {        
         if let observable = observable as? Observable<(DetailType, [CommonCardModel])> {
             bindTableView(observable: observable, type: .track)
             bindTableView(observable: observable, type: .artist)
@@ -195,7 +208,7 @@ final class SearchTabView: DescendantView {
             .map { $0.1 }
             .subscribe(onNext: { [weak self] item in
                 guard let `self` = self else { return }
-                self.isHiddenEmptyView[type.searchIndex] = item.count > 0
+                self.isHiddenEmptyView[type] = item.count > 0
                 self.showEmptyView(index: type.searchIndex)
             })
             .disposed(by: disposeBag)
@@ -218,8 +231,21 @@ final class SearchTabView: DescendantView {
     }
     
    private func showEmptyView(index: Int) {
-       if index == currentSearchIndex {
-           emptyLabel.isHidden = isHiddenEmptyView[currentSearchIndex]!
+       if index == currentSearchType.searchIndex {
+           emptyLabel.isHidden = isHiddenEmptyView[currentSearchType]!
        }
+    }
+    
+    private func parsingSearchIndexToDetailType(searchIndex: Int) -> DetailType {
+        switch searchIndex{
+        case DetailType.track.searchIndex:
+            return DetailType.track
+        case DetailType.artist.searchIndex:
+            return DetailType.artist
+        case DetailType.album.searchIndex:
+            return DetailType.album
+        default:
+            return DetailType.none
+        }
     }
 }

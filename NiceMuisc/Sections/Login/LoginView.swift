@@ -10,7 +10,7 @@ import RxRelay
 import Then
 
 final class LoginView: BaseSubView {
-    
+        
     private lazy var idTextField = UITextField().then {
         $0.backgroundColor = .white
         $0.placeholder = NSLocalizedString("login.id", comment: "")
@@ -101,7 +101,7 @@ final class LoginView: BaseSubView {
 
 
 extension LoginView: UITextFieldDelegate {
-  
+    
 }
 
 extension LoginView {

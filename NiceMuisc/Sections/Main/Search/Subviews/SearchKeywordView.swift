@@ -53,8 +53,7 @@ final class SearchKeywordView: DescendantView {
             .map { $0.keyword }
             .bind { [weak self] keyword in
                 guard let `self` = self else { return }
-                self.delegate?.inputRelay.accept(SearchActionType.executeRecently(keyword))
-                self.delegate?.inputRelay.accept(SearchActionType.saveKeyword(keyword))
+                self.delegate?.inputRelay.accept(SearchActionType.execute(keyword))
             }
             .disposed(by: disposeBag)
     }
