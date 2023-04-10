@@ -108,7 +108,7 @@ final class HomeTableViewCell: UITableViewCell {
         moreLabel.rx.tap
             .bind { [weak self] in
                 guard let `self` = self else { return }
-                self.action.accept(HomeActionType.tapAllforList(self.index))
+                self.action.accept(HomeActionType.tapAllForList(self.index))
             }
             .disposed(by: disposeBag)
         

@@ -101,7 +101,7 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
             }
             self.removeRecentlySearchWordsAction.execute(keyword)
         case .tapItemForDetail(let searchType, let title, let subTitle):
-            self.detailIsRequired(detailType: searchType, title: title, subTitle: subTitle)
+            self.moveToDetail(detailType: searchType, title: title, subTitle: subTitle)
         default:
             return .empty()
         }
@@ -207,8 +207,8 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
         return responseData
     }
     
-    func detailIsRequired(detailType: DetailType, title: String?, subTitle: String?) {
-        super.parsingTitleToArtist(
+    func moveToDetail(detailType: DetailType, title: String?, subTitle: String?) {
+        super.moveToDetail(
             type: detailType,
             title: title,
             subTitle: subTitle,

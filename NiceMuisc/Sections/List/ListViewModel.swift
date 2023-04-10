@@ -27,33 +27,32 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     private let alertRelay = PublishRelay<AlertAction>()
     private let tableViewShowRelay = PublishRelay<Bool>()
-    
-    
-    private var resData: [CommonCardModel] = []
-    private let defaultPageNum = 1
-    private let limit = 20
-    private var page = 1
+    private let defaultApiReqPageNum = 1
+    private let limreqApiLimitedCountit = 20
+        
+    private var apiResData: [CommonCardModel] = []
+    private var apiReqPageNum = 1
     private var isLoading = false
     var index = HomeIndex.none
         
     private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Track.top(page: self.page, limit: self.limit).asObservable()
+        return ServiceApi.Track.top(page: self.apiReqPageNum, limit: self.limreqApiLimitedCountit).asObservable()
     }
     
     private lazy var requestTopLocalTrackDataAction = Action<Void, TrackLocalTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Track.topLocal(page: self.page, limit: self.limit).asObservable()
+        return ServiceApi.Track.topLocal(page: self.apiReqPageNum, limit: self.limreqApiLimitedCountit).asObservable()
     }
     
     private lazy var requestTopArtistDataAction = Action<Void, ArtistTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Artist.top(page: self.page, limit: self.limit).asObservable()
+        return ServiceApi.Artist.top(page: self.apiReqPageNum, limit: self.limreqApiLimitedCountit).asObservable()
     }
     
     private lazy var requestTopLocalArtistDataAction = Action<Void, ArtistLocalTopModel> { [weak self] in
         guard let `self` = self else { return Observable.empty() }
-        return ServiceApi.Artist.topLocal(page: self.page, limit: self.limit).asObservable()
+        return ServiceApi.Artist.topLocal(page: self.apiReqPageNum, limit: self.limreqApiLimitedCountit).asObservable()
     }
                 
     private lazy var buttonAction = Action<ListActionType, Void> { [weak self] action in
@@ -64,17 +63,17 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
             if self.isLoading {
                 return .empty()
             }
-            self.page = self.defaultPageNum
-            self.resData.removeAll()
+            self.apiReqPageNum = self.defaultApiReqPageNum
+            self.apiResData.removeAll()
             self.requestListApi()
         case .more:
             if self.isLoading {
                 return .empty()
             }
-            self.page += 1
+            self.apiReqPageNum += 1
             self.requestListApi()
         case .tapItemForDetail(let title, let subTitle):
-            self.detailIsRequired(title: title, subTitle: subTitle)
+            self.moveToDetail(title: title, subTitle: subTitle)
         default:
             return .empty()
         }
@@ -117,7 +116,6 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         req.actionTrigger.bind(to: buttonAction.inputs).disposed(by: disposeBag)
         
         subscribeServerRequestionAction()
-        
         subscribeAlert()
         
         return Output(
@@ -142,7 +140,8 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
-        
+       
+            
         action.executing.bind { [weak self] element in
             guard let `self` = self else { return }
             self.isLoading = element
@@ -160,19 +159,19 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
                 guard let `self` = self else { return }
                 switch element {
                 case let data as ArtistTopModel:
-                    self.resData.append(contentsOf: self.makeLimitedData(array: data.artists?.artist))
+                    self.apiResData.append(contentsOf: self.makeLimitedData(array: data.artists?.artist))
                 case let data as TrackTopModel:
-                    self.resData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
+                    self.apiResData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
                 case let data as ArtistLocalTopModel:
-                    self.resData.append(contentsOf: self.makeLimitedData(array: data.topartists?.artist))
+                    self.apiResData.append(contentsOf: self.makeLimitedData(array: data.topartists?.artist))
                 case let data as TrackLocalTopModel:
-                    self.resData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
+                    self.apiResData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
                 default:
                     return
                 }
-                self.resDataRelay.accept(self.resData)
+                self.resDataRelay.accept(self.apiResData)
                 self.loaderRelay.accept(.loaderStop)
-                self.tableViewShowRelay.accept(self.resData.count < 1)
+                self.tableViewShowRelay.accept(self.apiResData.count < 1)
             })
             .disposed(by: disposeBag)
     }
@@ -190,8 +189,8 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         return responseData
     }
     
-    func detailIsRequired(title: String?, subTitle: String?) {
-        super.parsingTitleToArtist(type: index.detailType, title: title, subTitle: subTitle, task: MainSteps.detailIsRequired)
+    func moveToDetail(title: String?, subTitle: String?) {
+        super.moveToDetail(type: index.detailType, title: title, subTitle: subTitle, task: MainSteps.detailIsRequired)
     }
     
     private func subscribeAlert() {

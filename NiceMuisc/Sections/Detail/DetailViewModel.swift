@@ -83,11 +83,8 @@ final class DetailViewModel: ViewModelType, Stepper {
     func transform(req: Input) -> Output {
         
         req.actionTrigger.bind(to: buttonAction.inputs).disposed(by: disposeBag)
-                
-        subscribeServerRequestionAction(action: requestArtistDataAction)
-        subscribeServerRequestionAction(action: requestAlbumDataAction)
-        subscribeServerRequestionAction(action: requestTrackDataAction)
         
+        subscribeServerRequestionAction()
         subscribeAlert()
         
         return Output(response: resDataRelay.asObservable(), loadChanger: changerRelay.asObservable())
@@ -103,6 +100,19 @@ final class DetailViewModel: ViewModelType, Stepper {
             requestAlbumDataAction.execute((artist, name))
         case .track:
             requestTrackDataAction.execute((artist, name))
+        case .none:
+            return
+        }
+    }
+    
+    private func subscribeServerRequestionAction() {
+        switch detailType {
+        case .artist:
+            subscribeServerRequestionAction(action: requestArtistDataAction)
+        case .album:
+            subscribeServerRequestionAction(action: requestAlbumDataAction)
+        case .track:
+            subscribeServerRequestionAction(action: requestTrackDataAction)
         case .none:
             return
         }

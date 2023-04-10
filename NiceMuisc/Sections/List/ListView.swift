@@ -51,18 +51,16 @@ class ListView: BaseSubView, BaseRefreshContrl {
     }
         
     private func bindrx() {
-                
+        
         tableView.rx.modelSelected(CommonCardModel.self)
             .map { item in ListActionType.tapItemForDetail(item.title, item.subTitle) }
             .bind(to: inputRelay)
             .disposed(by: disposeBag)
         
         tableView.rx.contentOffset
-//            .throttle(.milliseconds(2000), scheduler: MainScheduler.instance)
             .subscribe({  [weak self] _ in
                 guard let `self` = self else { return }
                 if self.tableView.isNearBottomEdge() {
-                    Log.d("loading")
                     self.inputRelay.accept(ListActionType.more)
                 }
             }).disposed(by: disposeBag)

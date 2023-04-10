@@ -16,7 +16,10 @@ class BaseListViewModelType {
     
     let disposeBag = DisposeBag()
         
-    func parsingTitleToArtist(type: DetailType, title: String?, subTitle: String?, task:(DetailType, String?, String?)->MainSteps) {
+    func moveToDetail(type: DetailType,
+                              title: String?,
+                              subTitle: String?,
+                              task:(DetailType, String?, String?) -> MainSteps) {
         
         var artist = title
         var name = subTitle
@@ -28,6 +31,4 @@ class BaseListViewModelType {
         
         steps.accept(task(type, artist, name))
     }
-    
-    
 }
