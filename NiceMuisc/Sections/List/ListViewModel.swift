@@ -23,6 +23,7 @@ enum ListActionType {
 final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
             
     // MARK: - Output properties
+    private var reqApiSubject = PublishSubject<ListActionType>()
     private let resDataRelay = BehaviorRelay<[CommonCardModel]>(value: [])
     private let loaderRelay = BehaviorRelay<LoadChangeAction>(value: .none)
     private let alertRelay = PublishRelay<AlertAction>()
@@ -32,7 +33,6 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         
     private var apiResData: [CommonCardModel] = []
     private var apiReqPageNum = 1
-    private var isLoading = false
     var index = HomeIndex.none
         
     private lazy var requestTopTrackDataAction = Action<Void, TrackTopModel> { [weak self] in
@@ -55,23 +55,13 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         return ServiceApi.Artist.topLocal(page: self.apiReqPageNum, limit: self.limreqApiLimitedCountit).asObservable()
     }
                 
+    
     private lazy var buttonAction = Action<ListActionType, Void> { [weak self] action in
         guard let `self` = self else { return .empty() }
         
         switch action {
-        case .execute, .refresh:
-            if self.isLoading {
-                return .empty()
-            }
-            self.apiReqPageNum = self.defaultApiReqPageNum
-            self.apiResData.removeAll()
-            self.requestListApi()
-        case .more:
-            if self.isLoading {
-                return .empty()
-            }
-            self.apiReqPageNum += 1
-            self.requestListApi()
+        case .execute, .refresh, .more:
+            self.reqApiSubject.onNext(action)
         case .tapItemForDetail(let title, let subTitle):
             self.moveToDetail(title: title, subTitle: subTitle)
         default:
@@ -117,6 +107,7 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         
         subscribeServerRequestionAction()
         subscribeAlert()
+        bindRequestApi()
         
         return Output(
             response: resDataRelay.asObservable(),
@@ -140,17 +131,11 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     }
     
     private func subscribeServerRequestionAction<T>(action:Action<Void, T>) {
-       
-            
-        action.executing.bind { [weak self] element in
-            guard let `self` = self else { return }
-            self.isLoading = element
-        }
-        .disposed(by: disposeBag)
-        
+             
         action.errors.subscribe { code in
             self.loaderRelay.accept(.loaderStop)
             self.showApiErrorAlert()
+            self.bindRequestApi()
         }
         .disposed(by: disposeBag)
         
@@ -174,6 +159,7 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
                 self.resDataRelay.accept(self.apiResData)
                 self.loaderRelay.accept(.loaderStop)
                 self.tableViewShowRelay.accept(self.apiResData.count < 1)
+                self.bindRequestApi()
             })
             .disposed(by: disposeBag)
     }
@@ -198,5 +184,28 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
     
     private func showApiErrorAlert() {
         AlertDialogManager.shared.showApiErrorAndRetryAlertDialog(observable: alertRelay)
+    }
+    
+    private func bindRequestApi() {
+        reqApiSubject = PublishSubject<ListActionType>()
+        
+        reqApiSubject
+            .first()
+            .subscribe { [weak self] type in
+                guard let `self` = self else { return }
+                switch type {
+                case .execute, .refresh:
+                    self.apiReqPageNum = self.defaultApiReqPageNum
+                    self.apiResData.removeAll()
+                    break
+                case .more:
+                    self.apiReqPageNum += 1
+                    break
+                default:
+                    return
+                }
+                self.requestListApi()
+            }
+            .disposed(by: disposeBag)
     }
 }
