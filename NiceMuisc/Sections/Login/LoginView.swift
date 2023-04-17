@@ -83,7 +83,6 @@ final class LoginView: BaseSubView {
         
         homeButton.rx.tap.bind { [weak self] in
             guard let `self` = self else { return }
-            Log.d("click")
             self.inputRelay.accept(LoginActionType.tapForHome)
         }
         .disposed(by: disposeBag)

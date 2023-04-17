@@ -205,17 +205,17 @@ final class SearchTabView: DescendantView {
     private func bindTableView(observable: Observable<(DetailType, [CommonCardModel])>, type: DetailType) {
         observable
             .filter { ($0.0 as DetailType) == type }
-            .map { $0.1 }
-            .subscribe(onNext: { [weak self] item in
+            .map(\.1)
+            .subscribe(onNext: { [weak self] items in
                 guard let `self` = self else { return }
-                self.isHiddenEmptyView[type] = item.count > 0
+                self.isHiddenEmptyView[type] = items.count > 0
                 self.showEmptyView(index: type.searchIndex)
             })
             .disposed(by: disposeBag)
         
         observable
             .filter { ($0.0 as DetailType) == type }
-            .map { $0.1 }
+            .map(\.1)
             .bind(to: tableViews[type.searchIndex].rx.items) {  tableView, _, element in
                 if let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as? ListTableViewCell {
                     cell.prepare(

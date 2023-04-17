@@ -50,7 +50,7 @@ final class SearchKeywordView: DescendantView {
     
     private func bindRx() {     
         tableView.rx.modelSelected(RecentSearchWord.self)
-            .map { $0.keyword }
+            .map(\.keyword)
             .bind { [weak self] keyword in
                 guard let `self` = self else { return }
                 self.delegate?.inputRelay.accept(SearchActionType.execute(keyword))
