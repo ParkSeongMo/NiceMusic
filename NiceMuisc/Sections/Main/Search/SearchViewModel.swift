@@ -181,32 +181,19 @@ class SearchViewModel: BaseListViewModelType, ViewModelType, Stepper {
             guard let `self` = self else { return }
             self.isFinishSearchApi = true
             self.loaderRelay.accept(.loaderStop)
-            self.searchTabViewShowRelay.accept(false)
-            self.responseSearchData(type: .track, array: track.results?.trackmatches?.track)
-            self.responseSearchData(type: .artist, array: artist.results?.artistmatches?.artist)
-            self.responseSearchData(type: .album, array: album.results?.albummatches?.album)
+            self.searchTabViewShowRelay.accept(false)            
+            self.responseSearchData(type: .track, array: track.results?.trackmatches?.track ?? [Track]())
+            self.responseSearchData(type: .artist, array: artist.results?.artistmatches?.artist ?? [ArtistDetail]())
+            self.responseSearchData(type: .album, array: album.results?.albummatches?.album ?? [AlbumDetail]())
         })
         .disposed(by: disposeBag)
     }
     
-    private func responseSearchData<T>(type: DetailType, array: [T]?) {
-        apiResData[type]! += convertResDataToCommonCardModel(array: array)
+    private func responseSearchData<T>(type: DetailType, array: [T]) {
+        apiResData[type]! += array.map(CommonCardModel.init)
         resDataRelay.accept((type, apiResData[type] ?? []))
     }
-    
-    private func convertResDataToCommonCardModel<T>(array: [T]?) -> [CommonCardModel] {
-        
-        var responseData:[CommonCardModel] = []
-        
-        guard let array = array else { return responseData }
-        
-        for item in array {
-            responseData.append(CommonCardModel(data: item))
-        }
-        
-        return responseData
-    }
-    
+       
     func moveToDetail(detailType: DetailType, title: String?, subTitle: String?) {
         super.moveToDetail(
             type: detailType,

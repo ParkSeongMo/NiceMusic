@@ -157,38 +157,27 @@ final class ListViewModel: BaseListViewModelType, ViewModelType, Stepper {
         action.elements
             .subscribe(onNext: { [weak self] element in
                 guard let `self` = self else { return }
+                var result = [CommonCardModel]()
                 switch element {
                 case let data as ArtistTopModel:
-                    self.apiResData.append(contentsOf: self.makeLimitedData(array: data.artists?.artist))
+                    result = (data.artists?.artist ?? [ArtistDetail]()).map(CommonCardModel.init)
                 case let data as TrackTopModel:
-                    self.apiResData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
+                    result = (data.tracks?.track ?? [TrackDetail]()).map(CommonCardModel.init)
                 case let data as ArtistLocalTopModel:
-                    self.apiResData.append(contentsOf: self.makeLimitedData(array: data.topartists?.artist))
+                    result = (data.topartists?.artist ?? [ArtistDetail]()).map(CommonCardModel.init)
                 case let data as TrackLocalTopModel:
-                    self.apiResData.append(contentsOf: self.makeLimitedData(array: data.tracks?.track))
+                    result = (data.tracks?.track ?? [TrackDetail]()).map(CommonCardModel.init)
                 default:
                     return
                 }
+                self.apiResData.append(contentsOf: result)
                 self.resDataRelay.accept(self.apiResData)
                 self.loaderRelay.accept(.loaderStop)
                 self.tableViewShowRelay.accept(self.apiResData.count < 1)
             })
             .disposed(by: disposeBag)
     }
-    
-    private func makeLimitedData<T>(array: [T]?) -> [CommonCardModel] {
         
-        var responseData:[CommonCardModel] = []
-        
-        guard let array = array else { return responseData }
-        
-        for item in array {
-            responseData.append(CommonCardModel(data: item))
-        }
-                
-        return responseData
-    }
-    
     func moveToDetail(title: String?, subTitle: String?) {
         super.moveToDetail(type: index.detailType, title: title, subTitle: subTitle, task: MainSteps.detailIsRequired)
     }

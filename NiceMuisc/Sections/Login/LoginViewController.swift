@@ -44,7 +44,7 @@ final class LoginViewController: UIViewController {
     
     private func bindViewModel() {
         
-        let output = viewModel.transform(
+        _ = viewModel.transform(
             req: LoginViewModel.Input(actionTrigger: action.asObservable()))
 
         subView.setupDI(generic: action)

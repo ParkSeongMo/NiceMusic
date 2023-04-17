@@ -81,8 +81,7 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
                 
         req.actionTrigger.bind(to: buttonAction.inputs).disposed(by: disposeBag)
                                 
-        subscribeServerRequestionAction()
-        
+        subscribeServerRequestionAction()        
         subscribeAlert()
         
         return Output(response: homeDataRelay.asObservable(), loadChanger: changerRelay.asObservable())
@@ -135,10 +134,10 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
         .subscribe(onNext: { [weak self] (topArtist, topTrack, topLocalArtist, topLocalTrack) in
             guard let `self` = self else { return }
             self.isFinishHomeApi = true
-            self.appendHomeData(index: HomeIndex.topArtist, array: topArtist.artists?.artist)
-            self.appendHomeData(index: HomeIndex.topTrack, array: topTrack.tracks?.track)
-            self.appendHomeData(index: HomeIndex.topLocalArtist, array: topLocalArtist.topartists?.artist)
-            self.appendHomeData(index: HomeIndex.topLocalTrack, array: topLocalTrack.tracks?.track)
+            self.appendHomeData(index: HomeIndex.topArtist, array: topArtist.artists?.artist ?? [ArtistDetail]())
+            self.appendHomeData(index: HomeIndex.topTrack, array: topTrack.tracks?.track ?? [TrackDetail]())
+            self.appendHomeData(index: HomeIndex.topLocalArtist, array: topLocalArtist.topartists?.artist ?? [ArtistDetail]())
+            self.appendHomeData(index: HomeIndex.topLocalTrack, array: topLocalTrack.tracks?.track ?? [TrackDetail]())
             self.apiResData.sort { return $0.index.rawValue < $1.index.rawValue }
             self.homeDataRelay.accept(self.apiResData)
             self.changerRelay.accept(.loaderStop)
@@ -146,20 +145,9 @@ class HomeViewModel: BaseListViewModelType, ViewModelType, Stepper {
         .disposed(by: disposeBag)
     }
     
-    private func appendHomeData<T>(index: HomeIndex, array: [T]?) {
-        
-        var cardModels:[CommonCardModel] = []
-        
-        guard let array = array else {
-            self.apiResData.append(HomeCardModel(index: index, items: []))
-            return
-        }
-                
-        array.forEach { item in
-            cardModels.append(CommonCardModel(data: item))
-        }
-        
-        self.apiResData.append(HomeCardModel(index: index, items: cardModels))
+    private func appendHomeData<T>(index: HomeIndex, array: [T]) {
+        self.apiResData.append(
+            HomeCardModel(index: index, items: array.map(CommonCardModel.init)))
     }
     
     private func subscribeAlert() {
