@@ -7,11 +7,13 @@
 
 import UIKit
 import RxRelay
+import RxSwift
 import Then
 
 final class LoginView: BaseSubView {
-        
+    
     private lazy var idTextField = UITextField().then {
+        $0.textColor = .black
         $0.backgroundColor = .white
         $0.placeholder = NSLocalizedString("login.id", comment: "")
         $0.font = .systemFont(ofSize: 15)
@@ -23,6 +25,8 @@ final class LoginView: BaseSubView {
     }
     
     private lazy var passwdTextField = UITextField().then {
+        $0.textColor = .black
+        $0.isSecureTextEntry = true
         $0.backgroundColor = .white
         $0.placeholder = NSLocalizedString("login.passwd", comment: "")
         $0.font = .systemFont(ofSize: 15)
@@ -37,6 +41,7 @@ final class LoginView: BaseSubView {
         $0.backgroundColor = .black
         $0.titleLabel?.font = .systemFont(ofSize: 20)
         $0.setTitleColor(.white, for: .normal)
+        $0.setTitleColor(.gray, for: .disabled)
         $0.setTitle(NSLocalizedString("login.login", comment: ""), for: .normal)
         $0.layer.borderWidth = 2
         $0.layer.borderColor = UIColor.white.cgColor
@@ -56,7 +61,7 @@ final class LoginView: BaseSubView {
     
     private func setupLayout() {
         addSubviews(homeButton, idTextField, passwdTextField)
-                
+        
         idTextField.snp.makeConstraints {
             $0.top.equalToSuperview().offset(300)
             $0.centerX.equalToSuperview()
@@ -86,17 +91,57 @@ final class LoginView: BaseSubView {
             self.inputRelay.accept(LoginActionType.tapForHome)
         }
         .disposed(by: disposeBag)
+        
+        idTextField.rx.text.orEmpty
+            .map { LoginActionType.inputId($0) }
+            .bind(to: inputRelay)
+            .disposed(by: disposeBag)
+        
+        passwdTextField.rx.text.orEmpty
+            .map { LoginActionType.inputPwd($0) }
+            .bind(to: inputRelay)
+            .disposed(by: disposeBag)
     }
     
     @discardableResult
     func setupDI<T>(generic: PublishRelay<T>) -> Self {
-     
+        
         if let generic = generic as? PublishRelay<LoginActionType> {
             inputRelay.compactMap{ $0 as? LoginActionType }
                 .bind(to: generic)
                 .disposed(by: disposeBag)
         }
         return self
+    }
+    
+    @discardableResult
+    func setupDI<T>(observable: Observable<T>) -> Self {
+       
+        if let observable = observable as? Observable<(LoginValidType, Bool)> {
+            
+            observable.subscribe { [weak self] validType, isValid in
+                guard let `self` = self else { return }
+                Log.d("validType:\(validType), isValid:\(isValid)")
+                switch validType {
+                case .idValid:
+                    self.setInputTextColor(textLable: self.idTextField, isValid: isValid)
+                case .pwdValid:
+                    self.setInputTextColor(textLable: self.passwdTextField, isValid: isValid)
+                case .enableLoginBtn:
+                    self.homeButton.isEnabled = isValid
+                }
+            }
+            .disposed(by: disposeBag)
+        }
+        return self
+    }
+        
+    private func setInputTextColor(textLable: UITextField, isValid: Bool) {
+        textLable.textColor = isValid ? .black : .red
+    }
+    
+    private func setLoginButton(isValid: Bool) {
+        homeButton.setTitleColor(.gray, for: .normal)
     }
 }
 
@@ -111,7 +156,7 @@ extension LoginView {
         tap.cancelsTouchesInView = false
         self.addGestureRecognizer(tap)
     }
-
+    
     @objc func dismissKeyboard() {
         endEditing(true)
     }
