@@ -18,9 +18,21 @@ enum LoadChangeAction {
 }
 
 class LoadingIndicator {
+    
+    static func getTopWindow() -> UIWindow? {
+        var window: UIWindow? {
+            return UIApplication.shared.connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .first(where: { $0 is UIWindowScene })
+                .flatMap({ $0 as? UIWindowScene })?.windows
+                .first(where: \.isKeyWindow)            
+        }
+        return window
+    }
+    
     static func showLoading() {
         DispatchQueue.main.async {
-            guard let window = UIApplication.shared.windows.last else { return }
+            guard let window = getTopWindow() else { return }
 
             let loadingIndicatorView: LoadingIndicatorView
             if let existedView = window.subviews.first(where: { $0 is LoadingIndicatorView } ) as? LoadingIndicatorView {
@@ -36,7 +48,7 @@ class LoadingIndicator {
 
     static func hideLoading() {
         DispatchQueue.main.async {
-            guard let window = UIApplication.shared.windows.last else { return }
+            guard let window = getTopWindow() else { return }
             window.subviews
                 .filter { $0 is LoadingIndicatorView }
                 .forEach({ indicatorView in
