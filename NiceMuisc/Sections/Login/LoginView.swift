@@ -38,6 +38,7 @@ final class LoginView: BaseSubView {
     }
     
     private lazy var homeButton = UIButton().then {
+        $0.isEnabled = false
         $0.backgroundColor = .black
         $0.titleLabel?.font = .systemFont(ofSize: 20)
         $0.setTitleColor(.white, for: .normal)
@@ -119,21 +120,43 @@ final class LoginView: BaseSubView {
        
         if let observable = observable as? Observable<(LoginValidType, Bool)> {
             
-            observable.subscribe { [weak self] validType, isValid in
-                guard let `self` = self else { return }
-                Log.d("validType:\(validType), isValid:\(isValid)")
-                switch validType {
-                case .idValid:
-                    self.setInputTextColor(textLable: self.idTextField, isValid: isValid)
-                case .pwdValid:
-                    self.setInputTextColor(textLable: self.passwdTextField, isValid: isValid)
-                case .enableLoginBtn:
-                    self.homeButton.isEnabled = isValid
-                }
-            }
-            .disposed(by: disposeBag)
+            let idObservable = bindInputText( observable: observable,
+                                              loginType: .idValid,
+                                              textField: idTextField)
+            let pwdObservable = bindInputText(observable: observable,
+                                              loginType: .pwdValid,
+                                              textField: passwdTextField)
+            Observable
+                .combineLatest(idObservable, pwdObservable, resultSelector: { v1, v2 in v1 && v2 })
+                .distinctUntilChanged()
+                .asDriver(onErrorJustReturn: false)
+                .drive(self.homeButton.rx.isEnabled)
+                .disposed(by: disposeBag)
         }
         return self
+    }
+    
+    private func bindInputText(
+        observable: Observable<(LoginValidType, Bool)>,
+        loginType: LoginValidType,
+        textField: UITextField) -> Observable<(Bool)>{
+            
+            let retObserable = observable.filter { type, valid in
+                type == loginType
+            }
+            .map(\.1)
+            .distinctUntilChanged()
+            
+            retObserable
+                .asDriver(onErrorJustReturn: false)
+                .drive(onNext: { [weak self] isValid in
+                    guard let `self` = self else { return }
+                    print("input type \(loginType) valid \(isValid)")
+                    self.setInputTextColor(textLable: textField, isValid: isValid)
+                })
+                .disposed(by: disposeBag)
+            
+            return retObserable
     }
         
     private func setInputTextColor(textLable: UITextField, isValid: Bool) {
