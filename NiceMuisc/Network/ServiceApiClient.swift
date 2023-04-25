@@ -12,8 +12,7 @@ import RxSwift
 
 
 struct ServiceApiClient {
-    
-    
+        
     private static let apiProvider = MoyaProvider<ServiceApiProvider>(plugins: [CustomPlugIn()])
 //    private static let apiProvider = MoyaProvider<ServiceApiProvider>(plugins:
 //                                                                        [NetworkLoggerPlugin(configuration: .init(formatter: .init(responseData: JSONResponseDataFormatter), logOptions: .verbose))])
@@ -62,12 +61,14 @@ struct ServiceApiClient {
 
 class CustomPlugIn : PluginType {
     func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
-        Log.d("URL Request - \(target) : \(request.url?.absoluteString ?? "없음")")
+//        Log.d("URL Request - \(target) : \(request.url?.absoluteString ?? "없음")")
+
         return request
     }
 
     func process(_ result: Result<Moya.Response, MoyaError>, target: TargetType) -> Result<Moya.Response, MoyaError> {
 //        Log.d("URL Response - \(target) : \(result)")
+        
         return result
     }
 }
