@@ -16,4 +16,5 @@ target 'NiceMuisc' do
   pod 'SnapKit'
   pod 'SwiftyJSON'
   pod 'RxSwiftExt'
+  pod 'SkeletonView'
 end

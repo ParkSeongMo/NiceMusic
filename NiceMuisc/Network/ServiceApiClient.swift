@@ -62,7 +62,7 @@ struct ServiceApiClient {
 class CustomPlugIn : PluginType {
     func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
 //        Log.d("URL Request - \(target) : \(request.url?.absoluteString ?? "없음")")
-        
+
         return request
     }
 

@@ -51,15 +51,24 @@ extension HomeIndex {
     }
 }
 
-final class HomeView: BaseSubView, BaseRefreshContrl {
+final class HomeView:
+        BaseSubView,
+        BaseRefreshContrl,
+        SkeletonViewsAnimatable {
         
     typealias Model = HomeViewModel
+    
+    
+    var skeletonViews: [UIView]{
+        [tableView]
+    }
     
     private let tableViewHeight = 270.0
                 
     private let refreshControl = UIRefreshControl()
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {
+        $0.isSkeletonable = true
         $0.rowHeight = tableViewHeight
         $0.allowsSelection = false
         $0.backgroundColor = .black
@@ -116,6 +125,7 @@ final class HomeView: BaseSubView, BaseRefreshContrl {
                 cellIdentifier: HomeTableViewCell.id,
                 cellType: HomeTableViewCell.self)) {
                     index, item, cell in
+                    cell.isSkeletonable = true
                     cell.prepare(index: item.index, items: item.items)
                     cell.bindAction(reley: self.inputRelay)                
                 }
@@ -123,5 +133,21 @@ final class HomeView: BaseSubView, BaseRefreshContrl {
         }
               
         return self
+    }
+    
+    override func setupDI(loadChanger: Observable<LoadChangeAction>) {
+        loadChanger
+            .subscribe { [weak self] element in
+                guard let `self` = self else { return }
+                switch element {
+                case .loaderStart:
+                    self.showSkeletonAnimation()
+                case .loaderStop:
+                    self.hideSkeletonAnimation()
+                default:
+                    return
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
