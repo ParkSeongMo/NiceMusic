@@ -69,6 +69,8 @@ class CustomPlugIn : PluginType {
 
     func process(_ result: Result<Moya.Response, MoyaError>, target: TargetType) -> Result<Moya.Response, MoyaError> {
 //        Log.d("URL Response - \(target) : \(result)")
+        // skeleton
+        // skeleton main2
         // skeleton sub2
         return result
     }
