@@ -28,6 +28,7 @@ final class HomeTableViewCell: UITableViewCell {
     private let disposeBag = DisposeBag()
             
     private lazy var titleLabel = UILabel().then {
+        $0.isSkeletonable = true
         $0.text = ""
         $0.font = .boldSystemFont(ofSize: titleFontSize)
         $0.numberOfLines = 1
@@ -35,12 +36,14 @@ final class HomeTableViewCell: UITableViewCell {
     }
     
     private lazy var moreLabel = UIButton().then {
+        $0.isSkeletonable = true
         $0.titleLabel?.font = .systemFont(ofSize: moreFontSize)
         $0.setTitleColor(.gray, for: .normal)
         $0.setTitle(NSLocalizedString("common.showAll", comment: ""), for: .normal)
     }
               
     private lazy var moreImageView = UIImageView().then {
+        $0.isSkeletonable = true
         $0.image = UIImage(
             systemName: "chevron.right",
             withConfiguration:
@@ -56,6 +59,7 @@ final class HomeTableViewCell: UITableViewCell {
     }
     
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.collectionViewFlowLayout).then {
+        $0.isSkeletonable = true
         $0.isScrollEnabled = true
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = true

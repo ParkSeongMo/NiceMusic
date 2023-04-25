@@ -38,7 +38,7 @@ final class LoginView: BaseSubView {
     }
     
     private lazy var homeButton = UIButton().then {
-        $0.isEnabled = false
+//        $0.isEnabled = false
         $0.backgroundColor = .black
         $0.titleLabel?.font = .systemFont(ofSize: 20)
         $0.setTitleColor(.white, for: .normal)

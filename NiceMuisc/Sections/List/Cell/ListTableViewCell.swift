@@ -14,17 +14,20 @@ final class ListTableViewCell: UITableViewCell {
     static let id = "HomeTableViewCell"
     
     private lazy var imageview = UIImageView().then {
+        $0.isSkeletonable = true
         $0.layer.cornerRadius = 10
         $0.contentMode = .scaleAspectFill
     }
     
     private lazy var titleLabel = UILabel().then {
+        $0.isSkeletonable = true
         $0.font = .systemFont(ofSize: 15)
         $0.numberOfLines = 1
         $0.textColor = .white
     }
     
     private lazy var subTitleLabel = UILabel().then {
+        $0.isSkeletonable = true
         $0.font = .systemFont(ofSize: 12)
         $0.numberOfLines = 1
         $0.textColor = .white

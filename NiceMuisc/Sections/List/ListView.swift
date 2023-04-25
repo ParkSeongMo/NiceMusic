@@ -8,12 +8,14 @@
 import RxCocoa
 import RxSwift
 import UIKit
+import SkeletonView
 
 class ListView: BaseSubView, BaseRefreshContrl {
                 
     private let action = PublishRelay<ListActionType>()
         
     private lazy var tableView = UITableView(frame: .zero, style: .plain).then {
+        $0.isSkeletonable = true
         $0.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         $0.separatorInsetReference = .fromCellEdges
         $0.separatorStyle = .singleLine
@@ -92,6 +94,7 @@ class ListView: BaseSubView, BaseRefreshContrl {
             observable
                 .bind(to: tableView.rx.items) { tableView, _, element in
                     if let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.id) as? ListTableViewCell {
+                        cell.isSkeletonable = true
                         cell.prepare(
                             title: element.title,
                             subTitle: element.subTitle,
@@ -120,5 +123,22 @@ class ListView: BaseSubView, BaseRefreshContrl {
         }
         
         return self
+    }
+    
+    override func setupDI(loadChanger: Observable<LoadChangeAction>) {
+        loadChanger
+            .subscribe { [weak self] element in
+                guard let `self` = self else { return }
+                switch element {
+                case .loaderStart:
+                    self.tableView.showSkeleton(usingColor: .gray)
+                case .loaderStop:
+//                    self.tableView.hideSkeleton()
+                    break
+                default:
+                    return
+                }
+            }
+            .disposed(by: disposeBag)
     }
 }
