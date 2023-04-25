@@ -12,8 +12,7 @@ import RxSwift
 
 
 struct ServiceApiClient {
-    
-    
+        
     private static let apiProvider = MoyaProvider<ServiceApiProvider>(plugins: [CustomPlugIn()])
 //    private static let apiProvider = MoyaProvider<ServiceApiProvider>(plugins:
 //                                                                        [NetworkLoggerPlugin(configuration: .init(formatter: .init(responseData: JSONResponseDataFormatter), logOptions: .verbose))])
